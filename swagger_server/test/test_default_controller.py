@@ -36,8 +36,8 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        query_string = [('uvid', 'uvid_example'),
-                        ('routeStatus', 'routeStatus_example')]
+        query_string = [('uvid', 'urn:mrn:stm:voyage:id:vis1:0001'),
+                        ('routeStatus', '1')]
         response = self.client.open('/8320767/voyagePlans',
                                     method='GET',
                                     content_type='application/json;charset=UTF-8',
@@ -50,8 +50,8 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        query_string = [('callbackEndpoint', 'callbackEndpoint_example'),
-                        ('uvid', 'uvid_example')]
+        query_string = [('callbackEndpoint', 'http://localhost:8002'),
+                        ('uvid', 'urn:mrn:stm:voyage:id:vis1:0001')]
         response = self.client.open('/8320767/voyagePlans/subscription',
                                     method='DELETE',
                                     content_type='application/json;charset=UTF-8',
@@ -64,8 +64,8 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        query_string = [('callbackEndpoint', 'callbackEndpoint_example'),
-                        ('uvid', 'uvid_example')]
+        query_string = [('callbackEndpoint', 'http://localhost:8002'),
+                        ('uvid', 'urn:mrn:stm:voyage:id:vis1:0001')]
         response = self.client.open('/8320767/voyagePlans/subscription',
                                     method='POST',
                                     content_type='application/json;charset=UTF-8',
@@ -79,7 +79,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         area = S124DataSet()
-        query_string = [('deliveryAckEndPoint', 'deliveryAckEndPoint_example')]
+        query_string = [('deliveryAckEndPoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/area',
                                     method='POST',
                                     data=json.dumps(area),
@@ -94,7 +94,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         textMessageObject = TextMessageObject()
-        query_string = [('deliveryAckEndPoint', 'deliveryAckEndPoint_example')]
+        query_string = [('deliveryAckEndPoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/textMessage',
                                     method='POST',
                                     data=json.dumps(textMessageObject),
@@ -109,8 +109,8 @@ class TestDefaultController(BaseTestCase):
         
         """
         voyagePlan = VoyagePlan()
-        query_string = [('uvid', 'uvid_example'),
-                        ('deliveryAckEndPoint', 'deliveryAckEndPoint_example')]
+        query_string = [('uvid', 'urn:mrn:stm:voyage:id:vis1:0001'),
+                        ('deliveryAckEndPoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/voyagePlans',
                                     method='POST',
                                     data=json.dumps(voyagePlan),
