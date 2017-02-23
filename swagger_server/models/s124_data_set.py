@@ -24,7 +24,7 @@ class S124DataSet(Model):
         }
 
         self.attribute_map = {
-            'data_set': 'DataSet'
+            'data_set': 'dataSet'
         }
 
         self._data_set = data_set

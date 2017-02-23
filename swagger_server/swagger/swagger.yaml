@@ -1,10 +1,10 @@
 ---
 swagger: "2.0"
 info:
-  description: "Voyage Information Service API facing STM Onboard systems exposing\
-    \ interfaces to vessels"
+  description: "Voyage Information Service API facing SeaSWIM through SSC exposing\
+    \ interfaces to SeaSWIM stakeholders"
   version: "1.0.0"
-  title: "STM Voyage Information Service STM Onboard API"
+  title: "STM Voyage Information Service SeaSWIM API"
   termsOfService: "http://helloreverb.com/terms/"
   contact:
     name: "SMA"
@@ -18,45 +18,51 @@ basePath: "/8320767"
 schemes:
 - "http"
 consumes:
-- "application/json"
+- "application/json;charset=UTF-8"
 produces:
-- "application/json"
+- "application/json;charset=UTF-8"
 paths:
-  /voyagePlan:
+  /voyagePlans:
     get:
-      description: "Returns active VoyagePlan"
-      operationId: "get_voyage_plan"
+      description: "Returns active VoyagePlans"
+      operationId: "get_voyage_plans"
       produces:
-      - "application/json"
-      - "application/xml"
-      - "text/xml"
-      - "text/html"
+      - "application/json;charset=UTF-8"
       parameters:
       - name: "uvid"
         in: "query"
         description: "Unique identity (URN) of a voyageplan"
         required: false
         type: "string"
+        pattern: "urn:mrn:"
       - name: "routeStatus"
         in: "query"
-        description: "Status of a route for a voyageplan"
+        description: "Status of a route for a voyageplan: 1-Original   2-Planned_for_voyage\
+          \    3-Optimized 4-Cross_Checked 5-Safety_Checked    6-Approved  7-Used_for_monitoring\
+          \   8-Inactive"
         required: false
         type: "string"
+        enum:
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+        - "5"
+        - "6"
+        - "7"
+        - "8"
       responses:
         200:
           description: "Successful"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/GetVPResponseObject"
+            $ref: "#/definitions/GetVPResponseObject"
         400:
           description: "Bad Request"
         401:
           description: "Unauthorized (the user cannot be auhtenticated in the Identity\
             \ Registry)"
         403:
-          description: "Forbidden (the user is not authorized to requested Voyage\
-            \ Plan)"
+          description: "Forbidden (Not authorized request forwarded to operator)"
         404:
           description: "Not Found (the requested voyagePlan is not found)"
         500:
@@ -71,14 +77,15 @@ paths:
         \ service."
       operationId: "upload_voyage_plan"
       produces:
-      - "application/json"
+      - "application/json;charset=UTF-8"
       parameters:
       - name: "uvid"
         in: "query"
         description: "UVID of VoyagePlan to upload."
         required: true
         type: "string"
-      - name: "deliveryAckEndpoint"
+        pattern: "urn:mrn:"
+      - name: "deliveryAckEndPoint"
         in: "query"
         description: "Acknowledgement required, optionally an URL could be provided\
           \ to send acknowledgment."
@@ -115,24 +122,21 @@ paths:
         \ service."
       operationId: "upload_text_message"
       produces:
-      - "application/json"
-      - "application/xml"
-      - "text/xml"
-      - "text/html"
+      - "application/json;charset=UTF-8"
       parameters:
-      - name: "deliveryAckEndpoint"
+      - name: "deliveryAckEndPoint"
         in: "query"
         description: "Acknowledgement required, optionally an URL could be provided\
           \ to send acknowledgment."
         required: false
         type: "string"
       - in: "body"
-        name: "textMessage"
+        name: "textMessageObject"
         description: "Text message to add to VIS message db for delivery to STM Onboard\
           \ system"
         required: true
         schema:
-          $ref: "#/definitions/textMessage"
+          $ref: "#/definitions/textMessageObject"
       responses:
         200:
           description: "Successful"
@@ -158,9 +162,9 @@ paths:
         \ service as an informational message"
       operationId: "upload_area"
       produces:
-      - "application/json"
+      - "application/json;charset=UTF-8"
       parameters:
-      - name: "deliveryAckEndpoint"
+      - name: "deliveryAckEndPoint"
         in: "query"
         description: "Acknowledgement required, optionally an URL could be provided\
           \ to send acknowledgment."
@@ -192,15 +196,15 @@ paths:
           schema:
             $ref: "#/definitions/errorModel"
       x-swagger-router-controller: "swagger_server.controllers.default_controller"
-  /voyagePlan/subscribe:
+  /voyagePlans/subscription:
     post:
       description: "Request subscription for active Voyage Plan from other services\
         \ i.e. Enhanced Monitoring"
       operationId: "subscribe_to_voyage_plan"
       produces:
-      - "application/json"
+      - "application/json;charset=UTF-8"
       parameters:
-      - name: "callBackendpoint"
+      - name: "callbackEndpoint"
         in: "query"
         description: "An endpoint (URI) specifying the address where the subscribed\
           \ data is to be posted"
@@ -211,6 +215,7 @@ paths:
         description: "Unique identity (URN) of a voyageplan"
         required: false
         type: "string"
+        pattern: "urn:mrn:"
       responses:
         200:
           description: "Successful"
@@ -222,8 +227,7 @@ paths:
           description: "Unauthorized (the user cannot be auhtenticated in the Identity\
             \ Registry)"
         403:
-          description: "Forbidden (the user is not authorized to requested Voyage\
-            \ Plan)"
+          description: "Forbidden (Not authorized request forwarded to operator)"
         404:
           description: "Not Found (the requested Voyage Plan is not found)"
         500:
@@ -238,9 +242,9 @@ paths:
         \ i.e. Enhanced Monitoring"
       operationId: "remove_voyage_plan_subscription"
       produces:
-      - "application/json"
+      - "application/json;charset=UTF-8"
       parameters:
-      - name: "callBackendpoint"
+      - name: "callbackEndpoint"
         in: "query"
         description: "An endpoint (URI) specifying the address where the subscribed\
           \ data is to be posted"
@@ -251,6 +255,7 @@ paths:
         description: "Unique identity (URN) of a voyageplan"
         required: false
         type: "string"
+        pattern: "urn:mrn:"
       responses:
         200:
           description: "Successful"
@@ -275,9 +280,9 @@ paths:
   /acknowledgement:
     post:
       description: "Endpoint for receipt of acknowledgements"
-      operationId: "acknowledment"
+      operationId: "acknowledgement"
       produces:
-      - "application/json"
+      - "application/json;charset=UTF-8"
       parameters:
       - in: "body"
         name: "deliveryAck"
@@ -293,7 +298,7 @@ paths:
         400:
           description: "Bad Request"
         401:
-          description: "Unauthorized (the user cannot be auhtenticated in the Identity\
+          description: "Unauthorized (the user cannot be authenticated in the Identity\
             \ Registry)"
         403:
           description: "Forbidden"
@@ -316,15 +321,14 @@ definitions:
     type: "object"
     required:
     - "lastInteractionTime"
-    - "subject"
     properties:
       lastInteractionTime:
         type: "string"
         format: "date-time"
-      subject:
-        type: "string"
       voyagePlan:
-        $ref: "#/definitions/voyagePlan"
+        type: "array"
+        items:
+          $ref: "#/definitions/voyagePlan"
   responseObj:
     type: "object"
     required:
@@ -332,58 +336,19 @@ definitions:
     properties:
       body:
         type: "string"
-  textMessage:
+  textMessageObject:
     type: "object"
     required:
-    - "author"
-    - "createdAt"
-    - "from"
-    - "subject"
-    - "textMessageId"
+    - "textMessage"
     properties:
-      textMessageId:
+      textMessage:
         type: "string"
-      informationObjectReferenceId:
-        type: "string"
-      author:
-        type: "string"
-      from:
-        type: "string"
-      serviceType:
-        type: "string"
-      createdAt:
-        type: "string"
-        format: "date-time"
-      position:
-        $ref: "#/definitions/GM_Point"
-      subject:
-        type: "string"
-      body:
-        type: "string"
-  GM_Point:
-    type: "object"
-    required:
-    - "Id"
-    properties:
-      Id:
-        type: "integer"
-        format: "int64"
-      lat:
-        $ref: "#/definitions/LatitudeType"
-      lon:
-        $ref: "#/definitions/LongitudeType"
-  LatitudeType:
-    type: "string"
-    format: "double"
-  LongitudeType:
-    type: "string"
-    format: "double"
   S124DataSet:
     type: "object"
     required:
-    - "DataSet"
+    - "dataSet"
     properties:
-      DataSet:
+      dataSet:
         type: "string"
   deliveryAck:
     type: "object"
@@ -403,6 +368,7 @@ definitions:
       referenceId:
         type: "string"
         description: "Reference to delivered message (URN)"
+        pattern: "urn:mrn:"
       timeOfDelivery:
         type: "string"
         format: "date-time"
@@ -411,12 +377,14 @@ definitions:
         type: "string"
         description: "Identity of source (sender) of message that have been delivered\
           \ (URN)"
+        pattern: "urn:mrn:"
       fromName:
         type: "string"
         description: "Friendly name of sender"
       toId:
         type: "string"
         description: "Identity of target (recipient) of message delivery (URN)"
+        pattern: "urn:mrn:"
       toName:
         type: "string"
         description: "Friendly name of recipient"

@@ -123,6 +123,8 @@ class DeliveryAck(Model):
         """
         if reference_id is None:
             raise ValueError("Invalid value for `reference_id`, must not be `None`")
+        if reference_id is not None and not re.search('', reference_id):
+            raise ValueError("Invalid value for `reference_id`, must be a follow pattern or equal to `/urn:mrn:/`")
 
         self._reference_id = reference_id
 
@@ -173,6 +175,8 @@ class DeliveryAck(Model):
         """
         if from_id is None:
             raise ValueError("Invalid value for `from_id`, must not be `None`")
+        if from_id is not None and not re.search('', from_id):
+            raise ValueError("Invalid value for `from_id`, must be a follow pattern or equal to `/urn:mrn:/`")
 
         self._from_id = from_id
 
@@ -223,6 +227,8 @@ class DeliveryAck(Model):
         """
         if to_id is None:
             raise ValueError("Invalid value for `to_id`, must not be `None`")
+        if to_id is not None and not re.search('', to_id):
+            raise ValueError("Invalid value for `to_id`, must be a follow pattern or equal to `/urn:mrn:/`")
 
         self._to_id = to_id
 
