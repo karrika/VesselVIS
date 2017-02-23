@@ -9,7 +9,9 @@ This example uses the [Connexion](https://github.com/zalando/connexion) library 
 
 ### SSL certification
 
-In order to use SSL certificates you need to add your service instance certificates in the main directory. Have a look at __main__.py for the name of the host, ports and certificates.
+In order to use SSL certificates you need to add your service instance certificates in the main directory. In this instance the files are Certificate_VIS-IMO8320767.pem and PrivateKey_VIS-IMO8320767.pem. Both should be in the root directory.
+
+In order to identify the instance correctly you need to edit the path attribute in the swagger_server/swagger/swagger.yaml file. In this example the instance is /8320767
 
 To run the server, please execute the following from the root directory:
 
