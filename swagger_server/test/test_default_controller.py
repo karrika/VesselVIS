@@ -24,7 +24,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         deliveryAck = DeliveryAck()
-        response = self.client.open('/V1/acknowledgement',
+        response = self.client.open('/8320767/acknowledgement',
                                     method='POST',
                                     data=json.dumps(deliveryAck),
                                     content_type='application/json;charset=UTF-8')
@@ -38,7 +38,7 @@ class TestDefaultController(BaseTestCase):
         """
         query_string = [('uvid', 'uvid_example'),
                         ('routeStatus', 'routeStatus_example')]
-        response = self.client.open('/V1/voyagePlans',
+        response = self.client.open('/8320767/voyagePlans',
                                     method='GET',
                                     content_type='application/json;charset=UTF-8',
                                     query_string=query_string)
@@ -52,7 +52,7 @@ class TestDefaultController(BaseTestCase):
         """
         query_string = [('callbackEndpoint', 'callbackEndpoint_example'),
                         ('uvid', 'uvid_example')]
-        response = self.client.open('/V1/voyagePlans/subscription',
+        response = self.client.open('/8320767/voyagePlans/subscription',
                                     method='DELETE',
                                     content_type='application/json;charset=UTF-8',
                                     query_string=query_string)
@@ -66,7 +66,7 @@ class TestDefaultController(BaseTestCase):
         """
         query_string = [('callbackEndpoint', 'callbackEndpoint_example'),
                         ('uvid', 'uvid_example')]
-        response = self.client.open('/V1/voyagePlans/subscription',
+        response = self.client.open('/8320767/voyagePlans/subscription',
                                     method='POST',
                                     content_type='application/json;charset=UTF-8',
                                     query_string=query_string)
@@ -80,7 +80,7 @@ class TestDefaultController(BaseTestCase):
         """
         area = S124DataSet()
         query_string = [('deliveryAckEndPoint', 'deliveryAckEndPoint_example')]
-        response = self.client.open('/V1/area',
+        response = self.client.open('/8320767/area',
                                     method='POST',
                                     data=json.dumps(area),
                                     content_type='application/json;charset=UTF-8',
@@ -95,7 +95,7 @@ class TestDefaultController(BaseTestCase):
         """
         textMessageObject = TextMessageObject()
         query_string = [('deliveryAckEndPoint', 'deliveryAckEndPoint_example')]
-        response = self.client.open('/V1/textMessage',
+        response = self.client.open('/8320767/textMessage',
                                     method='POST',
                                     data=json.dumps(textMessageObject),
                                     content_type='application/json;charset=UTF-8',
@@ -111,7 +111,7 @@ class TestDefaultController(BaseTestCase):
         voyagePlan = VoyagePlan()
         query_string = [('uvid', 'uvid_example'),
                         ('deliveryAckEndPoint', 'deliveryAckEndPoint_example')]
-        response = self.client.open('/V1/voyagePlans',
+        response = self.client.open('/8320767/voyagePlans',
                                     method='POST',
                                     data=json.dumps(voyagePlan),
                                     content_type='application/json;charset=UTF-8',
