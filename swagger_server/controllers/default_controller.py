@@ -80,6 +80,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     """
     subscribe_to_voyage_plan
     Request subscription for active Voyage Plan from other services i.e. Enhanced Monitoring
+    The subscription goes to the import directory. It will be sent to the vessel for acceptancce.
+    As we have no vessel out there the code will accept the sender automatically.
     :param callbackEndpoint: An endpoint (URI) specifying the address where the subscribed data is to be posted
     :type callbackEndpoint: str
     :param uvid: Unique identity (URN) of a voyageplan
@@ -87,6 +89,31 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
+    me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
+    p = Path('import')
+    if uvid is None:
+        vp = 'all'
+    else:
+        vp = uvid
+    uvids = list(p.glob('**/*' + vp + '.subs'))
+    if len(uvids) > 0:
+        with uvids[0].open() as f: data = json.loads(f.read())
+        f.close()
+        if me in data:
+            print('Already subscribed')
+        else:
+            data.append(me)
+    else:
+        data = [ me ]
+    f = open('import/' + vp + '.subs', 'w')
+    f.write(json.dumps(data))
+    f.close()
+    """
+    Copy the requests directly to the export directory. All requests approved.
+    """
+    f = open('export/' + vp + '.subs', 'w')
+    f.write(json.dumps(data))
+    f.close()
     return ResponseObj()
 
 
