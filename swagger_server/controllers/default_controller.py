@@ -10,6 +10,7 @@ from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
 from ..util import deserialize_date, deserialize_datetime
+import json
 
 
 def acknowledgement(deliveryAck):
@@ -23,7 +24,7 @@ def acknowledgement(deliveryAck):
     """
     if connexion.request.is_json:
         deliveryAck = DeliveryAck.from_dict(connexion.request.get_json())
-    return 'do some magic!'
+    return 'Hello World!'
 
 
 def get_voyage_plans(uvid=None, routeStatus=None):
@@ -37,7 +38,9 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVPResponseObject
     """
-    return 'do some magic!'
+    ret = GetVPResponseObject()
+    print(ret)
+    return ret
 
 
 def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
@@ -51,7 +54,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
-    return 'do some magic!'
+    return ResponseObj()
 
 
 def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
@@ -65,7 +68,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
-    return 'do some magic!'
+    return ResponseObj()
 
 
 def upload_area(area, deliveryAckEndPoint=None):
@@ -81,7 +84,7 @@ def upload_area(area, deliveryAckEndPoint=None):
     """
     if connexion.request.is_json:
         area = S124DataSet.from_dict(connexion.request.get_json())
-    return 'do some magic!'
+    return ResponseObj()
 
 
 def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
@@ -97,7 +100,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     """
     if connexion.request.is_json:
         textMessageObject = TextMessageObject.from_dict(connexion.request.get_json())
-    return 'do some magic!'
+    return ResponseObj()
 
 
 def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
@@ -115,4 +118,5 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
     """
     if connexion.request.is_json:
         voyagePlan = VoyagePlan.from_dict(connexion.request.get_json())
-    return 'do some magic!'
+    return '-- MAGIC--'
+

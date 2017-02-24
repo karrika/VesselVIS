@@ -24,10 +24,18 @@ class TestDefaultController(BaseTestCase):
         
         """
         deliveryAck = DeliveryAck()
+        deliveryAck.id = 'urn:mrn:'
+        deliveryAck.reference_id = 'urn:mrn:'
+        deliveryAck.time_of_delivery = '2017-01-27T12:00:00Z'
+        deliveryAck.from_id = 'urn:mrn:'
+        deliveryAck.from_name = 'Who cares'
+        deliveryAck.to_id = 'urn:mrn:'
+        deliveryAck.to_name = 'Who cares'
+        deliveryAck.ack_result = 'Who cares'
         response = self.client.open('/8320767/acknowledgement',
                                     method='POST',
                                     data=json.dumps(deliveryAck),
-                                    content_type='application/json;charset=UTF-8')
+                                    content_type='application/json')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
     def test_get_voyage_plans(self):
@@ -40,7 +48,7 @@ class TestDefaultController(BaseTestCase):
                         ('routeStatus', '1')]
         response = self.client.open('/8320767/voyagePlans',
                                     method='GET',
-                                    content_type='application/json;charset=UTF-8',
+                                    content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -54,7 +62,7 @@ class TestDefaultController(BaseTestCase):
                         ('uvid', 'urn:mrn:stm:voyage:id:vis1:0001')]
         response = self.client.open('/8320767/voyagePlans/subscription',
                                     method='DELETE',
-                                    content_type='application/json;charset=UTF-8',
+                                    content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -68,7 +76,7 @@ class TestDefaultController(BaseTestCase):
                         ('uvid', 'urn:mrn:stm:voyage:id:vis1:0001')]
         response = self.client.open('/8320767/voyagePlans/subscription',
                                     method='POST',
-                                    content_type='application/json;charset=UTF-8',
+                                    content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -79,11 +87,12 @@ class TestDefaultController(BaseTestCase):
         
         """
         area = S124DataSet()
+        area.data_set = 'who cares'
         query_string = [('deliveryAckEndPoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/area',
                                     method='POST',
                                     data=json.dumps(area),
-                                    content_type='application/json;charset=UTF-8',
+                                    content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -94,11 +103,13 @@ class TestDefaultController(BaseTestCase):
         
         """
         textMessageObject = TextMessageObject()
+        textMessageObject.text_message = 'Hi there'
+        print(textMessageObject)
         query_string = [('deliveryAckEndPoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/textMessage',
                                     method='POST',
                                     data=json.dumps(textMessageObject),
-                                    content_type='application/json;charset=UTF-8',
+                                    content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -109,12 +120,13 @@ class TestDefaultController(BaseTestCase):
         
         """
         voyagePlan = VoyagePlan()
+        voyagePlan.route = '<route />'
         query_string = [('uvid', 'urn:mrn:stm:voyage:id:vis1:0001'),
                         ('deliveryAckEndPoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/voyagePlans',
                                     method='POST',
                                     data=json.dumps(voyagePlan),
-                                    content_type='application/json;charset=UTF-8',
+                                    content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 

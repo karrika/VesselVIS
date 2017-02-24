@@ -18,16 +18,16 @@ basePath: "/8320767"
 schemes:
 - "http"
 consumes:
-- "application/json;charset=UTF-8"
+- "application/json"
 produces:
-- "application/json;charset=UTF-8"
+- "application/json"
 paths:
   /voyagePlans:
     get:
       description: "Returns active VoyagePlans"
       operationId: "get_voyage_plans"
       produces:
-      - "application/json;charset=UTF-8"
+      - "application/json"
       parameters:
       - name: "uvid"
         in: "query"
@@ -42,15 +42,6 @@ paths:
           \   8-Inactive"
         required: false
         type: "string"
-        enum:
-        - "1"
-        - "2"
-        - "3"
-        - "4"
-        - "5"
-        - "6"
-        - "7"
-        - "8"
       responses:
         200:
           description: "Successful"
@@ -122,7 +113,7 @@ paths:
         \ service."
       operationId: "upload_text_message"
       produces:
-      - "application/json;charset=UTF-8"
+      - "application/json"
       parameters:
       - name: "deliveryAckEndPoint"
         in: "query"
@@ -162,7 +153,7 @@ paths:
         \ service as an informational message"
       operationId: "upload_area"
       produces:
-      - "application/json;charset=UTF-8"
+      - "application/json"
       parameters:
       - name: "deliveryAckEndPoint"
         in: "query"
@@ -202,7 +193,7 @@ paths:
         \ i.e. Enhanced Monitoring"
       operationId: "subscribe_to_voyage_plan"
       produces:
-      - "application/json;charset=UTF-8"
+      - "application/json"
       parameters:
       - name: "callbackEndpoint"
         in: "query"
@@ -242,7 +233,7 @@ paths:
         \ i.e. Enhanced Monitoring"
       operationId: "remove_voyage_plan_subscription"
       produces:
-      - "application/json;charset=UTF-8"
+      - "application/json"
       parameters:
       - name: "callbackEndpoint"
         in: "query"
@@ -282,7 +273,7 @@ paths:
       description: "Endpoint for receipt of acknowledgements"
       operationId: "acknowledgement"
       produces:
-      - "application/json;charset=UTF-8"
+      - "application/json"
       parameters:
       - in: "body"
         name: "deliveryAck"
@@ -399,9 +390,7 @@ definitions:
     properties:
       errorModelId:
         type: "integer"
-        format: "int64"
       code:
         type: "integer"
-        format: "int32"
       message:
         type: "string"

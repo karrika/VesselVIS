@@ -18,16 +18,16 @@ REQUIRES = ["connexion"]
 setup(
     name=NAME,
     version=VERSION,
-    description="STM Voyage Information Service STM Onboard API",
+    description="STM Voyage Information Service SeaSWIM API",
     author_email="per.lofbom@sjofartsverket.se",
     url="",
-    keywords=["Swagger", "STM Voyage Information Service STM Onboard API"],
+    keywords=["Swagger", "STM Voyage Information Service SeaSWIM API"],
     install_requires=REQUIRES,
     packages=find_packages(),
     package_data={'': ['swagger/swagger.yaml']},
     include_package_data=True,
     long_description="""\
-    Voyage Information Service API facing STM Onboard systems exposing interfaces to vessels
+    Voyage Information Service API facing SeaSWIM through SSC exposing interfaces to SeaSWIM stakeholders
     """
 )
 
