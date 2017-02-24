@@ -11,6 +11,7 @@ from typing import List, Dict
 from six import iteritems
 from ..util import deserialize_date, deserialize_datetime
 import json
+from pathlib import Path
 
 
 def acknowledgement(deliveryAck):
@@ -30,7 +31,8 @@ def acknowledgement(deliveryAck):
 def get_voyage_plans(uvid=None, routeStatus=None):
     """
     get_voyage_plans
-    Returns active VoyagePlans
+    Returns active VoyagePlans found in the ./export directory.
+    This is the directory containing data coming from the vessel.
     :param uvid: Unique identity (URN) of a voyageplan
     :type uvid: str
     :param routeStatus: Status of a route for a voyageplan: 1-Original   2-Planned_for_voyage    3-Optimized 4-Cross_Checked 5-Safety_Checked    6-Approved  7-Used_for_monitoring   8-Inactive
@@ -38,8 +40,25 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVPResponseObject
     """
+    p = Path('export')
+    if uvid is None:
+        uvids = list(p.glob('**/*.uvid'))
+    else:
+        uvids = list(p.glob('**/' + uvid + '.uvid'))
+    if len(uvids) == 0:
+        if uvid is None:
+            return 'No voyage plans found'
+        else:
+            return 'Voyage plan ' + uvid + ' not found'
+    with uvids[0].open() as f: data = json.loads(f.read())
+    f.close()
     ret = GetVPResponseObject()
-    print(ret)
+    vp = VoyagePlan()
+    f = open('export/' + data['route'], 'r')
+    vp.route = f.read()
+    f.close()
+    vps = [ vp ]
+    ret.voyage_plan = vps
     return ret
 
 
@@ -100,7 +119,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     """
     if connexion.request.is_json:
         textMessageObject = TextMessageObject.from_dict(connexion.request.get_json())
-    return ResponseObj()
+    return '-- MAGIC--'
 
 
 def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
