@@ -12,6 +12,7 @@ from six import iteritems
 from ..util import deserialize_date, deserialize_datetime
 import json
 from pathlib import Path
+import os
 
 
 def acknowledgement(deliveryAck):
@@ -73,7 +74,46 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
-    return ResponseObj()
+    ret = ResponseObj()
+    me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
+    p = Path('import')
+    if uvid is None:
+        vp = 'all'
+        ret.body = 'Generic remove subscription sent'
+    else:
+        vp = uvid
+        ret.body = 'Remove subscription for ' + uvid + ' sent'
+    uvids = list(p.glob('**/*' + vp + '.rmsubs'))
+    if len(uvids) > 0:
+        with uvids[0].open() as f: data = json.loads(f.read())
+        f.close()
+        if me in data:
+            ret.body = 'Remove subscription already sent'
+        else:
+            data.append(me)
+    else:
+        data = [ me ]
+    f = open('import/' + vp + '.rmsubs', 'w')
+    f.write(json.dumps(data))
+    f.close()
+    """
+    Now the vessel will get the request to remove a subscription. As we have no vessel we have to simulate it here.
+    """
+    os.remove('import/' + vp + '.rmsubs')
+    p = Path('export')
+    uvids = list(p.glob('**/*' + vp + '.subs'))
+    if len(uvids) > 0:
+        with uvids[0].open() as f: data = json.loads(f.read())
+        f.close()
+        if me in data:
+            data.remove(me)
+    if len(data) == 0:
+        os.remove('export/' + vp + '.subs')
+    else:
+        f = open('export/' + vp + '.subs', 'w')
+        f.write(json.dumps(data))
+        f.close()
+    return ret
 
 
 def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
@@ -89,12 +129,15 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
+    ret = ResponseObj()
     me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
     p = Path('import')
     if uvid is None:
         vp = 'all'
+        ret.body = 'Generic subscription sent'
     else:
         vp = uvid
+        ret.body = 'Subscription for ' + uvid + ' sent'
     uvids = list(p.glob('**/*' + vp + '.subs'))
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
@@ -109,12 +152,13 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     f.write(json.dumps(data))
     f.close()
     """
-    Copy the requests directly to the export directory. All requests approved.
+    Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
     """
     f = open('export/' + vp + '.subs', 'w')
     f.write(json.dumps(data))
     f.close()
-    return ResponseObj()
+    os.remove('import/' + vp + '.subs')
+    return ret
 
 
 def upload_area(area, deliveryAckEndPoint=None):
