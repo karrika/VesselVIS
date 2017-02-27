@@ -15,6 +15,18 @@ from pathlib import Path
 import os
 
 
+def client_mrn():
+    """
+    Placeholder for real client mrn service from certificate context
+    """
+    return 'urn:mrn:me'
+
+def check_acl():
+    """
+    Placeholder for real client mrn service from certificate context
+    """
+    return True
+
 def acknowledgement(deliveryAck):
     """
     acknowledgement
@@ -24,6 +36,8 @@ def acknowledgement(deliveryAck):
 
     :rtype: ResponseObj
     """
+    if not check_acl():
+        return 'Forbidden', 403
     ret = ResponseObj()
     if connexion.request.is_json:
         deliveryAck = DeliveryAck.from_dict(connexion.request.get_json())
@@ -46,6 +60,7 @@ def acknowledgement(deliveryAck):
 
 def get_voyage_plans(uvid=None, routeStatus=None):
     """
+    Note: !!! what should we do if the routeStatus does not match !!!
     get_voyage_plans
     Returns active VoyagePlans found in the ./export directory.
     This is the directory containing data coming from the vessel.
@@ -56,6 +71,8 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVPResponseObject
     """
+    if not check_acl():
+        return 'Forbidden', 403
     p = Path('export')
     if uvid is None:
         uvids = list(p.glob('**/*.uvid'))
@@ -89,6 +106,8 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
+    if not check_acl():
+        return 'Forbidden', 403
     ret = ResponseObj()
     me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
     p = Path('import')
@@ -144,6 +163,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
+    if not check_acl():
+        return 'Forbidden', 403
     ret = ResponseObj()
     me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
     p = Path('import')
@@ -153,6 +174,10 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     else:
         vp = uvid
         ret.body = 'Subscription for ' + uvid + ' sent'
+        p2 = Path('export')
+        uvids = list(p2.glob('**/' + uvid + '.uvid'))
+        if len(uvids) == 0:
+            return 'Voyage plan ' + uvid + ' not found', 404
     uvids = list(p.glob('**/*' + vp + '.subs'))
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
@@ -187,6 +212,8 @@ def upload_area(area, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
+    if not check_acl():
+        return 'Forbidden', 403
     if connexion.request.is_json:
         area = S124DataSet.from_dict(connexion.request.get_json())
     return ResponseObj()
@@ -203,6 +230,8 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
+    if not check_acl():
+        return 'Forbidden', 403
     if connexion.request.is_json:
         textMessageObject = TextMessageObject.from_dict(connexion.request.get_json())
     return '-- MAGIC--'
@@ -221,6 +250,8 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
+    if not check_acl():
+        return 'Forbidden', 403
     if connexion.request.is_json:
         voyagePlan = VoyagePlan.from_dict(connexion.request.get_json())
     return '-- MAGIC--'

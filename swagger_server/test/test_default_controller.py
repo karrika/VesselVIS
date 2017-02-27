@@ -38,13 +38,41 @@ class TestDefaultController(BaseTestCase):
                                     content_type='application/json')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
-    def test_get_voyage_plans(self):
+    def test_get_voyage_plans_current(self):
+        """
+        Test case for get_voyage_plans
+        In this case we have no uvid or routeStatus.
+        We want to retrieve the latest, current plan.
+        
+        """
+        query_string = []
+        response = self.client.open('/8320767/voyagePlans',
+                                    method='GET',
+                                    content_type='application/json',
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_get_voyage_plans_found(self):
         """
         Test case for get_voyage_plans
 
         
         """
-        query_string = [('uvid', 'urn:mrn:stm:voyage:id:vis1:0001'),
+        query_string = [('uvid', 'urn:mrn:stm:voyage:id:8320767'),
+                        ('routeStatus', '1')]
+        response = self.client.open('/8320767/voyagePlans',
+                                    method='GET',
+                                    content_type='application/json',
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_get_voyage_plans_not_found(self):
+        """
+        Test case for get_voyage_plans
+
+        
+        """
+        query_string = [('uvid', 'urn:mrn:stm:voyage:id:not:existing'),
                         ('routeStatus', '1')]
         response = self.client.open('/8320767/voyagePlans',
                                     method='GET',
@@ -59,26 +87,53 @@ class TestDefaultController(BaseTestCase):
         
         """
         query_string = [('callbackEndpoint', 'http://localhost:8002'),
-                        ('uvid', 'urn:mrn:stm:voyage:id:vis1:0001')]
+                        ('uvid', 'urn:mrn:stm:voyage:id:8320767')]
         response = self.client.open('/8320767/voyagePlans/subscription',
                                     method='DELETE',
                                     content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
-    def test_subscribe_to_voyage_plan(self):
+    def test_subscribe_to_generic_voyage_plan(self):
         """
         Test case for subscribe_to_voyage_plan
-
+        Here we have no uvid. This is a generic request.
         
         """
-        query_string = [('callbackEndpoint', 'http://localhost:8002'),
-                        ('uvid', 'urn:mrn:stm:voyage:id:vis1:0001')]
+        query_string = [('callbackEndpoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/voyagePlans/subscription',
                                     method='POST',
                                     content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_subscribe_to_voyage_plan_found(self):
+        """
+        Test case for subscribe_to_voyage_plan
+        A voyage with this uid exists.
+        
+        """
+        query_string = [('callbackEndpoint', 'http://localhost:8002'),
+                        ('uvid', 'urn:mrn:stm:voyage:id:8320767')]
+        response = self.client.open('/8320767/voyagePlans/subscription',
+                                    method='POST',
+                                    content_type='application/json',
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_subscribe_to_voyage_plan_not_found(self):
+        """
+        Test case for subscribe_to_voyage_plan
+        A voyage with this uvid does not exist.
+        
+        """
+        query_string = [('callbackEndpoint', 'http://localhost:8002'),
+                        ('uvid', 'urn:mrn:stm:voyage:id:not:existing')]
+        response = self.client.open('/8320767/voyagePlans/subscription',
+                                    method='POST',
+                                    content_type='application/json',
+                                    query_string=query_string)
+        self.assert404(response, "Response body is : " + response.data.decode('utf-8'))
 
     def test_upload_area(self):
         """
