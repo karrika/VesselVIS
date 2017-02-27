@@ -24,9 +24,24 @@ def acknowledgement(deliveryAck):
 
     :rtype: ResponseObj
     """
+    ret = ResponseObj()
     if connexion.request.is_json:
         deliveryAck = DeliveryAck.from_dict(connexion.request.get_json())
-    return 'Hello World!'
+    """
+    So, what an earth am I going to do about acknowledgements?
+        self.swagger_types = {
+            'id': str,
+            'reference_id': str,
+            'time_of_delivery': datetime,
+            'from_id': str,
+            'from_name': str,
+            'to_id': str,
+            'to_name': str,
+            'ack_result': str
+        }
+    """
+    ret.body = 'Thank you for sending the acknowlegement'
+    return ret
 
 
 def get_voyage_plans(uvid=None, routeStatus=None):
@@ -48,9 +63,9 @@ def get_voyage_plans(uvid=None, routeStatus=None):
         uvids = list(p.glob('**/' + uvid + '.uvid'))
     if len(uvids) == 0:
         if uvid is None:
-            return 'No voyage plans found'
+            return 'No voyage plans found', 404
         else:
-            return 'Voyage plan ' + uvid + ' not found'
+            return 'Voyage plan ' + uvid + ' not found', 404
     with uvids[0].open() as f: data = json.loads(f.read())
     f.close()
     ret = GetVPResponseObject()

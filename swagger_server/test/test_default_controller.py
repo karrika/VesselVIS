@@ -50,7 +50,7 @@ class TestDefaultController(BaseTestCase):
                                     method='GET',
                                     content_type='application/json',
                                     query_string=query_string)
-        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+        self.assert404(response, "Response body is : " + response.data.decode('utf-8'))
 
     def test_remove_voyage_plan_subscription(self):
         """
@@ -104,7 +104,6 @@ class TestDefaultController(BaseTestCase):
         """
         textMessageObject = TextMessageObject()
         textMessageObject.text_message = 'Hi there'
-        print(textMessageObject)
         query_string = [('deliveryAckEndPoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/textMessage',
                                     method='POST',
