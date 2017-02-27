@@ -175,7 +175,7 @@ class TestDefaultController(BaseTestCase):
         """
         voyagePlan = VoyagePlan()
         voyagePlan.route = '<route />'
-        query_string = [('uvid', 'urn:mrn:stm:voyage:id:vis1:0001'),
+        query_string = [('uvid', 'urn:mrn:stm:voyage:id:new:plan'),
                         ('deliveryAckEndPoint', 'http://localhost:8002')]
         response = self.client.open('/8320767/voyagePlans',
                                     method='POST',

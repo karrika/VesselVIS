@@ -13,6 +13,7 @@ from ..util import deserialize_date, deserialize_datetime
 import json
 from pathlib import Path
 import os
+import requests
 
 
 def client_mrn():
@@ -26,6 +27,27 @@ def check_acl():
     Placeholder for real client mrn service from certificate context
     """
     return True
+
+def send_ack(endPoint):
+    """
+    Send ack back to requester using the service instance certificate.
+    """
+    VIS_CERT='./Certificate_VIS-IMO8320767.pem'
+    VIS_KEY='./PrivateKeye_VIS-IMO8320767.pem'
+    payload = "{'ack_result': 'Who cares',\
+ 'from_id': 'urn:mrn:',\
+ 'from_name': 'Who cares',\
+ 'id': 'urn:mrn:',\
+ 'reference_id': 'urn:mrn:',\
+ 'time_of_delivery': '2017-01-27T12:00:00Z',\
+ 'to_id': 'urn:mrn:',\
+ 'to_name': 'Who cares'}"
+    r=requests.post(endPoint, json=payload, cert=(VIS_CERT, VIS_KEY))
+    if r.status_code == 200:
+        print(r.text)
+    else:
+        print(r.status_code, r.reason)
+
 
 def acknowledgement(deliveryAck):
     """
@@ -130,6 +152,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     f = open('import/' + vp + '.rmsubs', 'w')
     f.write(json.dumps(data))
     f.close()
+
     """
     Now the vessel will get the request to remove a subscription. As we have no vessel we have to simulate it here.
     """
@@ -147,6 +170,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
         f = open('export/' + vp + '.subs', 'w')
         f.write(json.dumps(data))
         f.close()
+
     return ret
 
 
@@ -191,6 +215,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     f = open('import/' + vp + '.subs', 'w')
     f.write(json.dumps(data))
     f.close()
+
     """
     Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
     """
@@ -198,6 +223,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     f.write(json.dumps(data))
     f.close()
     os.remove('import/' + vp + '.subs')
+
     return ret
 
 
@@ -252,7 +278,31 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
     """
     if not check_acl():
         return 'Forbidden', 403
+    ret = ResponseObj()
     if connexion.request.is_json:
         voyagePlan = VoyagePlan.from_dict(connexion.request.get_json())
-    return '-- MAGIC--'
+    f = open('import/' + uvid + '.rtz', 'w')
+    f.write(voyagePlan.route)
+    f.close()
+    if deliveryAckEndPoint is not None:
+        f = open('import/' + uvid + '.ack', 'w')
+        f.write(deliveryAckEndPoint)
+        f.close()
+
+    """
+    Now the vessel will need to process the uploaded voyagePlan and send an ack.
+    """
+    os.remove('import/' + uvid + '.rtz')
+    f = open('export/' + uvid + '.rtz', 'w')
+    f.write(voyagePlan.route)
+    f.close()
+    vp = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': '1' }
+    f = open('export/' + uvid + '.uvid', 'w')
+    f.write(json.dumps(vp))
+    f.close()
+    if deliveryAckEndPoint is not None:
+        os.remove('import/' + uvid + '.ack')
+        send_ack(deliveryAckEndPoint)
+
+    return ret
 
