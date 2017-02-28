@@ -42,11 +42,13 @@ def send_ack(endPoint):
  'time_of_delivery': '2017-01-27T12:00:00Z',\
  'to_id': 'urn:mrn:',\
  'to_name': 'Who cares'}"
+    """
     r=requests.post(endPoint, json=payload, cert=(VIS_CERT, VIS_KEY))
     if r.status_code == 200:
         print(r.text)
     else:
         print(r.status_code, r.reason)
+    """
 
 
 def acknowledgement(deliveryAck):
