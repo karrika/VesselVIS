@@ -13,10 +13,10 @@ info:
   license:
     name: "SMA"
     url: "http://opensource.org"
-host: "127.0.0.1:8002"
+host: "stm.furuno.fi:8002"
 basePath: "/8320767"
 schemes:
-- "http"
+- "https"
 consumes:
 - "application/json"
 produces:

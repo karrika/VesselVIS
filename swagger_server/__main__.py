@@ -12,5 +12,5 @@ if __name__ == '__main__':
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'Voyage Information Service API facing SeaSWIM through SSC exposing interfaces to SeaSWIM stakeholders'})
-    #app.run(port=8002, ssl_context=context)
-    app.run(port=8002)
+    app.run(port=8002, ssl_context=context)
+    #app.run(port=8002)

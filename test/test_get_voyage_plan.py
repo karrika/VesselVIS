@@ -38,10 +38,12 @@ class TestGetVoyagePlan(unittest.TestCase):
         """
         VIS_CERT='/home/karri/VesselVIS/Certificate_VIS-IMO8320767.pem'
         VIS_KEY='/home/karri/VesselVIS/PrivateKeye_VIS-IMO8320767.pem'
-        endPoint='http://localhost:8002/8320767/voyagePlans'
+        #endPoint='https://127.0.0.1:8002/8320767/voyagePlans'
+        #endPoint='https://stm.furuno.fi:8002/8320767/voyagePlans'
+        endPoint='https://www.google.com'
         payload='{}'
-        r=requests.get(endPoint, json=payload)
-        #r=requests.post(endPoint, json=payload, cert=('/home/karri/VesselVIS/Certificate_VIS-IMO8320767.pem','/home/karri/VesselVIS/PrivateKey_VIS-IMO8320767.pem'))
+        #r=requests.get(endPoint, json=payload)
+        r=requests.post(endPoint, json=payload, cert=('/home/karri/VesselVIS/Certificate_VIS-IMO8320767.pem','/home/karri/VesselVIS/PrivateKey_VIS-IMO8320767.pem'))
         if r.status_code == 200:
             pass
         print(r.status_code, r.reason)
