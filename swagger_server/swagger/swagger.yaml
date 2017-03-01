@@ -13,8 +13,8 @@ info:
   license:
     name: "SMA"
     url: "http://opensource.org"
-host: "stm.furuno.fi:8002"
-basePath: "/8320767"
+host: "ec2-35-157-50-165.eu-central-1.compute.amazonaws.com"
+basePath: "/"
 schemes:
 - "https"
 consumes:
