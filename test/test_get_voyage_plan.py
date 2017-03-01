@@ -36,14 +36,10 @@ class TestGetVoyagePlan(unittest.TestCase):
         """
         Test VoyagePlan
         """
-        VIS_CERT='/home/karri/VesselVIS/Certificate_VIS-IMO8320767.pem'
-        VIS_KEY='/home/karri/VesselVIS/PrivateKeye_VIS-IMO8320767.pem'
-        #endPoint='https://127.0.0.1:8002/8320767/voyagePlans'
-        #endPoint='https://stm.furuno.fi:8002/8320767/voyagePlans'
-        endPoint='https://www.google.com'
+        CERTPATH='/home/karri/VesselVIS/'
+        endPoint='https://ec2-35-157-50-165.eu-central-1.compute.amazonaws.com/voyagePlans'
         payload='{}'
-        #r=requests.get(endPoint, json=payload)
-        r=requests.post(endPoint, json=payload, cert=('/home/karri/VesselVIS/Certificate_VIS-IMO8320767.pem','/home/karri/VesselVIS/PrivateKey_VIS-IMO8320767.pem'))
+        r=requests.get(endPoint, cert=(CERTPATH + 'Certificate_VIS-Falstaff.pem',CERTPATH + 'PrivateKey_VIS-Falstaff.pem'), verify=CERTPATH + 'mc-ca-chain.pem')
         if r.status_code == 200:
             pass
         print(r.status_code, r.reason)
