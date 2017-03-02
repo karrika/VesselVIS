@@ -32,7 +32,7 @@ class TestDefaultController(BaseTestCase):
         deliveryAck.to_id = 'urn:mrn:'
         deliveryAck.to_name = 'Who cares'
         deliveryAck.ack_result = 'Who cares'
-        response = self.client.open('/8320767/acknowledgement',
+        response = self.client.open('/acknowledgement',
                                     method='POST',
                                     data=json.dumps(deliveryAck),
                                     content_type='application/json')
@@ -46,7 +46,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         query_string = []
-        response = self.client.open('/8320767/voyagePlans',
+        response = self.client.open('/voyagePlans',
                                     method='GET',
                                     content_type='application/json',
                                     query_string=query_string)
@@ -60,7 +60,7 @@ class TestDefaultController(BaseTestCase):
         """
         query_string = [('uvid', 'urn:mrn:stm:voyage:id:8320767'),
                         ('routeStatus', '1')]
-        response = self.client.open('/8320767/voyagePlans',
+        response = self.client.open('/voyagePlans',
                                     method='GET',
                                     content_type='application/json',
                                     query_string=query_string)
@@ -74,7 +74,7 @@ class TestDefaultController(BaseTestCase):
         """
         query_string = [('uvid', 'urn:mrn:stm:voyage:id:not:existing'),
                         ('routeStatus', '1')]
-        response = self.client.open('/8320767/voyagePlans',
+        response = self.client.open('/voyagePlans',
                                     method='GET',
                                     content_type='application/json',
                                     query_string=query_string)
@@ -88,7 +88,7 @@ class TestDefaultController(BaseTestCase):
         """
         query_string = [('callbackEndpoint', 'http://localhost:8002'),
                         ('uvid', 'urn:mrn:stm:voyage:id:8320767')]
-        response = self.client.open('/8320767/voyagePlans/subscription',
+        response = self.client.open('/voyagePlans/subscription',
                                     method='DELETE',
                                     content_type='application/json',
                                     query_string=query_string)
@@ -101,7 +101,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         query_string = [('callbackEndpoint', 'http://localhost:8002')]
-        response = self.client.open('/8320767/voyagePlans/subscription',
+        response = self.client.open('/voyagePlans/subscription',
                                     method='POST',
                                     content_type='application/json',
                                     query_string=query_string)
@@ -115,7 +115,7 @@ class TestDefaultController(BaseTestCase):
         """
         query_string = [('callbackEndpoint', 'http://localhost:8002'),
                         ('uvid', 'urn:mrn:stm:voyage:id:8320767')]
-        response = self.client.open('/8320767/voyagePlans/subscription',
+        response = self.client.open('/voyagePlans/subscription',
                                     method='POST',
                                     content_type='application/json',
                                     query_string=query_string)
@@ -129,7 +129,7 @@ class TestDefaultController(BaseTestCase):
         """
         query_string = [('callbackEndpoint', 'http://localhost:8002'),
                         ('uvid', 'urn:mrn:stm:voyage:id:not:existing')]
-        response = self.client.open('/8320767/voyagePlans/subscription',
+        response = self.client.open('/voyagePlans/subscription',
                                     method='POST',
                                     content_type='application/json',
                                     query_string=query_string)
@@ -144,7 +144,7 @@ class TestDefaultController(BaseTestCase):
         area = S124DataSet()
         area.data_set = 'who cares'
         query_string = [('deliveryAckEndPoint', 'http://localhost:8002')]
-        response = self.client.open('/8320767/area',
+        response = self.client.open('/area',
                                     method='POST',
                                     data=json.dumps(area),
                                     content_type='application/json',
@@ -160,7 +160,7 @@ class TestDefaultController(BaseTestCase):
         textMessageObject = TextMessageObject()
         textMessageObject.text_message = 'Hi there'
         query_string = [('deliveryAckEndPoint', 'http://localhost:8002')]
-        response = self.client.open('/8320767/textMessage',
+        response = self.client.open('/textMessage',
                                     method='POST',
                                     data=json.dumps(textMessageObject),
                                     content_type='application/json',
@@ -177,7 +177,7 @@ class TestDefaultController(BaseTestCase):
         voyagePlan.route = '<route />'
         query_string = [('uvid', 'urn:mrn:stm:voyage:id:new:plan'),
                         ('deliveryAckEndPoint', 'http://localhost:8002')]
-        response = self.client.open('/8320767/voyagePlans',
+        response = self.client.open('/voyagePlans',
                                     method='POST',
                                     data=json.dumps(voyagePlan),
                                     content_type='application/json',
