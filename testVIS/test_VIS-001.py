@@ -17,7 +17,27 @@ import shutil
 import sys
 
 CERTPATH='/home/karri/VesselVIS/'
+vis_cert=(CERTPATH + 'Certificate_VIS-Falstaff.pem', CERTPATH + 'PrivateKey_VIS-Falstaff.pem')
+trustchain=CERTPATH + 'mc-ca-chain.pem'
+
 url="https://ec2-35-157-50-165.eu-central-1.compute.amazonaws.com"
+url="http://localhost:8002"
+callbackurl="http://localhost:8002"
+
+voyageplan='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
+    <routeInfo routeName="Test-Mini-1"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
 
 class TestVIS_001(BaseTestCase):
     """ VIS-001 tests """
@@ -34,10 +54,11 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        uvid='urn%3Amrn%3Astm%3Avoyage%3Aid%3Anot%3Afound'
-        sub='/voyagePlans?uvid=' + uvid
-        payload={}
-        response=requests.get(url + sub, json=payload, cert=(CERTPATH + 'Certificate_VIS-Falstaff.pem', CERTPATH + 'PrivateKey_VIS-Falstaff.pem'), verify=CERTPATH + 'mc-ca-chain.pem')
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:not:found'
+        }
+        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_2(self):
@@ -46,9 +67,13 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        sub='/voyagePlans/subscription?callbackEndpoint=http%3A%2F%2Flocalhost%2FvoyagePlans&uvid=urn%3Amrn%3Astm%3Avoyage%3Aid%3Anot%3Afound'
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'uvid': 'urn:mrn:stm:voyage:id:not:found'
+        }
         payload={}
-        response=requests.post(url + sub, json=payload, cert=(CERTPATH + 'Certificate_VIS-Falstaff.pem', CERTPATH + 'PrivateKey_VIS-Falstaff.pem'), verify=CERTPATH + 'mc-ca-chain.pem')
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_3(self):
@@ -57,9 +82,12 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        sub='/voyagePlans?uvid=urn%3Amrn%3Astm%3Avoyage%3Aid%3Anot%3Afound'
-        payload={'route': '<route />'}
-        response=requests.post(url + sub, json=payload, cert=(CERTPATH + 'Certificate_VIS-Falstaff.pem', CERTPATH + 'PrivateKey_VIS-Falstaff.pem'), verify=CERTPATH + 'mc-ca-chain.pem')
+        sub='/voyagePlans?uvid=urn%3Amrn%3Astm%3Avoyage%3Aid%3Anew%3Aplan'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
 
