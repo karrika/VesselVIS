@@ -52,7 +52,7 @@ class TestVIS_001(BaseTestCase):
     def tearDown(self):
         pass
 
-    def test_VIS_001_1(self):
+    def test_VIS_001_01(self):
         """
         VIS-001-1 - VIS-2: Request (get) voyage plan with chosen UVID from VIS-1
 
@@ -65,7 +65,7 @@ class TestVIS_001(BaseTestCase):
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
         self.assert403(response, "Response body is : " + response.text)
 
-    def test_VIS_001_2(self):
+    def test_VIS_001_02(self):
         """
         VIS-001-2 - VIS-2: Subscribe to voyage plan with chosen UVID from VIS-1
 
@@ -80,7 +80,7 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert403(response, "Response body is : " + response.text)
 
-    def test_VIS_001_3(self):
+    def test_VIS_001_03(self):
         """
         VIS-001-3 - Publish voyage plan to VIS-1 with chosen UVID
 
@@ -94,7 +94,7 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_VIS_001_4(self):
+    def test_VIS_001_04(self):
         """
         VIS-001-4 - VIS-2: Request voyage plan with chosen UVID from VIS-1
 
@@ -109,6 +109,105 @@ class TestVIS_001(BaseTestCase):
             'uvid': 'urn:mrn:stm:voyage:id:8320767'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        self.assert403(response, "Response body is : " + response.text)
+
+    def test_VIS_001_05(self):
+        """
+        VIS-001-5 - VIS-2: Subscribe to voyage plan with chosen UVID from VIS-1
+
+        
+        """
+        f = open('export/' + voyageuvid + '.acl', 'w')
+        data=[ ]
+        f.write(json.dumps(data))
+        f.close()
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'uvid': 'urn:mrn:stm:voyage:id:8320767'
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert403(response, "Response body is : " + response.text)
+
+    def test_VIS_001_06(self):
+        """
+        VIS-001-6 - VIS-1: Authorize organisation for VIS-2 to chosen UVID in VIS-1
+
+        
+        """
+        f = open('export/' + voyageuvid + '.acl', 'w')
+        data=[ vis_uvid ]
+        f.write(json.dumps(data))
+        f.close()
+        pass
+
+    def test_VIS_001_07(self):
+        """
+        VIS-001-7 - VIS-2: Request voyage plan with chosen UVID from VIS-1
+
+        
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:8320767'
+        }
+        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_08(self):
+        """
+        VIS-001-8 - VIS-2: Subscribe to voyage plan with chosen UVID from VIS-1
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'uvid': 'urn:mrn:stm:voyage:id:8320767'
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_09(self):
+        """
+        VIS-001-9 - VIS-1: Remove authorization to organisation for VIS-2 to chosen UVID
+
+        
+        """
+        f = open('export/' + voyageuvid + '.acl', 'w')
+        data=[ ]
+        f.write(json.dumps(data))
+        f.close()
+        pass
+
+    def test_VIS_001_10(self):
+        """
+        VIS-001-10 - VIS-2: Request voyage plan with chosen UVID from VIS-1
+
+        
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:8320767'
+        }
+        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        self.assert403(response, "Response body is : " + response.text)
+
+    def test_VIS_001_11(self):
+        """
+        VIS-001-11 - VIS-2: Subscribe to voyage plan with chosen UVID from VIS-1
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'uvid': 'urn:mrn:stm:voyage:id:8320767'
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert403(response, "Response body is : " + response.text)
 
 
