@@ -20,13 +20,24 @@ def client_mrn():
     """
     Placeholder for real client mrn service from certificate context
     """
-    return 'urn:mrn:me'
+    return 'urn:mrn:stm:service:instance:furuno:imo8320767'
 
-def check_acl():
+def check_acl(uvid):
     """
-    Placeholder for real client mrn service from certificate context
+    Check if client is authorized in the access list of the voyage
     """
-    return True
+    if uvid is None:
+        return False
+    p = Path('export')
+    acl = list(p.glob('**/' + uvid + '.acl'))
+    if len(acl) == 0:
+        return False
+    with acl[0].open() as f: data = json.loads(f.read())
+    f.close()
+    if client_mrn() in data:
+        return True
+    else:
+        return False
 
 def send_ack(endPoint):
     """
@@ -60,8 +71,6 @@ def acknowledgement(deliveryAck):
 
     :rtype: ResponseObj
     """
-    if not check_acl():
-        return 'Forbidden', 403
     ret = ResponseObj()
     if connexion.request.is_json:
         deliveryAck = DeliveryAck.from_dict(connexion.request.get_json())
@@ -95,7 +104,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVPResponseObject
     """
-    if not check_acl():
+    if not check_acl(uvid):
         return 'Forbidden', 403
     p = Path('export')
     if uvid is None:
@@ -130,7 +139,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
-    if not check_acl():
+    if not check_acl(uvid):
         return 'Forbidden', 403
     ret = ResponseObj()
     me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
@@ -189,7 +198,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
-    if not check_acl():
+    if not check_acl(uvid):
         return 'Forbidden', 403
     ret = ResponseObj()
     me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
@@ -240,7 +249,7 @@ def upload_area(area, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
-    if not check_acl():
+    if not check_acl(uvid):
         return 'Forbidden', 403
     if connexion.request.is_json:
         area = S124DataSet.from_dict(connexion.request.get_json())
@@ -278,8 +287,6 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
-    if not check_acl():
-        return 'Forbidden', 403
     ret = ResponseObj()
     if connexion.request.is_json:
         voyagePlan = VoyagePlan.from_dict(connexion.request.get_json())

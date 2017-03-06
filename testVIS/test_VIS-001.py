@@ -15,6 +15,7 @@ from swagger_client.rest import ApiException
 import requests
 import shutil
 import sys
+import json
 
 CERTPATH='/home/karri/VesselVIS/'
 vis_cert=(CERTPATH + 'Certificate_VIS-Falstaff.pem', CERTPATH + 'PrivateKey_VIS-Falstaff.pem')
@@ -39,6 +40,9 @@ voyageplan='\
 </route>\
 '
 
+voyageuvid='urn:mrn:stm:voyage:id:8320767'
+vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
+
 class TestVIS_001(BaseTestCase):
     """ VIS-001 tests """
 
@@ -59,7 +63,7 @@ class TestVIS_001(BaseTestCase):
             'uvid': 'urn:mrn:stm:voyage:id:not:found'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-        self.assert404(response, "Response body is : " + response.text)
+        self.assert403(response, "Response body is : " + response.text)
 
     def test_VIS_001_2(self):
         """
@@ -74,7 +78,7 @@ class TestVIS_001(BaseTestCase):
         }
         payload={}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-        self.assert404(response, "Response body is : " + response.text)
+        self.assert403(response, "Response body is : " + response.text)
 
     def test_VIS_001_3(self):
         """
@@ -82,13 +86,30 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        sub='/voyagePlans?uvid=urn%3Amrn%3Astm%3Avoyage%3Aid%3Anew%3Aplan'
+        sub='/voyagePlans'
         parameters={
             'uvid': 'urn:mrn:stm:voyage:id:new:plan'
         }
         payload={'route': voyageplan}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_4(self):
+        """
+        VIS-001-4 - VIS-2: Request voyage plan with chosen UVID from VIS-1
+
+        
+        """
+        f = open('export/' + voyageuvid + '.acl', 'w')
+        data=[ ]
+        f.write(json.dumps(data))
+        f.close()
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:8320767'
+        }
+        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        self.assert403(response, "Response body is : " + response.text)
 
 
 if __name__ == '__main__':
