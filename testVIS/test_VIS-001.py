@@ -40,6 +40,51 @@ voyageplan='\
 </route>\
 '
 
+voyageplan_in_the_past='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
+    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2016-12-22T13:00:00Z" validityPeriodStop="2016-12-23T13:00:00Z"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
+
+voyageplan_in_the_past_and_future='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
+    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2016-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
+
+voyageplan_in_the_future='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
+    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
+
 voyageuvid='urn:mrn:stm:voyage:id:8320767'
 vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
 
@@ -91,6 +136,48 @@ class TestVIS_001(BaseTestCase):
             'uvid': 'urn:mrn:stm:voyage:id:new:plan'
         }
         payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_03_1(self):
+        """
+        VIS-001-3-1 - Select VP with validityPeriodStart and validityPeriodStop in past and publish to VIS-1
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_in_the_past}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_03_2(self):
+        """
+        VIS-001-3-2 - Change validityPeriodStop to future and publish to VIS-1
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_in_the_past_and_future}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_03_3(self):
+        """
+        VIS-001-3-2 - Change validityPeriodStart to future and publish to VIS-1
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_in_the_future}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
