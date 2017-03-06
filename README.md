@@ -9,9 +9,12 @@ This example uses the [Connexion](https://github.com/zalando/connexion) library 
 
 ### SSL certification
 
-In order to use SSL certificates you need to add your service instance certificates in the main directory. In this instance the files are Certificate_VIS-IMO8320767.pem and PrivateKey_VIS-IMO8320767.pem. Both should be in the root directory.
-
-In order to identify the instance correctly you need to edit the path attribute in the swagger_server/swagger/swagger.yaml file. In this example the instance is /8320767
+In order to use SSL certificates you need to add your service instance certificates in the VesselVIS directory.  The code will look for the files
+```
+VesselVIS/Certificate_VIS*.pem
+VesselVIS/PrivateKey_VIS*.pem
+VesselVIS/mc-ca-chain.pem
+```
 
 To run the server, please execute the following from the root directory:
 
@@ -34,6 +37,16 @@ https://stm.furuno.fi:8002/8320767/swagger.json
 
 To launch the integration tests, use tox:
 ```
-sudo pip install tox
+sudo pip3 install tox
 tox
+```
+
+To just run a single VIS tests you can use nosetests:
+```
+nosetests -v testVIS/test_VIS-001.py
+```
+
+To just run all the tests as verbose
+```
+nosetests -v
 ```
