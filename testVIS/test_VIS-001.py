@@ -37,6 +37,8 @@ trustchain=CERTPATH + str(vis_trust[0])
 url="https://ec2-35-157-50-165.eu-central-1.compute.amazonaws.com"
 url="http://localhost:8002"
 callbackurl="http://localhost:8002"
+voyageuvid='urn:mrn:stm:voyage:id:8320767'
+vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
 
 voyageplan='\
 <?xml version="1.0" encoding="UTF-8"?>\
@@ -98,8 +100,6 @@ voyageplan_in_the_future='\
 </route>\
 '
 
-voyageuvid='urn:mrn:stm:voyage:id:8320767'
-vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
 
 class TestVIS_001(BaseTestCase):
     """ VIS-001 tests """
@@ -116,12 +116,21 @@ class TestVIS_001(BaseTestCase):
 
         
         """
+        f = open('export/all.acl', 'w')
+        data=[ ]
+        f.write(json.dumps(data))
+        f.close()
+        f = open('export/' + voyageuvid + '.acl', 'w')
+        data=[ ]
+        f.write(json.dumps(data))
+        f.close()
+
         sub='/voyagePlans'
         parameters={
             'uvid': 'urn:mrn:stm:voyage:id:not:found'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-        self.assert403(response, "Response body is : " + response.text)
+        self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_02(self):
         """

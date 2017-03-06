@@ -27,7 +27,13 @@ def check_acl(uvid):
     Check if client is authorized in the access list of the voyage
     """
     if uvid is None:
-        return False
+        f = open('export/all.acl', 'r')
+        data = json.loads(f.read())
+        f.close()
+        if client_mrn() in data:
+            return True
+        else:
+            return False
     p = Path('export')
     acl = list(p.glob('**/' + uvid + '.acl'))
     if len(acl) == 0:
@@ -104,8 +110,6 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVPResponseObject
     """
-    if not check_acl(uvid):
-        return 'Forbidden', 403
     p = Path('export')
     if uvid is None:
         uvids = list(p.glob('**/*.uvid'))
@@ -118,6 +122,8 @@ def get_voyage_plans(uvid=None, routeStatus=None):
             return 'Voyage plan ' + uvid + ' not found', 404
     with uvids[0].open() as f: data = json.loads(f.read())
     f.close()
+    if not check_acl(uvid):
+        return 'Forbidden', 403
     ret = GetVPResponseObject()
     vp = VoyagePlan()
     f = open('export/' + data['route'], 'r')
@@ -139,10 +145,8 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
-    if not check_acl(uvid):
-        return 'Forbidden', 403
     ret = ResponseObj()
-    me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
+    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
     p = Path('import')
     if uvid is None:
         vp = 'all'
@@ -154,6 +158,8 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
         f.close()
+        if not check_acl(uvids[0]):
+            return 'Forbidden', 403
         if me in data:
             ret.body = 'Remove subscription already sent'
         else:
@@ -198,10 +204,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     :rtype: ResponseObj
     """
-    if not check_acl(uvid):
-        return 'Forbidden', 403
     ret = ResponseObj()
-    me = { 'uid': 'urn:mrn:me', 'url': callbackEndpoint}
+    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
     p = Path('import')
     if uvid is None:
         vp = 'all'
@@ -249,8 +253,6 @@ def upload_area(area, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
-    if not check_acl(uvid):
-        return 'Forbidden', 403
     if connexion.request.is_json:
         area = S124DataSet.from_dict(connexion.request.get_json())
     return ResponseObj()
@@ -267,8 +269,6 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
-    if not check_acl():
-        return 'Forbidden', 403
     if connexion.request.is_json:
         textMessageObject = TextMessageObject.from_dict(connexion.request.get_json())
     return '-- MAGIC--'

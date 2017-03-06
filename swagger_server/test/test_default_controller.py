@@ -13,6 +13,18 @@ from . import BaseTestCase
 from six import BytesIO
 from flask import json
 
+voyageuvid='urn:mrn:stm:voyage:id:8320767'
+vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
+
+f = open('export/' + voyageuvid + '.acl', 'w')
+data=[ vis_uvid ]
+f.write(json.dumps(data))
+f.close()
+
+f = open('export/all.acl', 'w')
+data=[ vis_uvid ]
+f.write(json.dumps(data))
+f.close()
 
 class TestDefaultController(BaseTestCase):
     """ DefaultController integration test stubs """
