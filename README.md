@@ -26,13 +26,19 @@ python3 -m swagger_server
 and open your browser to here:
 
 ```
-https://stm.furuno.fi:8002/8320767/ui/
+https://stm.furuno.fi:8002/ui/ -- Production
+
+http://localhost:8002/ui/ -- Testing
 ```
+
+In order to choose between localhost or your real server edit VesselVIS/swagger_server/__main__.py
+
+And for testing you also need to edit the host url at the start of VesselVIS/testVIS test cases.
 
 Your Swagger definition lives here:
 
 ```
-https://stm.furuno.fi:8002/8320767/swagger.json
+https://stm.furuno.fi:8002/swagger.json
 ```
 
 To launch the integration tests, use tox:
