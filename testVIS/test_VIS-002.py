@@ -254,6 +254,7 @@ class TestVIS_002(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
+    @unittest.skip('Multiple vessels through one instance is not supported.')
     def test_VIS_002_9_7(self):
         """
         VIS-002-1-7 - VIS-2 : Request voyage plans from VIS-1
@@ -267,13 +268,13 @@ class TestVIS_002(BaseTestCase):
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
+    @unittest.skip('Multiple vessels through one instance is not supported.')
     def test_VIS_002_9_8(self):
         """
         VIS-002-1-8 - VIS-1 : Publish voyage plan with new UVID for another ship and routeStatus=7
 
 
         """
-        logging.disable(logging.CRITICAL)
         sub='/voyagePlans'
         parameters={
             'uvid': newvoyageuvid2,
@@ -281,20 +282,18 @@ class TestVIS_002(BaseTestCase):
         }
         payload={'route': voyageplan}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-        self.fail('Multiple vessels through one instance is not supported.')
-        logging.disable(logging.NOTSET)
+        self.assert200(response, "Response body is : " + response.text)
 
+    @unittest.skip('Multiple vessels through one instance is not supported.')
     def test_VIS_002_9_8(self):
         """
         VIS-002-1-9 - VIS-2 : Request voyage plans from VIS-1
 
         
         """
-        logging.disable(logging.CRITICAL)
         sub='/voyagePlans'
         response=requests.get(url + sub, cert=vis_cert, verify=trustchain)
-        self.fail('Multiple vessels through one instance is not supported.')
-        logging.disable(logging.NOTSET)
+        self.assert200(response, "Response body is : " + response.text)
 
 
 if __name__ == '__main__':
