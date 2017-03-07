@@ -71,7 +71,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         query_string = [('uvid', 'urn:mrn:stm:voyage:id:8320767'),
-                        ('routeStatus', '1')]
+                        ('routeStatus', '7')]
         response = self.client.open('/voyagePlans',
                                     method='GET',
                                     content_type='application/json',
@@ -85,7 +85,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         query_string = [('uvid', 'urn:mrn:stm:voyage:id:not:existing'),
-                        ('routeStatus', '1')]
+                        ('routeStatus', '7')]
         response = self.client.open('/voyagePlans',
                                     method='GET',
                                     content_type='application/json',

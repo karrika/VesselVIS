@@ -122,6 +122,9 @@ def get_voyage_plans(uvid=None, routeStatus=None):
             return 'Voyage plan ' + uvid + ' not found', 404
     with uvids[0].open() as f: data = json.loads(f.read())
     f.close()
+    if routeStatus is not None:
+        if routeStatus != data['routeStatus']:
+            return 'Voyage plan with routeStatus' + routeStatus + ' not found', 404
     if not check_acl(uvid):
         return 'Forbidden', 403
     ret = GetVPResponseObject()
@@ -217,6 +220,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         uvids = list(p2.glob('**/' + uvid + '.uvid'))
         if len(uvids) == 0:
             return 'Voyage plan ' + uvid + ' not found', 404
+        if not check_acl(uvid):
+            return 'Forbidden', 403
     uvids = list(p.glob('**/*' + vp + '.subs'))
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
