@@ -16,6 +16,11 @@ VesselVIS/PrivateKey_VIS*.pem
 VesselVIS/mc-ca-chain.pem
 ```
 
+As the MarineCloud certificates are self-signed you also need to set them up correctly for OpenSSL. This is done by running a script.
+```
+VesselVIS/setup_MC_certs.sh
+```
+
 To run the server, please execute the following from the root directory:
 
 ```
