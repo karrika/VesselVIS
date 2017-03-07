@@ -85,10 +85,83 @@ voyageplan_in_the_past_and_future='\
 </route>\
 '
 
-voyageplan_in_the_future='\
+voyageplan_in_the_future10='\
 <?xml version="1.0" encoding="UTF-8"?>\
 <route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
     <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
+
+voyageplan_in_the_future11='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/1">\
+    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
+
+voyageplan_in_the_future20='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/2/0">\
+    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
+
+voyageplan_in_the_future_stm20='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/2/0">\
+    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
+
+voyageplan_incorrect_xml='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+'
+
+voyageplan_incorrect_schema='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
+    <elephant routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
         <waypoints>\
                 <waypoint id="1">\
                         <position lat="53.5123" lon="8.11998"/>\
@@ -191,7 +264,7 @@ class TestVIS_001(BaseTestCase):
 
     def test_VIS_001_03_3(self):
         """
-        VIS-001-3-2 - Change validityPeriodStart to future and publish to VIS-1
+        VIS-001-3-3 - Change validityPeriodStart to future and publish to VIS-1
 
 
         """
@@ -199,9 +272,93 @@ class TestVIS_001(BaseTestCase):
         parameters={
             'uvid': 'urn:mrn:stm:voyage:id:new:plan'
         }
-        payload={'route': voyageplan_in_the_future}
+        payload={'route': voyageplan_in_the_future10}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_04_1(self):
+        """
+        VIS-001-4-1 - Select VP according to schema RTZ 1.0 and publish to VIS-1
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_in_the_future10}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_04_2(self):
+        """
+        VIS-001-4-2 - Select VP according to schema RTZ 1.1 and publish to VIS-1
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_in_the_future11}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_04_3(self):
+        """
+        VIS-001-4-3 - Select VP according to schema RTZ 2.0 and publish to VIS-1
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_in_the_future20}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_04_4(self):
+        """
+        VIS-001-4-4 - Select VP according to schema RTZ STM 2.0 and publish to VIS-1 
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_in_the_future_stm20}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_001_05_1(self):
+        """
+        VIS-001-5-1 - Select VP in incorrect XML and publish to VIS-1 
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_incorrect_xml}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert400(response, "Response body is : " + response.text)
+
+    def test_VIS_001_05_2(self):
+        """
+        VIS-001-5-2 - Select VP not following schema RTZ  and publish to VIS-1 
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan_incorrect_schema}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_04(self):
         """
