@@ -39,6 +39,7 @@ url="http://localhost:8002"
 callbackurl="http://localhost:8002"
 voyageuvid='urn:mrn:stm:voyage:id:8320767'
 newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
+newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'
 vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
 
 

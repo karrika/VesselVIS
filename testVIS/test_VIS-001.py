@@ -18,6 +18,7 @@ import sys
 import json
 from pathlib import Path
 from . import hostsettings
+import logging
 
 vis_cert=hostsettings.vis_cert
 trustchain=hostsettings.trustchain
@@ -399,6 +400,7 @@ class TestVIS_001(BaseTestCase):
 
 
         """
+        logging.disable(logging.CRITICAL)
         sub='/voyagePlans'
         parameters={
             'uvid': 'urn:mrn:stm:voyage:id:new:plan'
@@ -406,6 +408,8 @@ class TestVIS_001(BaseTestCase):
         payload={'route': voyageplan_in_the_future11}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
+        self.fail('RTZ1.1 not supported')
+        logging.disable(logging.NOTSET)
 
     def test_VIS_001_12_04_3(self):
         """
@@ -413,6 +417,7 @@ class TestVIS_001(BaseTestCase):
 
 
         """
+        logging.disable(logging.CRITICAL)
         sub='/voyagePlans'
         parameters={
             'uvid': 'urn:mrn:stm:voyage:id:new:plan'
@@ -420,6 +425,8 @@ class TestVIS_001(BaseTestCase):
         payload={'route': voyageplan_in_the_future20}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
+        self.fail('RTZ2.0 not supported')
+        logging.disable(logging.NOTSET)
 
     def test_VIS_001_12_04_4(self):
         """
@@ -427,6 +434,7 @@ class TestVIS_001(BaseTestCase):
 
 
         """
+        logging.disable(logging.CRITICAL)
         sub='/voyagePlans'
         parameters={
             'uvid': 'urn:mrn:stm:voyage:id:new:plan'
@@ -434,6 +442,8 @@ class TestVIS_001(BaseTestCase):
         payload={'route': voyageplan_in_the_future_stm20}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
+        self.fail('STM RTZ2.0 not supported')
+        logging.disable(logging.NOTSET)
 
     def test_VIS_001_12_05_1(self):
         """
@@ -441,14 +451,15 @@ class TestVIS_001(BaseTestCase):
 
 
         """
+        logging.disable(logging.CRITICAL)
         sub='/voyagePlans'
         parameters={
             'uvid': 'urn:mrn:stm:voyage:id:new:plan'
         }
         payload={'route': voyageplan_incorrect_xml}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-        #self.assert400(response, "Response body is : " + response.text)
-        pass
+        self.fail('XML checking not implemented')
+        logging.disable(logging.NOTSET)
 
     def test_VIS_001_12_05_2(self):
         """
@@ -462,8 +473,8 @@ class TestVIS_001(BaseTestCase):
         }
         payload={'route': voyageplan_incorrect_schema}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-        #self.assert400(response, "Response body is : " + response.text)
-        pass
+        self.fail('Schema checking not implemented')
+        logging.disable(logging.NOTSET)
 
 
 if __name__ == '__main__':

@@ -18,6 +18,7 @@ import sys
 import json
 from pathlib import Path
 from . import hostsettings
+import logging
 
 vis_cert=hostsettings.vis_cert
 trustchain=hostsettings.trustchain
@@ -26,7 +27,23 @@ url=hostsettings.url
 callbackurl=hostsettings.callbackurl
 voyageuvid=hostsettings.voyageuvid
 newvoyageuvid=hostsettings.newvoyageuvid
+newvoyageuvid2=hostsettings.newvoyageuvid2
 vis_uvid=hostsettings.vis_uvid
+
+voyageplan='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
+    <routeInfo routeName="Test-Mini-1" routeStatus="7"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
 
 
 class TestVIS_002(BaseTestCase):
@@ -168,7 +185,22 @@ class TestVIS_002(BaseTestCase):
 
     def test_VIS_002_9_2(self):
         """
-        VIS-002-1-2 - VIS-2: Request (get) voyage plan with chosen UVID from VIS-1
+        VIS-002-1-2 - VIS-1 : Publish voyage plan with chosen UVID and routeStatus=7
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': newvoyageuvid,
+            'routeStatus': '7'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_002_9_3(self):
+        """
+        VIS-002-1-3 - VIS-2 : Request voyage plans from VIS-1
 
         
         """
@@ -177,7 +209,92 @@ class TestVIS_002(BaseTestCase):
             'uvid': newvoyageuvid
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-        self.assert404(response, "Response body is : " + response.text)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_002_9_4(self):
+        """
+        VIS-002-1-4 - VIS-1 : Publish voyage plan with chosen UVID and routeStatus=7
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': newvoyageuvid,
+            'routeStatus': '7'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_002_9_5(self):
+        """
+        VIS-002-1-5 - VIS-2 : Request voyage plans from VIS-1
+
+        
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': newvoyageuvid
+        }
+        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_002_9_6(self):
+        """
+        VIS-002-1-6 - VIS-1 : Publish voyage plan with new UVID for the same ship and routeStatus=7
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': newvoyageuvid2,
+            'routeStatus': '7'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_002_9_7(self):
+        """
+        VIS-002-1-7 - VIS-2 : Request voyage plans from VIS-1
+
+        
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': newvoyageuvid2
+        }
+        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_002_9_8(self):
+        """
+        VIS-002-1-8 - VIS-1 : Publish voyage plan with new UVID for another ship and routeStatus=7
+
+
+        """
+        logging.disable(logging.CRITICAL)
+        sub='/voyagePlans'
+        parameters={
+            'uvid': newvoyageuvid2,
+            'routeStatus': '7'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.fail('Multiple vessels through one instance is not supported.')
+        logging.disable(logging.NOTSET)
+
+    def test_VIS_002_9_8(self):
+        """
+        VIS-002-1-9 - VIS-2 : Request voyage plans from VIS-1
+
+        
+        """
+        logging.disable(logging.CRITICAL)
+        sub='/voyagePlans'
+        response=requests.get(url + sub, cert=vis_cert, verify=trustchain)
+        self.fail('Multiple vessels through one instance is not supported.')
+        logging.disable(logging.NOTSET)
 
 
 if __name__ == '__main__':
