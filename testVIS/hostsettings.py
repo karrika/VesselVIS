@@ -38,6 +38,7 @@ url="https://ec2-35-157-50-165.eu-central-1.compute.amazonaws.com"
 url="http://localhost:8002"
 callbackurl="http://localhost:8002"
 voyageuvid='urn:mrn:stm:voyage:id:8320767'
+newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
 
 
