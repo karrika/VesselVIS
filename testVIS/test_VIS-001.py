@@ -133,7 +133,9 @@ voyageplan_in_the_future_stm20='\
 </route>\
 '
 
-voyageplan_incorrect_xml='\
+voyageplan_incorrect_xml='The quick brown fox jumps over a lazy old dog'
+
+voyageplan_incorrect_xml2='\
 <?xml version="1.0" encoding="UTF-8"?>\
 <route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
         <waypoints>\
@@ -439,7 +441,10 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
+        """
     @unittest.skip('XML conformance checking not supported')
+        """
+
     def test_VIS_001_12_05_1(self):
         """
         VIS-001-5-1 - Select VP in incorrect XML and publish to VIS-1 
@@ -452,6 +457,7 @@ class TestVIS_001(BaseTestCase):
         }
         payload={'route': voyageplan_incorrect_xml}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
 
     @unittest.skip('Schema conformance checking not supported')
     def test_VIS_001_12_05_2(self):

@@ -42,4 +42,12 @@ newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'
 vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
 
+def set_acl(id, uvid=None):
+    if uvid is None: 
+        f = open('export/all.acl', 'w')
+    else:
+        f = open('export/' + voyageuvid + '.acl', 'w')
+    data=[ id ]
+    f.write(json.dumps(data))
+    f.close()
 

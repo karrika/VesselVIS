@@ -47,7 +47,7 @@ voyageplan='\
 
 
 class TestVIS_002(BaseTestCase):
-    """ VIS-001 tests """
+    """ VIS-002 tests """
 
     def setUp(self):
         f = open('export/' + voyageuvid + '.acl', 'w')
