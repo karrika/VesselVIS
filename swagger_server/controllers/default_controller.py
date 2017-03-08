@@ -157,11 +157,11 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     else:
         vp = uvid
         ret.body = 'Remove subscription for ' + uvid + ' sent'
-    uvids = list(p.glob('**/*' + vp + '.rmsubs'))
+    uvids = list(p.glob('**/' + vp + '.rmsubs'))
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
         f.close()
-        if not check_acl(uvids[0]):
+        if not check_acl(vp):
             return 'Forbidden', 403
         if me in data:
             ret.body = 'Remove subscription already sent'

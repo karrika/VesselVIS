@@ -46,8 +46,8 @@ voyageplan='\
 '
 
 
-class TestVIS_003(BaseTestCase):
-    """ VIS-003 tests """
+class TestVIS_004(BaseTestCase):
+    """ VIS-004 tests """
 
     def setUp(self):
         hostsettings.set_acl(vis_uvid, voyageuvid)
@@ -57,9 +57,9 @@ class TestVIS_003(BaseTestCase):
     def tearDown(self):
         pass
 
-    def test_VIS_003_1(self):
+    def test_VIS_004_1(self):
         """
-        VIS-003-1 - VIS-2: Request subscription on VIS-1
+        VIS-004-1 - VIS-2: Request subscription on VIS-1
 
         
         """
@@ -69,13 +69,44 @@ class TestVIS_003(BaseTestCase):
             'uvid': voyageuvid
         }
         payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
     @unittest.skip('Testing subscription with receiving the packet requires two instances. Not set up yet.')
-    def test_VIS_003_2(self):
+    def test_VIS_004_2(self):
         """
-        VIS-003-2 - VIS-1: Publish voyage plan to VIS-1 instance
+        VIS-004-2 - VIS-1: Publish voyage plan to VIS-1 instance
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'uvid': voyageuvid
+        }
+        payload={}
+        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_004_3(self):
+        """
+        VIS-004-3 - VIS-2: Request remove of subscription to voyage plan from VIS-1
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'uvid': voyageuvid
+        }
+        payload={}
+        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    @unittest.skip('Testing subscription with receiving the packet requires two instances. Not set up yet.')
+    def test_VIS_004_4(self):
+        """
+        VIS-004-4 - VIS-1: Publish voyage plan to VIS-1 instance
 
         
         """
