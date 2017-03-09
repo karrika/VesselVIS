@@ -7,6 +7,14 @@ is an example of building a swagger-enabled Flask server.
 
 This example uses the [Connexion](https://github.com/zalando/connexion) library on top of Flask.
 
+### Ubuntu 16.04 LTS
+
+This example requires Python 3.5 to run the test suites
+
+It also requires a fairly new release of OpenSSL for running TLSv1.2 that is required by STM.
+
+After trying Raspberry Pi with Raspbian and EC2 AWS instances with AMI I finally found one good distro with all the right tools. It was Ubuntu 16.04 LTS release which will be supported for 4 years.
+
 ### SSL certification
 
 In order to use SSL certificates you need to add your service instance certificates in the VesselVIS directory.  The code will look for the files
@@ -31,14 +39,12 @@ python3 -m swagger_server
 and open your browser to here:
 
 ```
-https://stm.furuno.fi:8002/ui/ -- Production
-
-http://localhost:8002/ui/ -- Testing
+https://stm.furuno.fi:8001/ui/ -- Vessel 1
+https://stm.furuno.fi:8002/ui/ -- Vessel 2
+https://stm.furuno.fi:8003/ui/ -- Vessel 3
+https://stm.furuno.fi:8004/ui/ -- Vessel 4
+...
 ```
-
-In order to choose between localhost or your real server edit VesselVIS/swagger_server/__main__.py
-
-And for testing you also need to edit the host url at the start of VesselVIS/testVIS test cases.
 
 Your Swagger definition lives here:
 
@@ -46,18 +52,15 @@ Your Swagger definition lives here:
 https://stm.furuno.fi:8002/swagger.json
 ```
 
-To launch the integration tests, use tox:
+To set up the env environment for testing, launch tox:
 ```
 sudo pip3 install tox
 tox
 ```
 
-To just run a single VIS tests you can use nosetests:
+To run the integration test suite we need to launch two vessel service instances that are capable of communicating with each other
 ```
-nosetests -v testVIS/test_VIS-001.py
+./run_VIS_unittests.sh
 ```
 
-To just run all the tests as verbose
-```
-nosetests -v
-```
+By peeking inside the previous script you have examples of how to run single tests.
