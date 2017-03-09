@@ -487,7 +487,6 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('RTZ 2.0 is not yet supported.')
     def test_VIS_001_12_04_3(self):
         """
         VIS-001-4-3 - Select VP according to schema RTZ 2.0 and publish to VIS-1
@@ -502,7 +501,6 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('RTZ STM 2.0 is not yet supported.')
     def test_VIS_001_12_04_4(self):
         """
         VIS-001-4-4 - Select VP according to schema RTZ STM 2.0 and publish to VIS-1 

@@ -18,6 +18,8 @@ from lxml import etree
 import io
 from . import rtz10
 from . import rtz11
+from . import rtz20
+from . import rtzstm20
 
 
 def client_mrn():
@@ -316,8 +318,20 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
                 ret.body = rtz11.xmlschema.error_log
                 return ret, 400
         else:
-            ret.body = 'Unsupported route format'
-            return ret, 400
+            if root.tag == '{http://www.cirm.org/RTZ/2/0}route':
+                if rtz20.xmlschema.validate(doc) == False:
+                    rtz.close()
+                    ret.body = rtz20.xmlschema.error_log
+                    return ret, 400
+            else:
+                if root.tag == '{http://www.cirm.org/RTZ/2/0}route':
+                    if rtzstm20.xmlschema.validate(doc) == False:
+                        rtz.close()
+                        ret.body = rtzstm20.xmlschema.error_log
+                        return ret, 400
+                else:
+                    ret.body = 'Unsupported route format'
+                return ret, 400
     f = open('import/' + uvid + '.rtz', 'w')
     f.write(voyagePlan.route)
     f.close()
