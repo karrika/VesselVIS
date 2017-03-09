@@ -7,6 +7,14 @@ is an example of building a swagger-enabled Flask server.
 
 This example uses the [Connexion](https://github.com/zalando/connexion) library on top of Flask.
 
+### Quick start
+
+Everything is here. Just invoke the tests and enjoy the show.
+```
+./setup_MC_certs.sh
+./run_VIS_unittests.sh
+```
+
 ### Ubuntu 16.04 LTS
 
 This example requires Python 3.5 to run the test suites
