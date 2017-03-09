@@ -14,6 +14,9 @@ import json
 from pathlib import Path
 import os
 import requests
+from lxml import etree
+import io
+from . import rtz11
 
 
 def client_mrn():
@@ -295,6 +298,14 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
     ret = ResponseObj()
     if connexion.request.is_json:
         voyagePlan = VoyagePlan.from_dict(connexion.request.get_json())
+    rtz = io.StringIO()
+    rtz.write(voyagePlan.route)
+    rtz.seek(0)
+    doc = etree.parse(rtz)
+    if rtz11.xmlschema.validate(doc) == False:
+        rtz.close()
+        ret.body = rtz11.xmlschema.error_log
+        return ret, 400
     f = open('import/' + uvid + '.rtz', 'w')
     f.write(voyagePlan.route)
     f.close()
