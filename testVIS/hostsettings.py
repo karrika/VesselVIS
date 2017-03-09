@@ -30,13 +30,11 @@ vis_trust = list(p.glob('**/mc-ca-chain.pem'))
 if len(vis_trust) == 0:
     print('Error: no mc-ca-chain.pem found')
 
-CERTPATH=''
-vis_cert=(CERTPATH + str(vis_cert[0]), CERTPATH + str(vis_key[0]))
-trustchain=CERTPATH + str(vis_trust[0])
+vis_cert=(str(vis_cert[0]), str(vis_key[0]))
+trustchain=str(vis_trust[0])
 
-url="https://ec2-35-157-50-165.eu-central-1.compute.amazonaws.com"
-url="http://localhost:8002"
-callbackurl="http://localhost:8002"
+url="https://localhost:8001"
+callbackurl="https://localhost:8001"
 voyageuvid='urn:mrn:stm:voyage:id:8320767'
 newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'

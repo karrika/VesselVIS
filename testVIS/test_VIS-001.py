@@ -179,7 +179,7 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        f = open('export/' + voyageuvid + '.acl', 'w')
+        f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
         data=[ ]
         f.write(json.dumps(data))
         f.close()
@@ -226,7 +226,7 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        f = open('export/' + voyageuvid + '.acl', 'w')
+        f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
         data=[ ]
         f.write(json.dumps(data))
         f.close()
@@ -243,7 +243,7 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        f = open('export/' + voyageuvid + '.acl', 'w')
+        f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
         data=[ ]
         f.write(json.dumps(data))
         f.close()
@@ -262,11 +262,11 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        f = open('export/all.acl', 'w')
+        f = open('../VIS-1/export/all.acl', 'w')
         data=[ ]
         f.write(json.dumps(data))
         f.close()
-        f = open('export/' + voyageuvid + '.acl', 'w')
+        f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
         data=[ vis_uvid ]
         f.write(json.dumps(data))
         f.close()
@@ -306,7 +306,7 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        f = open('export/' + voyageuvid + '.acl', 'w')
+        f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
         data=[ ]
         f.write(json.dumps(data))
         f.close()

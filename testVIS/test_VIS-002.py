@@ -50,11 +50,11 @@ class TestVIS_002(BaseTestCase):
     """ VIS-002 tests """
 
     def setUp(self):
-        f = open('export/' + voyageuvid + '.acl', 'w')
+        f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
         data=[ vis_uvid ]
         f.write(json.dumps(data))
         f.close()
-        f = open('export/all.acl', 'w')
+        f = open('../VIS-1/export/all.acl', 'w')
         data=[ vis_uvid ]
         f.write(json.dumps(data))
         f.close()
@@ -173,14 +173,14 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        f = open('export/' + newvoyageuvid + '.acl', 'w')
+        f = open('../VIS-1/export/' + newvoyageuvid + '.acl', 'w')
         data=[ vis_uvid ]
         f.write(json.dumps(data))
         f.close()
-        p = Path('export')
+        p = Path('../VIS-1/export')
         vp = list(p.glob('**/' + newvoyageuvid + '.uvid'))
         if len(vp) > 0:
-            os.remove('export/' + newvoyageuvid + '.uvid')
+            os.remove('../VIS-1/export/' + newvoyageuvid + '.uvid')
         pass
 
     def test_VIS_002_9_2(self):
