@@ -16,6 +16,7 @@ import os
 import requests
 from lxml import etree
 import io
+from . import rtz10
 from . import rtz11
 
 
@@ -302,10 +303,21 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
     rtz.write(voyagePlan.route)
     rtz.seek(0)
     doc = etree.parse(rtz)
-    if rtz11.xmlschema.validate(doc) == False:
-        rtz.close()
-        ret.body = rtz11.xmlschema.error_log
-        return ret, 400
+    root = doc.getroot()
+    if root.tag == '{http://www.cirm.org/RTZ/1/0}route':
+        if rtz10.xmlschema.validate(doc) == False:
+            rtz.close()
+            ret.body = rtz10.xmlschema.error_log
+            return ret, 400
+    else:
+        if root.tag == '{http://www.cirm.org/RTZ/1/1}route':
+            if rtz11.xmlschema.validate(doc) == False:
+                rtz.close()
+                ret.body = rtz11.xmlschema.error_log
+                return ret, 400
+        else:
+            ret.body = 'Unsupported route format'
+            return ret, 400
     f = open('import/' + uvid + '.rtz', 'w')
     f.write(voyagePlan.route)
     f.close()

@@ -28,110 +28,187 @@ callbackurl=hostsettings.callbackurl
 voyageuvid=hostsettings.voyageuvid
 vis_uvid=hostsettings.vis_uvid
 
-voyageplan='\
-<?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
-    <routeInfo routeName="Test-Mini-1"/>\
-        <waypoints>\
-                <waypoint id="1">\
-                        <position lat="53.5123" lon="8.11998"/>\
-                </waypoint>\
-                <waypoint id="15">\
-                        <position lat="53.0492" lon="8.87731"/>\
-                </waypoint>\
-        </waypoints>\
-</route>\
-'
+voyageplan='''<?xml version="1.0"?>
+<route version="1.1" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  </routeInfo>
+  <waypoints>
+    <waypoint id="1" name="Hango" radius="0.800000">
+      <position lat="59.811700" lon="22.935567"/>
+    </waypoint>
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.758817" lon="23.020267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <scheduleElement etd="2017-02-15T10:00:00Z" waypointId="1"/>
+        <scheduleElement eta="2017-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
-voyageplan_in_the_past='\
-<?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
-    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2016-12-22T13:00:00Z" validityPeriodStop="2016-12-23T13:00:00Z"/>\
-        <waypoints>\
-                <waypoint id="1">\
-                        <position lat="53.5123" lon="8.11998"/>\
-                </waypoint>\
-                <waypoint id="15">\
-                        <position lat="53.0492" lon="8.87731"/>\
-                </waypoint>\
-        </waypoints>\
-</route>\
-'
+voyageplan_in_the_past='''<?xml version="1.0"?>
+<route version="1.1" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2016-02-16T10:00:00Z" optimizationMethod="Time table">
+  </routeInfo>
+  <waypoints>
+    <waypoint id="1" name="Hango" radius="0.800000">
+      <position lat="59.811700" lon="22.935567"/>
+    </waypoint>
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.758817" lon="23.020267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <scheduleElement etd="2016-02-15T10:00:00Z" waypointId="1"/>
+        <scheduleElement eta="2016-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
-voyageplan_in_the_past_and_future='\
-<?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
-    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2016-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
-        <waypoints>\
-                <waypoint id="1">\
-                        <position lat="53.5123" lon="8.11998"/>\
-                </waypoint>\
-                <waypoint id="15">\
-                        <position lat="53.0492" lon="8.87731"/>\
-                </waypoint>\
-        </waypoints>\
-</route>\
-'
+voyageplan_in_the_past_and_future='''<?xml version="1.0"?>
+<route version="1.1" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  </routeInfo>
+  <waypoints>
+    <waypoint id="1" name="Hango" radius="0.800000">
+      <position lat="59.811700" lon="22.935567"/>
+    </waypoint>
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.758817" lon="23.020267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <scheduleElement etd="2016-02-15T10:00:00Z" waypointId="1"/>
+        <scheduleElement eta="2116-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
-voyageplan_in_the_future10='\
-<?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
-    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
-        <waypoints>\
-                <waypoint id="1">\
-                        <position lat="53.5123" lon="8.11998"/>\
-                </waypoint>\
-                <waypoint id="15">\
-                        <position lat="53.0492" lon="8.87731"/>\
-                </waypoint>\
-        </waypoints>\
-</route>\
-'
+voyageplan_in_the_future10='''<?xml version="1.0"?>
+<route version="1.0" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.cirm.org/RTZ/1/0">
+  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  </routeInfo>
+  <waypoints>
+    <waypoint id="1" name="Hango" radius="0.800000">
+      <position lat="59.811700" lon="22.935567"/>
+    </waypoint>
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.758817" lon="23.020267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <sheduleElement etd="2116-02-15T10:00:00Z" waypointId="1"/>
+        <sheduleElement eta="2116-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
-voyageplan_in_the_future11='\
-<?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/1">\
-    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
-        <waypoints>\
-                <waypoint id="1">\
-                        <position lat="53.5123" lon="8.11998"/>\
-                </waypoint>\
-                <waypoint id="15">\
-                        <position lat="53.0492" lon="8.87731"/>\
-                </waypoint>\
-        </waypoints>\
-</route>\
-'
+voyageplan_in_the_future11='''<?xml version="1.0"?>
+<route version="1.1" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  </routeInfo>
+  <waypoints>
+    <waypoint id="1" name="Hango" radius="0.800000">
+      <position lat="59.811700" lon="22.935567"/>
+    </waypoint>
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.758817" lon="23.020267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <scheduleElement etd="2116-02-15T10:00:00Z" waypointId="1"/>
+        <scheduleElement eta="2116-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
-voyageplan_in_the_future20='\
-<?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/2/0">\
-    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
-        <waypoints>\
-                <waypoint id="1">\
-                        <position lat="53.5123" lon="8.11998"/>\
-                </waypoint>\
-                <waypoint id="15">\
-                        <position lat="53.0492" lon="8.87731"/>\
-                </waypoint>\
-        </waypoints>\
-</route>\
-'
+voyageplan_in_the_future20='''<?xml version="1.0"?>
+<route version="2.0" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.cirm.org/RTZ/2/0">
+  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  </routeInfo>
+  <waypoints>
+    <waypoint id="1" name="Hango" radius="0.800000">
+      <position lat="59.811700" lon="22.935567"/>
+    </waypoint>
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.758817" lon="23.020267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <scheduleElement etd="2116-02-15T10:00:00Z" waypointId="1"/>
+        <scheduleElement eta="2116-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
-voyageplan_in_the_future_stm20='\
-<?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/2/0">\
-    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
-        <waypoints>\
-                <waypoint id="1">\
-                        <position lat="53.5123" lon="8.11998"/>\
-                </waypoint>\
-                <waypoint id="15">\
-                        <position lat="53.0492" lon="8.87731"/>\
-                </waypoint>\
-        </waypoints>\
-</route>\
-'
+voyageplan_in_the_futurestm20='''<?xml version="1.0"?>
+<route version="2.0" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.cirm.org/RTZ/2/0">
+  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  </routeInfo>
+  <waypoints>
+    <waypoint id="1" name="Hango" radius="0.800000">
+      <position lat="59.811700" lon="22.935567"/>
+    </waypoint>
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.758817" lon="23.020267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <scheduleElement etd="2116-02-15T10:00:00Z" waypointId="1"/>
+        <scheduleElement eta="2116-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
 voyageplan_incorrect_xml='The quick brown fox jumps over a lazy old dog'
 
@@ -396,7 +473,6 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('RTZ1.1 not supported')
     def test_VIS_001_12_04_2(self):
         """
         VIS-001-4-2 - Select VP according to schema RTZ 1.1 and publish to VIS-1
@@ -411,7 +487,7 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('RTZ2.0 not supported')
+    @unittest.skip('RTZ 2.0 is not yet supported.')
     def test_VIS_001_12_04_3(self):
         """
         VIS-001-4-3 - Select VP according to schema RTZ 2.0 and publish to VIS-1
@@ -426,7 +502,7 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('STM RTZ2.0 not supported')
+    @unittest.skip('RTZ STM 2.0 is not yet supported.')
     def test_VIS_001_12_04_4(self):
         """
         VIS-001-4-4 - Select VP according to schema RTZ STM 2.0 and publish to VIS-1 
@@ -440,10 +516,6 @@ class TestVIS_001(BaseTestCase):
         payload={'route': voyageplan_in_the_future_stm20}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
-
-        """
-    @unittest.skip('XML conformance checking not supported')
-        """
 
     def test_VIS_001_12_05_1(self):
         """
@@ -459,7 +531,6 @@ class TestVIS_001(BaseTestCase):
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Schema conformance checking not supported')
     def test_VIS_001_12_05_2(self):
         """
         VIS-001-5-2 - Select VP not following schema RTZ  and publish to VIS-1 
