@@ -8,16 +8,11 @@ cd VIS-1
 tox
 cd ../VIS-2
 tox
-nosetests -v testVIS/test_VIS-001.py &> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_1 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_2 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_3 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_4 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_5 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_6 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_7 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_8 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_1 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_2 &>> huu
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_3 &>> huu
+nosetests -v testVIS/test_VIS-001.py > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-002.py 
+nosetests -v testVIS/test_VIS-002-1.py:TestVIS_002_1.test_VIS_002_9_7 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-1
+nosetests -v testVIS/test_VIS-002-1.py:TestVIS_002_1.test_VIS_002_9_8 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-2
+nosetests -v testVIS/test_VIS-002-1.py:TestVIS_002_1.test_VIS_002_9_9 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 
