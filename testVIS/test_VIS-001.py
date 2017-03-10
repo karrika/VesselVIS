@@ -210,9 +210,7 @@ voyageplan_in_the_futurestm20='''<?xml version="1.0"?>
 </route>
 '''
 
-voyageplan_incorrect_xml='The quick brown fox jumps over a lazy old dog'
-
-voyageplan_incorrect_xml2='\
+voyageplan_incorrect_xml='\
 <?xml version="1.0" encoding="UTF-8"?>\
 <route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
         <waypoints>\
@@ -511,7 +509,7 @@ class TestVIS_001(BaseTestCase):
         parameters={
             'uvid': 'urn:mrn:stm:voyage:id:new:plan'
         }
-        payload={'route': voyageplan_in_the_future_stm20}
+        payload={'route': voyageplan_in_the_futurestm20}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -527,7 +525,7 @@ class TestVIS_001(BaseTestCase):
         }
         payload={'route': voyageplan_incorrect_xml}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-        self.assert200(response, "Response body is : " + response.text)
+        self.assert500(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_05_2(self):
         """
@@ -541,6 +539,7 @@ class TestVIS_001(BaseTestCase):
         }
         payload={'route': voyageplan_incorrect_schema}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert500(response, "Response body is : " + response.text)
 
 
 if __name__ == '__main__':

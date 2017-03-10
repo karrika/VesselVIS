@@ -16,6 +16,7 @@ import os
 import requests
 from lxml import etree
 import io
+import re
 from . import rtz10
 from . import rtz11
 from . import rtz20
@@ -301,8 +302,9 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
     ret = ResponseObj()
     if connexion.request.is_json:
         voyagePlan = VoyagePlan.from_dict(connexion.request.get_json())
+    RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
     rtz = io.StringIO()
-    rtz.write(voyagePlan.route)
+    rtz.write(RE_XML_ENCODING.sub("", voyagePlan.route, count=1))
     rtz.seek(0)
     doc = etree.parse(rtz)
     root = doc.getroot()
@@ -331,7 +333,7 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
                         return ret, 400
                 else:
                     ret.body = 'Unsupported route format'
-                return ret, 400
+                    return ret, 400
     f = open('import/' + uvid + '.rtz', 'w')
     f.write(voyagePlan.route)
     f.close()

@@ -1,8 +1,9 @@
 # coding: utf-8
 from io import StringIO
 from lxml import etree
+import re
 
-schema = StringIO('''<?xml version="1.0"?>
+schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 <!--
   
   Route Exchange Format (RTZ)
@@ -837,8 +838,10 @@ schema = StringIO('''<?xml version="1.0"?>
   </xsd:simpleType>
 
 </xsd:schema>
-''')
+'''
 
+RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
+schema = StringIO(RE_XML_ENCODING.sub("", schema_str, count=1))
 schema10_doc = etree.parse(schema)
 xmlschema = etree.XMLSchema(schema10_doc)
 
