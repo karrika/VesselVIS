@@ -265,9 +265,18 @@ def upload_area(area, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
+    ret = ResponseObj()
     if connexion.request.is_json:
         area = S124DataSet.from_dict(connexion.request.get_json())
-    return ResponseObj()
+    f = open('import/' + client_mrn() + ':2' + '.S124', 'a')
+    f.write(area.data_set)
+    f.close()
+    ret.body = 'Ok'
+    if deliveryAckEndPoint is not None:
+        f = open('import/' + client_mrn() + ':2' + '.ack', 'w')
+        f.write(deliveryAckEndPoint)
+        f.close()
+    return ret
 
 
 def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
@@ -284,12 +293,12 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     ret = ResponseObj()
     if connexion.request.is_json:
         textMessageObject = TextMessageObject.from_dict(connexion.request.get_json())
-    f = open('import/' + 'sender' + '.txt', 'a')
+    f = open('import/' + client_mrn() + ':1' + '.txt', 'a')
     f.write(textMessageObject.text_message)
     f.close()
     ret.body = 'Ok'
     if deliveryAckEndPoint is not None:
-        f = open('import/' + 'sender' + '.ack', 'w')
+        f = open('import/' + client_mrn() + ':1' + '.ack', 'w')
         f.write(deliveryAckEndPoint)
         f.close()
     return ret
