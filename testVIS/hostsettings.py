@@ -49,3 +49,33 @@ def set_acl(id, uvid=None):
     f.write(json.dumps(data))
     f.close()
 
+def uvid_exists(uvid):
+    p = Path('export')
+    uvids = list(p.glob('**/' + uvid + '.uvid'))
+    return len(uvids) > 0
+
+def rtz_exists(uvid):
+    p = Path('export')
+    uvids = list(p.glob('**/' + uvid + '.rtz'))
+    return len(uvids) > 0
+
+def subs_exists(uvid):
+    p = Path('export')
+    uvids = list(p.glob('**/' + uvid + '.subs'))
+    return len(uvids) > 0
+
+def acl_exists(uvid):
+    p = Path('export')
+    uvids = list(p.glob('**/' + uvid + '.acl'))
+    return len(uvids) > 0
+
+def rm_uvid(uvid):
+    if uvid_exists(uvid):
+        os.remove('export/' + uvid + '.uvid') 
+    if rtz_exists(uvid):
+        os.remove('export/' + uvid + '.rtz') 
+    if subs_exists(uvid):
+        os.remove('export/' + uvid + '.subs') 
+    if acl_exists(uvid):
+        os.remove('export/' + uvid + '.acl') 
+
