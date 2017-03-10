@@ -39,6 +39,8 @@ voyageuvid='urn:mrn:stm:voyage:id:8320767'
 newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'
 vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
+vis1_uvid='urn:mrn:stm:service:instance:furuno:vis1'
+vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 
 def set_acl(id, uvid=None):
     if uvid is None: 

@@ -29,6 +29,8 @@ voyageuvid=hostsettings.voyageuvid
 newvoyageuvid=hostsettings.newvoyageuvid
 newvoyageuvid2=hostsettings.newvoyageuvid2
 vis_uvid=hostsettings.vis_uvid
+vis1_uvid=hostsettings.vis1_uvid
+vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='\
 <?xml version="1.0" encoding="UTF-8"?>\
@@ -88,35 +90,49 @@ class TestVIS_005(BaseTestCase):
         """
         self.assertTrue(hostsettings.uvid_exists(newvoyageuvid))
 
-    def test_VIS_005_1(self):
+    @unittest.skip('The service registry search is not implemented yet.')
+    def test_VIS_005_1_1(self):
         """
-        VIS-005-1 - STM Module retrieves messages from VIS-1 with ack
+        VIS-005-1-1 - In VIS-2, search for VIS with MMSI=12345678
+
+        
+        """
+
+    def test_VIS_005_1_2(self):
+        """
+        VIS-005-1-2 - In VIS-2, select voyage plan and send (upload) the voyage plan to VIS-1 with ACKendpoint
 
         
         """
         sub='/voyagePlans'
         parameters={
             'uvid': newvoyageuvid,
-            'routeStatus': '7'
+            'routeStatus': '1',
+            'deliveryAckEndPoint': 'https://localhost:8002'
         }
         payload={'route': voyageplan}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Implementing check for received payload is still missing.')
-    def test_VIS_005_4(self):
+    def test_VIS_005_1_3(self):
         """
-        VIS-005-4 - STM Module retrieves messages from VIS-1 with ack timeout?
+        VIS-005-1-3 - STM Module retrieves messages from VIS-1
 
         
         """
-        sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid,
-            'routeStatus': '7'
+        sub='/acknowledgement'
+        deliveryAckEndPoint = 'https://localhost:8002'
+        payload={
+            'ackResult': 'Ok',
+            'fromId': vis1_uvid,
+            'fromName': 'VIS-1',
+            'id': newvoyageuvid + ':ack',
+            'referenceId': newvoyageuvid,
+            'timeOfDelivery': '2017-01-27T12:00:00Z',
+            'toId': vis2_uvid,
+            'toName': 'VIS-2'
         }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        response=requests.post(deliveryAckEndPoint + sub, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
 

@@ -302,6 +302,7 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
     ret = ResponseObj()
     if connexion.request.is_json:
         voyagePlan = VoyagePlan.from_dict(connexion.request.get_json())
+    routeStatus = '1'
     RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
     rtz = io.StringIO()
     rtz.write(RE_XML_ENCODING.sub("", voyagePlan.route, count=1))
@@ -334,6 +335,10 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
                 else:
                     ret.body = 'Unsupported route format'
                     return ret, 400
+    data = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
+    f = open('import/' + uvid + '.uvid', 'w')
+    f.write(json.dumps(data))
+    f.close()
     f = open('import/' + uvid + '.rtz', 'w')
     f.write(voyagePlan.route)
     f.close()
@@ -344,7 +349,6 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
 
     """
     Now the vessel will need to process the uploaded voyagePlan and send an ack.
-    """
     os.remove('import/' + uvid + '.rtz')
     f = open('export/' + uvid + '.rtz', 'w')
     f.write(voyagePlan.route)
@@ -356,6 +360,7 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
     if deliveryAckEndPoint is not None:
         os.remove('import/' + uvid + '.ack')
         send_ack(deliveryAckEndPoint)
+    """
 
     return ret
 
