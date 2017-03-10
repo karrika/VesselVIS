@@ -281,9 +281,18 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
     :rtype: ResponseObj
     """
+    ret = ResponseObj()
     if connexion.request.is_json:
         textMessageObject = TextMessageObject.from_dict(connexion.request.get_json())
-    return '-- MAGIC--'
+    f = open('import/' + 'sender' + '.txt', 'a')
+    f.write(textMessageObject.text_message)
+    f.close()
+    ret.body = 'Ok'
+    if deliveryAckEndPoint is not None:
+        f = open('import/' + 'sender' + '.ack', 'w')
+        f.write(deliveryAckEndPoint)
+        f.close()
+    return ret
 
 
 def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
