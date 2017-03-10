@@ -135,6 +135,31 @@ class TestVIS_005(BaseTestCase):
         response=requests.post(deliveryAckEndPoint + sub, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
+    def test_VIS_005_2_1(self):
+        """
+        VIS-005-2-2 - In VIS-2, select voyage plan and send (upload) the voyage plan to VIS-1 with ACKendpoint that does not respond
+
+        
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': newvoyageuvid,
+            'routeStatus': '1',
+            'deliveryAckEndPoint': 'https://localhost'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        self.assert200(response, "Response body is : " + response.text)
+
+    @unittest.skip('Implement user timeout nagging feature when ack is missing')
+    def test_VIS_005_2_2(self):
+        """
+        VIS-005-1-3 - STM Module retrieves messages from VIS-1
+
+        
+        """
+        pass
+
 
 
 if __name__ == '__main__':
