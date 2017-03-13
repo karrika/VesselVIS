@@ -81,3 +81,14 @@ def rm_uvid(uvid):
     if acl_exists(uvid):
         os.remove('export/' + uvid + '.acl') 
 
+def vessel_connects():
+    p = Path('import')
+    uvids = list(p.glob('**/*.uvid'))
+    for item in uvids:
+        shutil.copyfile(str(item), 'export/' + item.parts[1])
+        os.remove(str(item)) 
+    rtzs = list(p.glob('**/*.rtz'))
+    if item in rtzs:
+        shutil.copyfile(str(item), 'export/' + item.parts[1])
+        os.remove(str(item)) 
+
