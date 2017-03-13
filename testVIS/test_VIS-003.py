@@ -70,6 +70,19 @@ class TestVIS_003(BaseTestCase):
         }
         payload={}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS003sheet.write(VIS_003_01_row, VIS_003_01_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS003sheet.write(VIS_003_01_row, VIS_003_01_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     @unittest.skip('Testing subscription with receiving the packet requires two instances. Not set up yet.')
