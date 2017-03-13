@@ -50,6 +50,18 @@ class TestVIS_002(BaseTestCase):
     """ VIS-002 tests """
 
     def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+
+    def test_VIS_002_00(self):
+        """
+        VIS-002-0 - Preparation:Organisation for VIS-2 authorized to exactly one published voyage plan with routestatus=7 and chosen UVID
+
+        
+        """
         f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
         data=[ vis_uvid ]
         f.write(json.dumps(data))
@@ -58,9 +70,13 @@ class TestVIS_002(BaseTestCase):
         data=[ vis_uvid ]
         f.write(json.dumps(data))
         f.close()
-        pass
 
-    def tearDown(self):
+        report='''
+VIS002sheet.write(VIS_002_00_row, VIS_002_00_col, "PASS", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
         pass
 
     def test_VIS_002_1(self):
@@ -71,6 +87,19 @@ class TestVIS_002(BaseTestCase):
         """
         sub='/voyagePlans'
         response=requests.get(url + sub, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_1_row, VIS_002_1_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_1_row, VIS_002_1_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_002_2(self):
@@ -84,6 +113,19 @@ class TestVIS_002(BaseTestCase):
             'uvid': voyageuvid
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_2_row, VIS_002_2_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_2_row, VIS_002_2_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_002_3(self):
@@ -97,6 +139,19 @@ class TestVIS_002(BaseTestCase):
             'routeStatus': '7'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_3_row, VIS_002_3_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_3_row, VIS_002_3_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_002_4(self):
@@ -111,6 +166,19 @@ class TestVIS_002(BaseTestCase):
             'routeStatus': '7'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_4_row, VIS_002_4_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_4_row, VIS_002_4_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_002_5(self):
@@ -125,6 +193,19 @@ class TestVIS_002(BaseTestCase):
             'routeStatus': '7'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 404:
+            report='''
+VIS002sheet.write(VIS_002_5_row, VIS_002_5_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_5_row, VIS_002_5_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_002_6(self):
@@ -139,6 +220,19 @@ class TestVIS_002(BaseTestCase):
             'routeStatus': '6'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 404:
+            report='''
+VIS002sheet.write(VIS_002_6_row, VIS_002_6_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_6_row, VIS_002_6_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_002_7(self):
@@ -152,6 +246,19 @@ class TestVIS_002(BaseTestCase):
             'uvid': 'urn:mrn:stm:voyage:id:not:found'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 404:
+            report='''
+VIS002sheet.write(VIS_002_7_row, VIS_002_7_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_7_row, VIS_002_7_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_002_8(self):
@@ -165,6 +272,19 @@ class TestVIS_002(BaseTestCase):
             'routeStatus': '6'
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 404:
+            report='''
+VIS002sheet.write(VIS_002_8_row, VIS_002_8_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_8_row, VIS_002_8_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert404(response, "Response body is : " + response.text)
 
 
