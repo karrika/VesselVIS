@@ -147,6 +147,8 @@ worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
 row = 13
+VIS_002_1_row = row
+VIS_002_1_col = 9
 worksheet.write(row, 0, "MO", boldcenter)
 worksheet.write(row, 2, "Variant – Test rule “Only 1 voyage plan used for monitoring per ship”", bold)
 worksheet.write(row, 3, "Test maintained rule « Only one voyage per ship can be in status « Used for monitoring » (7) when requesting voyage plans", bold)
@@ -817,67 +819,120 @@ VIS002sheet.write(row, 1, "Preparation:Organisation for VIS-2 authorized to exac
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 12
-VIS_002_1_row = row
-VIS_002_1_col = 5
+VIS_002_01_row = row
+VIS_002_01_col = 5
 VIS002sheet.write(row, 0, "1", bold)
 VIS002sheet.write(row, 1, "VIS-2 request voyage plan from VIS-1, no specific UVID or status, hence no parameters given - getVoyagePlan()", bold)
 VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", bold)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 13
-VIS_002_2_row = row
-VIS_002_2_col = 5
+VIS_002_02_row = row
+VIS_002_02_col = 5
 VIS002sheet.write(row, 0, "2", bold)
 VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID from VIS-1, no specific status - getVoyagePlan(UVID)", bold)
 VIS002sheet.write(row, 3, "VIS-2 request voyage plan with chosen UVID from VIS-1, no specific status", bold)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 14
-VIS_002_3_row = row
-VIS_002_3_col = 5
+VIS_002_03_row = row
+VIS_002_03_col = 5
 VIS002sheet.write(row, 0, "3", bold)
 VIS002sheet.write(row, 1, "VIS-2 request voyage plan with routeStatus= 7 from VIS-1, no specific UVID  - getVoyagePlan(routeStatus)", bold)
 VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", bold)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 15
-VIS_002_4_row = row
-VIS_002_4_col = 5
+VIS_002_04_row = row
+VIS_002_04_col = 5
 VIS002sheet.write(row, 0, "4", bold)
 VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID and routeStatus=7 from VIS-1 - getVoyagePlan(UVID, routeStatus)", bold)
 VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", bold)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 16
-VIS_002_5_row = row
-VIS_002_5_col = 5
+VIS_002_05_row = row
+VIS_002_05_col = 5
 VIS002sheet.write(row, 0, "5", bold)
 VIS002sheet.write(row, 1, "VIS-2 request voyage plan with another (non published) UVID and routeStatus=7 from VIS-1 - getVoyagePlan(UVID, routeStatus)", bold)
 VIS002sheet.write(row, 3, "No voyage plans received", bold)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 17
-VIS_002_6_row = row
-VIS_002_6_col = 5
+VIS_002_06_row = row
+VIS_002_06_col = 5
 VIS002sheet.write(row, 0, "6", bold)
 VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID and routeStatus=6 from VIS-1", bold)
 VIS002sheet.write(row, 3, "No voyage plans received", bold)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 18
-VIS_002_7_row = row
-VIS_002_7_col = 5
+VIS_002_07_row = row
+VIS_002_07_col = 5
 VIS002sheet.write(row, 0, "7", bold)
 VIS002sheet.write(row, 1, "VIS-2 request voyage plan with another (non published) UVID from VIS-1, no specific status", bold)
 VIS002sheet.write(row, 3, "No voyage plans received", bold)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 19
-VIS_002_8_row = row
-VIS_002_8_col = 5
+VIS_002_08_row = row
+VIS_002_08_col = 5
 VIS002sheet.write(row, 0, "8", bold)
 VIS002sheet.write(row, 1, "VIS-2 request voyage plan with routeStatus= 6 (non published)  from VIS-1, no specific UVID ", bold)
 VIS002sheet.write(row, 3, "No voyage plans received", bold)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 22
+VIS002sheet.write(row, 1, "Title", bold)
+VIS002sheet.write(row, 2, "variant - Test rule “Only 1 voyage plan used for monitoring per ship”", normal)
+row = 23
+VIS002sheet.write(row, 1, "Description", bold)
+VIS002sheet.write(row, 4, "Total:", normalright)
+VIS002sheet.write(row, 5, '=IF(F27>0,"NOT EXECUTED",IF(F26>0,"FAIL","PASS"))', normalright)
+row = 24
+VIS002sheet.write(row, 1, "Preconditions", bold)
+VIS002sheet.write(row, 4, "Pass:", normalright)
+VIS002sheet.write(row, 5, '=COUNTIF(F29:F37, "PASS")', normalright)
+row = 25
+VIS002sheet.write(row, 1, "Dependencies", bold)
+VIS002sheet.write(row, 4, "Fail:", normalright)
+VIS002sheet.write(row, 5, '=COUNTIF(F29:F37, "FAIL")', normalright)
+row = 26
+VIS002sheet.write(row, 4, "Not executed:", normalright)
+VIS002sheet.write(row, 5, '=COUNTIF(F29:F37, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_002_1_row, VIS_002_1_col, '=VIS002.F24', bold)
+
+VIS002sheet.add_table('A28:G37')
+row = 27
+VIS002sheet.write(row, 0, "Step#", boldcenter)
+VIS002sheet.write(row, 1, "Test Step", boldcenter)
+VIS002sheet.write(row, 2, "Test Data", boldcenter)
+VIS002sheet.write(row, 3, "Expected Result", boldcenter)
+VIS002sheet.write(row, 4, "Actual", boldcenter)
+VIS002sheet.write(row, 5, "Pass Fail", boldcenter)
+VIS002sheet.write(row, 6, "Findings & Comments", boldcenter)
+
+row = 28
+VIS_002_1_0_row = row
+VIS_002_1_0_col = 5
+VIS002sheet.write(row, 0, "0", bold)
+VIS002sheet.write(row, 1, "Preparation: Organisation for VIS-2 authorized to chosen UVID", bold)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 29
+VIS_002_1_1_row = row
+VIS_002_1_1_col = 5
+VIS002sheet.write(row, 0, "1", bold)
+VIS002sheet.write(row, 1, "VIS-1 : Publish voyage plan with chosen UVID and routeStatus=7", bold)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 30
+VIS_002_1_2_row = row
+VIS_002_1_2_col = 5
+VIS002sheet.write(row, 0, "2", bold)
+VIS002sheet.write(row, 1, "VIS-2 : Request voyage plans from VIS-1", bold)
+VIS002sheet.write(row, 3, "1 voyage plan received", bold)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 '''

@@ -90,11 +90,11 @@ VIS002sheet.write(VIS_002_00_row, VIS_002_00_col, "PASS", boldcenter)
 
         if response.status_code == 200:
             report='''
-VIS002sheet.write(VIS_002_1_row, VIS_002_1_col, "PASS", boldcenter)
+VIS002sheet.write(VIS_002_01_row, VIS_002_01_col, "PASS", boldcenter)
 '''
         else:
             report='''
-VIS002sheet.write(VIS_002_1_row, VIS_002_1_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_01_row, VIS_002_01_col, "FAIL", boldcenter)
 '''
         f = open('../create_worksheet.py', 'a')
         f.write(report)
@@ -116,11 +116,11 @@ VIS002sheet.write(VIS_002_1_row, VIS_002_1_col, "FAIL", boldcenter)
 
         if response.status_code == 200:
             report='''
-VIS002sheet.write(VIS_002_2_row, VIS_002_2_col, "PASS", boldcenter)
+VIS002sheet.write(VIS_002_02_row, VIS_002_02_col, "PASS", boldcenter)
 '''
         else:
             report='''
-VIS002sheet.write(VIS_002_2_row, VIS_002_2_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_02_row, VIS_002_02_col, "FAIL", boldcenter)
 '''
         f = open('../create_worksheet.py', 'a')
         f.write(report)
@@ -142,11 +142,11 @@ VIS002sheet.write(VIS_002_2_row, VIS_002_2_col, "FAIL", boldcenter)
 
         if response.status_code == 200:
             report='''
-VIS002sheet.write(VIS_002_3_row, VIS_002_3_col, "PASS", boldcenter)
+VIS002sheet.write(VIS_002_03_row, VIS_002_03_col, "PASS", boldcenter)
 '''
         else:
             report='''
-VIS002sheet.write(VIS_002_3_row, VIS_002_3_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_03_row, VIS_002_03_col, "FAIL", boldcenter)
 '''
         f = open('../create_worksheet.py', 'a')
         f.write(report)
@@ -169,11 +169,11 @@ VIS002sheet.write(VIS_002_3_row, VIS_002_3_col, "FAIL", boldcenter)
 
         if response.status_code == 200:
             report='''
-VIS002sheet.write(VIS_002_4_row, VIS_002_4_col, "PASS", boldcenter)
+VIS002sheet.write(VIS_002_04_row, VIS_002_04_col, "PASS", boldcenter)
 '''
         else:
             report='''
-VIS002sheet.write(VIS_002_4_row, VIS_002_4_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_04_row, VIS_002_04_col, "FAIL", boldcenter)
 '''
         f = open('../create_worksheet.py', 'a')
         f.write(report)
@@ -196,11 +196,11 @@ VIS002sheet.write(VIS_002_4_row, VIS_002_4_col, "FAIL", boldcenter)
 
         if response.status_code == 404:
             report='''
-VIS002sheet.write(VIS_002_5_row, VIS_002_5_col, "PASS", boldcenter)
+VIS002sheet.write(VIS_002_05_row, VIS_002_05_col, "PASS", boldcenter)
 '''
         else:
             report='''
-VIS002sheet.write(VIS_002_5_row, VIS_002_5_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_05_row, VIS_002_05_col, "FAIL", boldcenter)
 '''
         f = open('../create_worksheet.py', 'a')
         f.write(report)
@@ -223,11 +223,11 @@ VIS002sheet.write(VIS_002_5_row, VIS_002_5_col, "FAIL", boldcenter)
 
         if response.status_code == 404:
             report='''
-VIS002sheet.write(VIS_002_6_row, VIS_002_6_col, "PASS", boldcenter)
+VIS002sheet.write(VIS_002_06_row, VIS_002_06_col, "PASS", boldcenter)
 '''
         else:
             report='''
-VIS002sheet.write(VIS_002_6_row, VIS_002_6_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_06_row, VIS_002_06_col, "FAIL", boldcenter)
 '''
         f = open('../create_worksheet.py', 'a')
         f.write(report)
@@ -249,11 +249,11 @@ VIS002sheet.write(VIS_002_6_row, VIS_002_6_col, "FAIL", boldcenter)
 
         if response.status_code == 404:
             report='''
-VIS002sheet.write(VIS_002_7_row, VIS_002_7_col, "PASS", boldcenter)
+VIS002sheet.write(VIS_002_07_row, VIS_002_07_col, "PASS", boldcenter)
 '''
         else:
             report='''
-VIS002sheet.write(VIS_002_7_row, VIS_002_7_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_07_row, VIS_002_07_col, "FAIL", boldcenter)
 '''
         f = open('../create_worksheet.py', 'a')
         f.write(report)
@@ -275,11 +275,11 @@ VIS002sheet.write(VIS_002_7_row, VIS_002_7_col, "FAIL", boldcenter)
 
         if response.status_code == 404:
             report='''
-VIS002sheet.write(VIS_002_8_row, VIS_002_8_col, "PASS", boldcenter)
+VIS002sheet.write(VIS_002_08_row, VIS_002_08_col, "PASS", boldcenter)
 '''
         else:
             report='''
-VIS002sheet.write(VIS_002_8_row, VIS_002_8_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_08_row, VIS_002_08_col, "FAIL", boldcenter)
 '''
         f = open('../create_worksheet.py', 'a')
         f.write(report)
