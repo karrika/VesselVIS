@@ -78,6 +78,10 @@ class TestVIS_002_1(BaseTestCase):
         data=[ vis_uvid ]
         f.write(json.dumps(data))
         f.close()
+        f = open('../VIS-1/export/' + newvoyageuvid2 + '.acl', 'w')
+        data=[ vis_uvid ]
+        f.write(json.dumps(data))
+        f.close()
         p = Path('../VIS-1/export')
         vp = list(p.glob('**/' + newvoyageuvid + '.uvid'))
         if len(vp) > 0:
@@ -148,7 +152,7 @@ VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col, "FAIL", boldcenter)
 
     def test_VIS_002_9_3(self):
         """
-        VIS-002-1-4 - VIS-1 : Publish voyage plan with chosen UVID and routeStatus=7
+        VIS-002-1-3 - VIS-1 : Publish voyage plan with chosen UVID and routeStatus=7
 
 
         """
@@ -159,11 +163,24 @@ VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col, "FAIL", boldcenter)
         }
         payload={'route': voyageplan}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_1_3_row, VIS_002_1_3_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_1_3_row, VIS_002_1_3_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_002_9_4(self):
         """
-        VIS-002-1-5 - VIS-2 : Request voyage plans from VIS-1
+        VIS-002-1-4 - VIS-2 : Request voyage plans from VIS-1
 
         
         """
@@ -172,11 +189,24 @@ VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col, "FAIL", boldcenter)
             'uvid': newvoyageuvid
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_1_4_row, VIS_002_1_4_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_1_4_row, VIS_002_1_4_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_002_9_5(self):
         """
-        VIS-002-1-6 - VIS-1 : Publish voyage plan with new UVID for the same ship and routeStatus=7
+        VIS-002-1-5 - VIS-1 : Publish voyage plan with new UVID for the same ship and routeStatus=7
 
 
         """
@@ -187,11 +217,24 @@ VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col, "FAIL", boldcenter)
         }
         payload={'route': voyageplan}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_002_9_6(self):
         """
-        VIS-002-1-7 - VIS-2 : Request voyage plans from VIS-1
+        VIS-002-1-6 - VIS-2 : Request voyage plans from VIS-1
 
         
         """
@@ -202,10 +245,9 @@ VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col, "FAIL", boldcenter)
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Multiple vessels through one instance is not supported.')
     def test_VIS_002_9_7(self):
         """
-        VIS-002-1-8 - VIS-1 : Publish voyage plan with new UVID for another ship and routeStatus=7
+        VIS-002-1-7 - VIS-1 : Publish voyage plan with new UVID for another ship and routeStatus=7
 
 
         """
@@ -218,10 +260,10 @@ VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col, "FAIL", boldcenter)
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Multiple vessels through one instance is not supported.')
+    @unittest.skip('Multiple voyages through one get is not yet supported.')
     def test_VIS_002_9_8(self):
         """
-        VIS-002-1-9 - VIS-2 : Request voyage plans from VIS-1
+        VIS-002-1-8 - VIS-2 : Request voyage plans from VIS-1
 
         
         """

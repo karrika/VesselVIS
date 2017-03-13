@@ -40,9 +40,23 @@ normalright = workbook.add_format()
 normalright.set_align('right')
 bold = workbook.add_format({'bold': True})
 bold.set_text_wrap()
+bold.set_align('vcenter')
+boldbl = workbook.add_format({'bold': True})
+boldbl.set_text_wrap()
+boldbl.set_align('vcenter')
+boldbl.set_bg_color('#8888FF')
+boldblue = workbook.add_format({'bold': True})
+boldblue.set_text_wrap()
+boldblue.set_bg_color('#8888FF')
 boldcenter = workbook.add_format({'bold': True})
 boldcenter.set_align('center')
+boldcenter.set_align('vcenter')
 boldcenter.set_text_wrap()
+boldcenterwhite = workbook.add_format({'bold': True})
+boldcenterwhite.set_align('center')
+boldcenterwhite.set_text_wrap()
+boldcenterwhite.set_font_color('white')
+boldcenterwhite.set_bg_color('black')
 
 
 worksheet.write(row, 0, "VIS Test Protocol", bold)
@@ -56,17 +70,17 @@ worksheet.write(row, 1, time.strftime("%Y-%m-%d"), bold)
 
 row = 5
 worksheet.add_table('A6:K34')
-worksheet.write(row, 0, "Designed by", boldcenter)
-worksheet.write(row, 1, "Design date", boldcenter)
-worksheet.write(row, 2, "Title", boldcenter)
-worksheet.write(row, 3, "Description", boldcenter)
-worksheet.write(row, 4, "Component", boldcenter)
-worksheet.write(row, 5, "Testcase ID", boldcenter)
-worksheet.write(row, 6, "Main or Variant", boldcenter)
-worksheet.write(row, 7, "Link to Detailed", boldcenter)
-worksheet.write(row, 8, "Test Data", boldcenter)
-worksheet.write(row, 9, "Pass/Fail", boldcenter)
-worksheet.write(row, 10, "Finding & Comment", boldcenter)
+worksheet.write(row, 0, "Designed by", boldcenterwhite)
+worksheet.write(row, 1, "Design date", boldcenterwhite)
+worksheet.write(row, 2, "Title", boldcenterwhite)
+worksheet.write(row, 3, "Description", boldcenterwhite)
+worksheet.write(row, 4, "Component", boldcenterwhite)
+worksheet.write(row, 5, "Testcase ID", boldcenterwhite)
+worksheet.write(row, 6, "Main or Variant", boldcenterwhite)
+worksheet.write(row, 7, "Link to Detailed", boldcenterwhite)
+worksheet.write(row, 8, "Test Data", boldcenterwhite)
+worksheet.write(row, 9, "Pass/Fail", boldcenterwhite)
+worksheet.write(row, 10, "Finding & Comment", boldcenterwhite)
 
 row = 6
 VIS_001_row = row
@@ -77,7 +91,6 @@ worksheet.write(row, 3, "Test publish voyage plan and give authorization (access
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-001", bold)
 worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 8, "RTZ-001", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
@@ -88,7 +101,6 @@ worksheet.write(row, 3, "Publish old voyage plan where validityPeriod has passed
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-001-3", bold)
 worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 8, "RTZ with different validityPeriods", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
@@ -101,7 +113,6 @@ worksheet.write(row, 3, "Publish future voyage plan according to different schem
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-001-4", bold)
 worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
 row = 9
@@ -111,7 +122,6 @@ worksheet.write(row, 3, "Publish incorrect voyage plan according to RTZ schema",
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-001-5", bold)
 worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
 row = 10
@@ -121,7 +131,6 @@ worksheet.write(row, 3, "Test/show behaviour for VIS if an ship publishes a RTZ 
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-001-6", bold)
 worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
 row = 11
@@ -131,7 +140,6 @@ worksheet.write(row, 3, "Test/show behaviour of VIS if publishing a voyage plan 
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-001-6", bold)
 worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
 row = 12
@@ -143,7 +151,6 @@ worksheet.write(row, 3, "Test request (get) voyage plan(s)", bold)
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-002", bold)
 worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
 row = 13
@@ -155,7 +162,6 @@ worksheet.write(row, 3, "Test maintained rule « Only one voyage per ship can b
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-002-1", bold)
 worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
 row = 14
@@ -165,7 +171,6 @@ worksheet.write(row, 3, "Test subscription on voyage plans", bold)
 worksheet.write(row, 4, "VIS", bold)
 worksheet.write(row, 5, "VIS-003", bold)
 worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 7, "Link to Detailed", bold)
 worksheet.write(row, 9, "NOT EXECUTED", bold)
 
 row = 15
@@ -338,14 +343,19 @@ col = 0
 VIS001sheet.write(row, 1, "Test Protocol", bold)
 
 row = 1
-VIS001sheet.write(row, 1, "Test ID", bold)
-VIS001sheet.write(row, 2, "TEST-VIS-001", bold)
+VIS001sheet.write(row, 0, "", boldblue)
+VIS001sheet.write(row, 1, "Test ID", boldblue)
+VIS001sheet.write(row, 2, "TEST-VIS-001", boldblue)
+VIS001sheet.write(row, 3, "", boldblue)
+VIS001sheet.write(row, 4, "", boldblue)
+VIS001sheet.write(row, 5, "", boldblue)
+VIS001sheet.write(row, 6, "", boldblue)
 row = 2
 VIS001sheet.write(row, 1, "Executed by", bold)
 VIS001sheet.write(row, 2, "Karri Kaksonen", bold)
 row = 3
-VIS001sheet.write(row, 0, "Executed date", bold)
-VIS001sheet.write(row, 1, time.strftime("%Y-%m-%d"), bold)
+VIS001sheet.write(row, 1, "Executed date", bold)
+VIS001sheet.write(row, 2, time.strftime("%Y-%m-%d"), bold)
 row = 5
 VIS001sheet.write(row, 1, "Title", bold)
 VIS001sheet.write(row, 2, "Main test", normal)
@@ -370,113 +380,130 @@ worksheet.write(VIS_001_row, VIS_001_col, '=VIS001.F7', bold)
 
 VIS001sheet.add_table('A11:G23')
 row = 10
-VIS001sheet.write(row, 0, "Step#", boldcenter)
-VIS001sheet.write(row, 1, "Test Step", boldcenter)
-VIS001sheet.write(row, 2, "Test Data", boldcenter)
-VIS001sheet.write(row, 3, "Expected Result", boldcenter)
-VIS001sheet.write(row, 4, "Actual", boldcenter)
-VIS001sheet.write(row, 5, "Pass Fail", boldcenter)
-VIS001sheet.write(row, 6, "Findings & Comments", boldcenter)
+VIS001sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS001sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS001sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS001sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS001sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 11
 VIS_001_00_row = row
 VIS_001_00_col = 5
-VIS001sheet.write(row, 0, "0", bold)
-VIS001sheet.write(row, 1, "Preparation: No voyage plan published with chosen UVID in VIS-1 - Identify VIS-1 - Identify VIS-2", bold)
+VIS001sheet.write(row, 0, "0", boldbl)
+VIS001sheet.write(row, 1, "Preparation: No voyage plan published with chosen UVID in VIS-1 - Identify VIS-1 - Identify VIS-2", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 12
 VIS_001_01_row = row
 VIS_001_01_col = 5
-VIS001sheet.write(row, 0, "1", bold)
-VIS001sheet.write(row, 1, "VIS-2: Request (get) voyage plan from VIS-1", bold)
-VIS001sheet.write(row, 2, "RTZ-001", bold)
-VIS001sheet.write(row, 3, "No voyage plans in response", bold)
+VIS001sheet.write(row, 0, "1", boldbl)
+VIS001sheet.write(row, 1, "VIS-2: Request (get) voyage plan from VIS-1", boldbl)
+VIS001sheet.write(row, 2, "RTZ-001", boldbl)
+VIS001sheet.write(row, 3, "No voyage plans in response", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 13
 VIS_001_02_row = row
 VIS_001_02_col = 5
-VIS001sheet.write(row, 0, "2", bold)
-VIS001sheet.write(row, 1, "VIS-2: Subscribe to voyage plan from VIS-1", bold)
-VIS001sheet.write(row, 3, "No subscription", bold)
+VIS001sheet.write(row, 0, "2", boldbl)
+VIS001sheet.write(row, 1, "VIS-2: Subscribe to voyage plan from VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No subscription", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 14
 VIS_001_03_row = row
 VIS_001_03_col = 5
-VIS001sheet.write(row, 0, "3", bold)
-VIS001sheet.write(row, 1, "VIS-1: Publish voyage plan with chosen UVID", bold)
-VIS001sheet.write(row, 3, "Success", bold)
+VIS001sheet.write(row, 0, "3", boldbl)
+VIS001sheet.write(row, 1, "VIS-1: Publish voyage plan with chosen UVID", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Success", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 15
 VIS_001_04_row = row
 VIS_001_04_col = 5
-VIS001sheet.write(row, 0, "4", bold)
-VIS001sheet.write(row, 1, "VIS-2: Request voyage plan from VIS-1", bold)
-VIS001sheet.write(row, 3, "No voyage plan received, error message “Not authorized”", bold)
+VIS001sheet.write(row, 0, "4", boldbl)
+VIS001sheet.write(row, 1, "VIS-2: Request voyage plan from VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No voyage plan received, error message “Not authorized”", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 16
 VIS_001_05_row = row
 VIS_001_05_col = 5
-VIS001sheet.write(row, 0, "5", bold)
-VIS001sheet.write(row, 1, "VIS-2: Subscribe to voyage plan from VIS-1", bold)
-VIS001sheet.write(row, 3, "No subscription", bold)
+VIS001sheet.write(row, 0, "5", boldbl)
+VIS001sheet.write(row, 1, "VIS-2: Subscribe to voyage plan from VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No subscription", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 17
 VIS_001_06_row = row
 VIS_001_06_col = 5
-VIS001sheet.write(row, 0, "6", bold)
-VIS001sheet.write(row, 1, "VIS-1: Authorize organisation for VIS-2 to chosen UVID in VIS-1", bold)
-VIS001sheet.write(row, 3, "Success", bold)
+VIS001sheet.write(row, 0, "6", boldbl)
+VIS001sheet.write(row, 1, "VIS-1: Authorize organisation for VIS-2 to chosen UVID in VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Success", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 18
 VIS_001_07_row = row
 VIS_001_07_col = 5
-VIS001sheet.write(row, 0, "7", bold)
-VIS001sheet.write(row, 1, "VIS-2: Request voyage plan from VIS-1", bold)
-VIS001sheet.write(row, 3, "Voyage plan received", bold)
+VIS001sheet.write(row, 0, "7", boldbl)
+VIS001sheet.write(row, 1, "VIS-2: Request voyage plan from VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Voyage plan received", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 19
 VIS_001_08_row = row
 VIS_001_08_col = 5
-VIS001sheet.write(row, 0, "8", bold)
-VIS001sheet.write(row, 1, "VIS-2: Subscribe to voyage plan from VIS-1", bold)
-VIS001sheet.write(row, 3, "Success", bold)
+VIS001sheet.write(row, 0, "8", boldbl)
+VIS001sheet.write(row, 1, "VIS-2: Subscribe to voyage plan from VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Success", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 20
 VIS_001_09_row = row
 VIS_001_09_col = 5
-VIS001sheet.write(row, 0, "9", bold)
-VIS001sheet.write(row, 1, "VIS-1: Remove authorization to organisation for VIS-2", bold)
-VIS001sheet.write(row, 3, "Success", bold)
+VIS001sheet.write(row, 0, "9", boldbl)
+VIS001sheet.write(row, 1, "VIS-1: Remove authorization to organisation for VIS-2", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Success", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 21
 VIS_001_10_row = row
 VIS_001_10_col = 5
-VIS001sheet.write(row, 0, "10", bold)
-VIS001sheet.write(row, 1, "VIS-2: Request voyage plan from VIS-1", bold)
-VIS001sheet.write(row, 3, "No voyage plan received, error message “Not authorized”", bold)
+VIS001sheet.write(row, 0, "10", boldbl)
+VIS001sheet.write(row, 1, "VIS-2: Request voyage plan from VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No voyage plan received, error message “Not authorized”", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 22
 VIS_001_11_row = row
 VIS_001_11_col = 5
-VIS001sheet.write(row, 0, "11", bold)
-VIS001sheet.write(row, 1, "VIS-2: Subscribe to voyage plan from VIS-1", bold)
-VIS001sheet.write(row, 3, "No subscription", bold)
+VIS001sheet.write(row, 0, "11", boldbl)
+VIS001sheet.write(row, 1, "VIS-2: Subscribe to voyage plan from VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No subscription", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 27
-VIS001sheet.write(row, 1, "Test ID", bold)
-VIS001sheet.write(row, 2, "TEST-VIS-001-3", bold)
+VIS001sheet.write(row, 0, "", boldblue)
+VIS001sheet.write(row, 1, "Test ID", boldblue)
+VIS001sheet.write(row, 2, "TEST-VIS-001-3", boldblue)
+VIS001sheet.write(row, 3, "", boldblue)
+VIS001sheet.write(row, 4, "", boldblue)
+VIS001sheet.write(row, 5, "", boldblue)
+VIS001sheet.write(row, 6, "", boldblue)
 
 row = 28
 VIS001sheet.write(row, 1, "Title", bold)
@@ -501,41 +528,49 @@ VIS001sheet.write(row, 5, '=COUNTIF(F35:F37, "NOT EXECUTED")', normalright)
 
 VIS001sheet.add_table('A34:G37')
 row = 33
-VIS001sheet.write(row, 0, "Step#", boldcenter)
-VIS001sheet.write(row, 1, "Test Step", boldcenter)
-VIS001sheet.write(row, 2, "Test Data", boldcenter)
-VIS001sheet.write(row, 3, "Expected Result", boldcenter)
-VIS001sheet.write(row, 4, "Actual", boldcenter)
-VIS001sheet.write(row, 5, "Pass Fail", boldcenter)
-VIS001sheet.write(row, 6, "Findings & Comments", boldcenter)
+VIS001sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS001sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS001sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS001sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS001sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 34
 VIS_001_12_03_1_row = row
 VIS_001_12_03_1_col = 5
-VIS001sheet.write(row, 0, "1", bold)
-VIS001sheet.write(row, 1, "VIS-1: Select VP with validityPeriodStart and validityPeriodStop in past and publish to subscribers ", bold)
-VIS001sheet.write(row, 3, "Ok, message published and shared", bold)
+VIS001sheet.write(row, 0, "1", boldbl)
+VIS001sheet.write(row, 1, "VIS-1: Select VP with validityPeriodStart and validityPeriodStop in past and publish to subscribers ", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Ok, message published and shared", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 35
 VIS_001_12_03_2_row = row
 VIS_001_12_03_2_col = 5
-VIS001sheet.write(row, 0, "1", bold)
-VIS001sheet.write(row, 1, "Change validityPeriodStop to future and publish to VIS-1", bold)
-VIS001sheet.write(row, 3, "Ok, message published and shared", bold)
+VIS001sheet.write(row, 0, "1", boldbl)
+VIS001sheet.write(row, 1, "Change validityPeriodStop to future and publish to VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Ok, message published and shared", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 36
 VIS_001_12_03_3_row = row
 VIS_001_12_03_3_col = 5
-VIS001sheet.write(row, 0, "1", bold)
-VIS001sheet.write(row, 1, "Change validityPeriodStart to future and publish to VIS-1", bold)
-VIS001sheet.write(row, 3, "Ok, message published and shared", bold)
+VIS001sheet.write(row, 0, "1", boldbl)
+VIS001sheet.write(row, 1, "Change validityPeriodStart to future and publish to VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Ok, message published and shared", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 38
-VIS001sheet.write(row, 1, "Test ID", bold)
-VIS001sheet.write(row, 2, "TEST-VIS-001-4", bold)
+VIS001sheet.write(row, 0, "", boldblue)
+VIS001sheet.write(row, 1, "Test ID", boldblue)
+VIS001sheet.write(row, 2, "TEST-VIS-001-4", boldblue)
+VIS001sheet.write(row, 3, "", boldblue)
+VIS001sheet.write(row, 4, "", boldblue)
+VIS001sheet.write(row, 5, "", boldblue)
+VIS001sheet.write(row, 6, "", boldblue)
 
 row = 39
 VIS001sheet.write(row, 1, "Title", bold)
@@ -563,41 +598,49 @@ VIS001sheet.write(row, 5, '=COUNTIF(F46:F48, "NOT EXECUTED")', normalright)
 
 VIS001sheet.add_table('A45:G48')
 row = 44
-VIS001sheet.write(row, 0, "Step#", boldcenter)
-VIS001sheet.write(row, 1, "Test Step", boldcenter)
-VIS001sheet.write(row, 2, "Test Data", boldcenter)
-VIS001sheet.write(row, 3, "Expected Result", boldcenter)
-VIS001sheet.write(row, 4, "Actual", boldcenter)
-VIS001sheet.write(row, 5, "Pass Fail", boldcenter)
-VIS001sheet.write(row, 6, "Findings & Comments", boldcenter)
+VIS001sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS001sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS001sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS001sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS001sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 46
 VIS_001_12_04_1_row = row
 VIS_001_12_04_1_col = 5
-VIS001sheet.write(row, 0, "1", bold)
-VIS001sheet.write(row, 1, "Select VP according to schema RTZ 1.0 and publish to VIS-1", bold)
-VIS001sheet.write(row, 3, "Success", bold)
+VIS001sheet.write(row, 0, "1", boldbl)
+VIS001sheet.write(row, 1, "Select VP according to schema RTZ 1.0 and publish to VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Success", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 47
 VIS_001_12_04_2_row = row
 VIS_001_12_04_2_col = 5
-VIS001sheet.write(row, 0, "2", bold)
-VIS001sheet.write(row, 1, "Select VP according to schema RTZ 1.1 and publish to VIS-1", bold)
-VIS001sheet.write(row, 3, "Success", bold)
+VIS001sheet.write(row, 0, "2", boldbl)
+VIS001sheet.write(row, 1, "Select VP according to schema RTZ 1.1 and publish to VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Success", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 48
 VIS_001_12_04_3_row = row
 VIS_001_12_04_3_col = 5
-VIS001sheet.write(row, 0, "3", bold)
-VIS001sheet.write(row, 1, "Select VP according to schema RTZ STM 2.0 and publish to VIS-1", bold)
-VIS001sheet.write(row, 3, "Success", bold)
+VIS001sheet.write(row, 0, "3", boldbl)
+VIS001sheet.write(row, 1, "Select VP according to schema RTZ STM 2.0 and publish to VIS-1", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Success", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 53
-VIS001sheet.write(row, 1, "Test ID", bold)
-VIS001sheet.write(row, 2, "TEST-VIS-001-5", bold)
+VIS001sheet.write(row, 0, "", boldblue)
+VIS001sheet.write(row, 1, "Test ID", boldblue)
+VIS001sheet.write(row, 2, "TEST-VIS-001-5", boldblue)
+VIS001sheet.write(row, 3, "", boldblue)
+VIS001sheet.write(row, 4, "", boldblue)
+VIS001sheet.write(row, 5, "", boldblue)
+VIS001sheet.write(row, 6, "", boldblue)
 
 row = 54
 VIS001sheet.write(row, 1, "Title", bold)
@@ -626,33 +669,40 @@ VIS001sheet.write(row, 5, '=COUNTIF(F61:F62, "NOT EXECUTED")', normalright)
 
 VIS001sheet.add_table('A60:G62')
 row = 59
-VIS001sheet.write(row, 0, "Step#", boldcenter)
-VIS001sheet.write(row, 1, "Test Step", boldcenter)
-VIS001sheet.write(row, 2, "Test Data", boldcenter)
-VIS001sheet.write(row, 3, "Expected Result", boldcenter)
-VIS001sheet.write(row, 4, "Actual", boldcenter)
-VIS001sheet.write(row, 5, "Pass Fail", boldcenter)
-VIS001sheet.write(row, 6, "Findings & Comments", boldcenter)
+VIS001sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS001sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS001sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS001sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS001sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 60
 VIS_001_12_05_1_row = row
 VIS_001_12_05_1_col = 5
-VIS001sheet.write(row, 0, "1", bold)
-VIS001sheet.write(row, 1, "Select VP in incorrect XML and publish to VIS-1 ", bold)
-VIS001sheet.write(row, 3, "STM-Module-1 gets error in response. Log entry in VIS-1", bold)
+VIS001sheet.write(row, 0, "1", boldbl)
+VIS001sheet.write(row, 1, "Select VP in incorrect XML and publish to VIS-1 ", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "STM-Module-1 gets error in response. Log entry in VIS-1", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 61
 VIS_001_12_05_2_row = row
 VIS_001_12_05_2_col = 5
-VIS001sheet.write(row, 0, "2", bold)
-VIS001sheet.write(row, 1, "Select VP not following schema RTZ  and publish to VIS-1 ", bold)
-VIS001sheet.write(row, 3, "STM-Module-1 gets error in response. Log entry in VIS-1", bold)
+VIS001sheet.write(row, 0, "2", boldbl)
+VIS001sheet.write(row, 1, "Select VP not following schema RTZ  and publish to VIS-1 ", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "STM-Module-1 gets error in response. Log entry in VIS-1", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 66
-VIS001sheet.write(row, 1, "Test ID", bold)
-VIS001sheet.write(row, 2, "TEST-VIS-001-6", bold)
+VIS001sheet.write(row, 0, "", boldblue)
+VIS001sheet.write(row, 1, "Test ID", boldblue)
+VIS001sheet.write(row, 2, "TEST-VIS-001-6", boldblue)
+VIS001sheet.write(row, 3, "", boldblue)
+VIS001sheet.write(row, 4, "", boldblue)
+VIS001sheet.write(row, 5, "", boldblue)
+VIS001sheet.write(row, 6, "", boldblue)
 
 row = 67
 VIS001sheet.write(row, 1, "Title", bold)
@@ -680,25 +730,31 @@ VIS001sheet.write(row, 5, '=COUNTIF(F74:F74, "NOT EXECUTED")', normalright)
 
 VIS001sheet.add_table('A73:G74')
 row = 72
-VIS001sheet.write(row, 0, "Step#", boldcenter)
-VIS001sheet.write(row, 1, "Test Step", boldcenter)
-VIS001sheet.write(row, 2, "Test Data", boldcenter)
-VIS001sheet.write(row, 3, "Expected Result", boldcenter)
-VIS001sheet.write(row, 4, "Actual", boldcenter)
-VIS001sheet.write(row, 5, "Pass Fail", boldcenter)
-VIS001sheet.write(row, 6, "Findings & Comments", boldcenter)
+VIS001sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS001sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS001sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS001sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS001sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 73
 VIS_001_12_06_1_row = row
 VIS_001_12_06_1_col = 5
-VIS001sheet.write(row, 0, "1", bold)
-VIS001sheet.write(row, 1, "Select VP for another ship and publish to subscribers", bold)
-VIS001sheet.write(row, 3, "Voyage Plan is published and sent to nominated actors (subscribing actors)", bold)
+VIS001sheet.write(row, 0, "1", boldbl)
+VIS001sheet.write(row, 1, "Select VP for another ship and publish to subscribers", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "Voyage Plan is published and sent to nominated actors (subscribing actors)", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 76
-VIS001sheet.write(row, 1, "Test ID", bold)
-VIS001sheet.write(row, 2, "TEST-VIS-001-7", bold)
+VIS001sheet.write(row, 0, "", boldblue)
+VIS001sheet.write(row, 1, "Test ID", boldblue)
+VIS001sheet.write(row, 2, "TEST-VIS-001-7", boldblue)
+VIS001sheet.write(row, 3, "", boldblue)
+VIS001sheet.write(row, 4, "", boldblue)
+VIS001sheet.write(row, 5, "", boldblue)
+VIS001sheet.write(row, 6, "", boldblue)
 
 row = 77
 VIS001sheet.write(row, 1, "Title", bold)
@@ -726,44 +782,48 @@ VIS001sheet.write(row, 5, '=COUNTIF(F84:F87, "NOT EXECUTED")', normalright)
 
 VIS001sheet.add_table('A83:G87')
 row = 82
-VIS001sheet.write(row, 0, "Step#", boldcenter)
-VIS001sheet.write(row, 1, "Test Step", boldcenter)
-VIS001sheet.write(row, 2, "Test Data", boldcenter)
-VIS001sheet.write(row, 3, "Expected Result", boldcenter)
-VIS001sheet.write(row, 4, "Actual", boldcenter)
-VIS001sheet.write(row, 5, "Pass Fail", boldcenter)
-VIS001sheet.write(row, 6, "Findings & Comments", boldcenter)
+VIS001sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS001sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS001sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS001sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS001sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 83
 VIS_001_12_07_1_row = row
 VIS_001_12_07_1_col = 5
-VIS001sheet.write(row, 0, "1", bold)
-VIS001sheet.write(row, 1, "Select voyage plan with missing vesselVoyage and publish to subscribers", bold)
-VIS001sheet.write(row, 3, "No voyage plan received by subscribers", bold)
+VIS001sheet.write(row, 0, "1", boldbl)
+VIS001sheet.write(row, 1, "Select voyage plan with missing vesselVoyage and publish to subscribers", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No voyage plan received by subscribers", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 84
 VIS_001_12_07_2_row = row
 VIS_001_12_07_2_col = 5
-VIS001sheet.write(row, 0, "2", bold)
-VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  vesselVoyage and publish to subscribers", bold)
-VIS001sheet.write(row, 3, "No voyage plan received by subscribers", bold)
+VIS001sheet.write(row, 0, "2", boldbl)
+VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  vesselVoyage and publish to subscribers", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No voyage plan received by subscribers", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 85
 VIS_001_12_07_3_row = row
 VIS_001_12_07_3_col = 5
-VIS001sheet.write(row, 0, "3", bold)
-VIS001sheet.write(row, 1, "Select voyage plan with missing routeStatus and publish to subscribers", bold)
-VIS001sheet.write(row, 3, "No voyage plan received by subscribers", bold)
+VIS001sheet.write(row, 0, "3", boldbl)
+VIS001sheet.write(row, 1, "Select voyage plan with missing routeStatus and publish to subscribers", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No voyage plan received by subscribers", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 86
 VIS_001_12_07_4_row = row
 VIS_001_12_07_4_col = 5
-VIS001sheet.write(row, 0, "4", bold)
-VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  routeStatus and publish to subscribers", bold)
-VIS001sheet.write(row, 3, "No voyage plan received by subscribers", bold)
+VIS001sheet.write(row, 0, "4", boldbl)
+VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  routeStatus and publish to subscribers", boldbl)
+VIS001sheet.write(row, 2, "", boldbl)
+VIS001sheet.write(row, 3, "No voyage plan received by subscribers", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 0
@@ -771,14 +831,19 @@ col = 0
 VIS002sheet.write(row, 1, "Test Protocol", bold)
 
 row = 1
-VIS002sheet.write(row, 1, "Test ID", bold)
-VIS002sheet.write(row, 2, "TEST-VIS-002", bold)
+VIS002sheet.write(row, 0, "", boldblue)
+VIS002sheet.write(row, 1, "Test ID", boldblue)
+VIS002sheet.write(row, 2, "TEST-VIS-002", boldblue)
+VIS002sheet.write(row, 3, "", boldblue)
+VIS002sheet.write(row, 4, "", boldblue)
+VIS002sheet.write(row, 5, "", boldblue)
+VIS002sheet.write(row, 6, "", boldblue)
 row = 2
 VIS002sheet.write(row, 1, "Executed by", bold)
 VIS002sheet.write(row, 2, "Karri Kaksonen", bold)
 row = 3
-VIS002sheet.write(row, 0, "Executed date", bold)
-VIS002sheet.write(row, 1, time.strftime("%Y-%m-%d"), bold)
+VIS002sheet.write(row, 1, "Executed date", bold)
+VIS002sheet.write(row, 2, time.strftime("%Y-%m-%d"), bold)
 row = 5
 VIS002sheet.write(row, 1, "Title", bold)
 VIS002sheet.write(row, 2, "Test request (get) voyage plan(s)", normal)
@@ -803,83 +868,93 @@ worksheet.write(VIS_002_row, VIS_002_col, '=VIS002.F7', bold)
 
 VIS002sheet.add_table('A11:G20')
 row = 10
-VIS002sheet.write(row, 0, "Step#", boldcenter)
-VIS002sheet.write(row, 1, "Test Step", boldcenter)
-VIS002sheet.write(row, 2, "Test Data", boldcenter)
-VIS002sheet.write(row, 3, "Expected Result", boldcenter)
-VIS002sheet.write(row, 4, "Actual", boldcenter)
-VIS002sheet.write(row, 5, "Pass Fail", boldcenter)
-VIS002sheet.write(row, 6, "Findings & Comments", boldcenter)
+VIS002sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS002sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS002sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS002sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS002sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS002sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS002sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 11
 VIS_002_00_row = row
 VIS_002_00_col = 5
-VIS002sheet.write(row, 0, "0", bold)
+VIS002sheet.write(row, 0, "0", boldbl)
 VIS002sheet.write(row, 1, "Preparation:Organisation for VIS-2 authorized to exactly one published voyage plan with routestatus=7 and chosen UVID", bold)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 12
 VIS_002_01_row = row
 VIS_002_01_col = 5
-VIS002sheet.write(row, 0, "1", bold)
-VIS002sheet.write(row, 1, "VIS-2 request voyage plan from VIS-1, no specific UVID or status, hence no parameters given - getVoyagePlan()", bold)
-VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", bold)
+VIS002sheet.write(row, 0, "1", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 request voyage plan from VIS-1, no specific UVID or status, hence no parameters given - getVoyagePlan()", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 13
 VIS_002_02_row = row
 VIS_002_02_col = 5
-VIS002sheet.write(row, 0, "2", bold)
-VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID from VIS-1, no specific status - getVoyagePlan(UVID)", bold)
-VIS002sheet.write(row, 3, "VIS-2 request voyage plan with chosen UVID from VIS-1, no specific status", bold)
+VIS002sheet.write(row, 0, "2", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID from VIS-1, no specific status - getVoyagePlan(UVID)", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "VIS-2 request voyage plan with chosen UVID from VIS-1, no specific status", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 14
 VIS_002_03_row = row
 VIS_002_03_col = 5
-VIS002sheet.write(row, 0, "3", bold)
-VIS002sheet.write(row, 1, "VIS-2 request voyage plan with routeStatus= 7 from VIS-1, no specific UVID  - getVoyagePlan(routeStatus)", bold)
-VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", bold)
+VIS002sheet.write(row, 0, "3", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 request voyage plan with routeStatus= 7 from VIS-1, no specific UVID  - getVoyagePlan(routeStatus)", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 15
 VIS_002_04_row = row
 VIS_002_04_col = 5
-VIS002sheet.write(row, 0, "4", bold)
-VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID and routeStatus=7 from VIS-1 - getVoyagePlan(UVID, routeStatus)", bold)
-VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", bold)
+VIS002sheet.write(row, 0, "4", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID and routeStatus=7 from VIS-1 - getVoyagePlan(UVID, routeStatus)", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "VIS-2 receives the voyage plan in response", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 16
 VIS_002_05_row = row
 VIS_002_05_col = 5
-VIS002sheet.write(row, 0, "5", bold)
-VIS002sheet.write(row, 1, "VIS-2 request voyage plan with another (non published) UVID and routeStatus=7 from VIS-1 - getVoyagePlan(UVID, routeStatus)", bold)
-VIS002sheet.write(row, 3, "No voyage plans received", bold)
+VIS002sheet.write(row, 0, "5", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 request voyage plan with another (non published) UVID and routeStatus=7 from VIS-1 - getVoyagePlan(UVID, routeStatus)", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "No voyage plans received", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 17
 VIS_002_06_row = row
 VIS_002_06_col = 5
-VIS002sheet.write(row, 0, "6", bold)
-VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID and routeStatus=6 from VIS-1", bold)
-VIS002sheet.write(row, 3, "No voyage plans received", bold)
+VIS002sheet.write(row, 0, "6", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 request voyage plan with chosen UVID and routeStatus=6 from VIS-1", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "No voyage plans received", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 18
 VIS_002_07_row = row
 VIS_002_07_col = 5
-VIS002sheet.write(row, 0, "7", bold)
-VIS002sheet.write(row, 1, "VIS-2 request voyage plan with another (non published) UVID from VIS-1, no specific status", bold)
-VIS002sheet.write(row, 3, "No voyage plans received", bold)
+VIS002sheet.write(row, 0, "7", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 request voyage plan with another (non published) UVID from VIS-1, no specific status", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "No voyage plans received", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 19
 VIS_002_08_row = row
 VIS_002_08_col = 5
-VIS002sheet.write(row, 0, "8", bold)
-VIS002sheet.write(row, 1, "VIS-2 request voyage plan with routeStatus= 6 (non published)  from VIS-1, no specific UVID ", bold)
-VIS002sheet.write(row, 3, "No voyage plans received", bold)
+VIS002sheet.write(row, 0, "8", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 request voyage plan with routeStatus= 6 (non published)  from VIS-1, no specific UVID ", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "No voyage plans received", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 22
@@ -905,34 +980,93 @@ worksheet.write(VIS_002_1_row, VIS_002_1_col, '=VIS002.F24', bold)
 
 VIS002sheet.add_table('A28:G37')
 row = 27
-VIS002sheet.write(row, 0, "Step#", boldcenter)
-VIS002sheet.write(row, 1, "Test Step", boldcenter)
-VIS002sheet.write(row, 2, "Test Data", boldcenter)
-VIS002sheet.write(row, 3, "Expected Result", boldcenter)
-VIS002sheet.write(row, 4, "Actual", boldcenter)
-VIS002sheet.write(row, 5, "Pass Fail", boldcenter)
-VIS002sheet.write(row, 6, "Findings & Comments", boldcenter)
+VIS002sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS002sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS002sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS002sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS002sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS002sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS002sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 28
 VIS_002_1_0_row = row
 VIS_002_1_0_col = 5
-VIS002sheet.write(row, 0, "0", bold)
-VIS002sheet.write(row, 1, "Preparation: Organisation for VIS-2 authorized to chosen UVID", bold)
+VIS002sheet.write(row, 0, "0", boldbl)
+VIS002sheet.write(row, 1, "Preparation: Organisation for VIS-2 authorized to chosen UVID", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 29
 VIS_002_1_1_row = row
 VIS_002_1_1_col = 5
-VIS002sheet.write(row, 0, "1", bold)
-VIS002sheet.write(row, 1, "VIS-1 : Publish voyage plan with chosen UVID and routeStatus=7", bold)
+VIS002sheet.write(row, 0, "1", boldbl)
+VIS002sheet.write(row, 1, "VIS-1 : Publish voyage plan with chosen UVID and routeStatus=7", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 30
 VIS_002_1_2_row = row
 VIS_002_1_2_col = 5
-VIS002sheet.write(row, 0, "2", bold)
-VIS002sheet.write(row, 1, "VIS-2 : Request voyage plans from VIS-1", bold)
-VIS002sheet.write(row, 3, "1 voyage plan received", bold)
+VIS002sheet.write(row, 0, "2", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 : Request voyage plans from VIS-1", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "1 voyage plan received", boldbl)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 31
+VIS_002_1_3_row = row
+VIS_002_1_3_col = 5
+VIS002sheet.write(row, 0, "3", boldbl)
+VIS002sheet.write(row, 1, "VIS-1 : Publish voyage plan with chosen UVID and routeStatus=7", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "", boldbl)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 32
+VIS_002_1_4_row = row
+VIS_002_1_4_col = 5
+VIS002sheet.write(row, 0, "4", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 : Request voyage plans from VIS-1", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "1 voyage plan received", boldbl)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 33
+VIS_002_1_5_row = row
+VIS_002_1_5_col = 5
+VIS002sheet.write(row, 0, "5", boldbl)
+VIS002sheet.write(row, 1, "VIS-1 : Publish voyage plan with new UVID for the same ship and routeStatus=7", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "", boldbl)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 34
+VIS_002_1_6_row = row
+VIS_002_1_6_col = 5
+VIS002sheet.write(row, 0, "6", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 : Request voyage plans from VIS-1", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "1 voyage plan received", boldbl)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 35
+VIS_002_1_7_row = row
+VIS_002_1_7_col = 5
+VIS002sheet.write(row, 0, "7", boldbl)
+VIS002sheet.write(row, 1, "VIS-1 : Publish voyage plan with new UVID for another ship and routeStatus=7", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "", boldbl)
+VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 36
+VIS_002_1_8_row = row
+VIS_002_1_8_col = 5
+VIS002sheet.write(row, 0, "8", boldbl)
+VIS002sheet.write(row, 1, "VIS-2 : Request voyage plans from VIS-1", boldbl)
+VIS002sheet.write(row, 2, "", boldbl)
+VIS002sheet.write(row, 3, "2 voyage plan received", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
 
 '''
