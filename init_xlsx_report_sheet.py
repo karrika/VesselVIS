@@ -5,7 +5,7 @@ import time
 workbook = xlsxwriter.Workbook('VIS-TestCaseCollection_report.xlsx')
 worksheet = workbook.add_worksheet("VIS Test Case Summary")
 worksheet.set_column(0, 10, 15)
-VIS001sheet = workbook.add_worksheet("vis001")
+VIS001sheet = workbook.add_worksheet("VIS001")
 VIS001sheet.set_column(0, 0, 5)
 VIS001sheet.set_column(1, 1, 20)
 VIS001sheet.set_column(2, 2, 10)
@@ -683,6 +683,76 @@ VIS_001_12_06_1_col = 5
 VIS001sheet.write(row, 0, "1", bold)
 VIS001sheet.write(row, 1, "Select VP for another ship and publish to subscribers", bold)
 VIS001sheet.write(row, 3, "Voyage Plan is published and sent to nominated actors (subscribing actors)", bold)
+VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 76
+VIS001sheet.write(row, 1, "Test ID", bold)
+VIS001sheet.write(row, 2, "TEST-VIS-001-7", bold)
+
+row = 77
+VIS001sheet.write(row, 1, "Title", bold)
+VIS001sheet.write(row, 2, "Variant – Publish voyage plan without UVID and/or status", normal)
+
+row = 78
+VIS001sheet.write(row, 1, "Description", bold)
+VIS001sheet.write(row, 2, "Test/show behaviour of VIS if publishing a voyage plan with no or incorrect vesselVoyage and/or routeStatus", normal)
+VIS001sheet.write(row, 4, "Total:", normalright)
+VIS001sheet.write(row, 5, '=IF(F82>0,"NOT EXECUTED",IF(F81>0,"FAIL","PASS"))', normalright)
+
+row = 79
+VIS001sheet.write(row, 1, "Preconditions", bold)
+VIS001sheet.write(row, 4, "Pass:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F84:F87, "PASS")', normalright)
+
+row = 80
+VIS001sheet.write(row, 1, "Dependencies", bold)
+VIS001sheet.write(row, 4, "Fail:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F84:F87, "FAIL")', normalright)
+
+row = 81
+VIS001sheet.write(row, 4, "Not executed:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F84:F87, "NOT EXECUTED")', normalright)
+
+VIS001sheet.add_table('A83:G87')
+row = 82
+VIS001sheet.write(row, 0, "Step#", boldcenter)
+VIS001sheet.write(row, 1, "Test Step", boldcenter)
+VIS001sheet.write(row, 2, "Test Data", boldcenter)
+VIS001sheet.write(row, 3, "Expected Result", boldcenter)
+VIS001sheet.write(row, 4, "Actual", boldcenter)
+VIS001sheet.write(row, 5, "Pass Fail", boldcenter)
+VIS001sheet.write(row, 6, "Findings & Comments", boldcenter)
+
+row = 83
+VIS_001_12_07_1_row = row
+VIS_001_12_07_1_col = 5
+VIS001sheet.write(row, 0, "1", bold)
+VIS001sheet.write(row, 1, "Select voyage plan with missing vesselVoyage and publish to subscribers", bold)
+VIS001sheet.write(row, 3, "No voyage plan received by subscribers", bold)
+VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 84
+VIS_001_12_07_2_row = row
+VIS_001_12_07_2_col = 5
+VIS001sheet.write(row, 0, "2", bold)
+VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  vesselVoyage and publish to subscribers", bold)
+VIS001sheet.write(row, 3, "No voyage plan received by subscribers", bold)
+VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 85
+VIS_001_12_07_3_row = row
+VIS_001_12_07_3_col = 5
+VIS001sheet.write(row, 0, "3", bold)
+VIS001sheet.write(row, 1, "Select voyage plan with missing routeStatus and publish to subscribers", bold)
+VIS001sheet.write(row, 3, "No voyage plan received by subscribers", bold)
+VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 86
+VIS_001_12_07_4_row = row
+VIS_001_12_07_4_col = 5
+VIS001sheet.write(row, 0, "4", bold)
+VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  routeStatus and publish to subscribers", bold)
+VIS001sheet.write(row, 3, "No voyage plan received by subscribers", bold)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 '''

@@ -784,6 +784,116 @@ VIS001sheet.write(VIS_001_12_06_1_row, VIS_001_12_06_1_col, "FAIL", boldcenter)
 
         self.assert200(response, "Response body is : " + response.text)
 
+    def test_VIS_001_12_07_1(self):
+        """
+        VIS-001-7-1 - Select voyage plan with missing vesselVoyage and publish to subscribers
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': ''}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 500:
+            report='''
+VIS001sheet.write(VIS_001_12_07_1_row, VIS_001_12_07_1_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS001sheet.write(VIS_001_12_07_1_row, VIS_001_12_07_1_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert500(response, "Response body is : " + response.text)
+
+    @unittest.skip('No idea about what to do yet.')
+    def test_VIS_001_12_07_2(self):
+        """
+        VIS-001-7-2 - Select voyage plan with incorrect syntax of  vesselVoyage and publish to subscribers
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': ''}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS001sheet.write(VIS_001_12_07_2_row, VIS_001_12_07_2_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS001sheet.write(VIS_001_12_07_2_row, VIS_001_12_07_2_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
+
+    @unittest.skip('No idea about what to do yet.')
+    def test_VIS_001_12_07_3(self):
+        """
+        VIS-001-7-3 - Select voyage plan with missing routeStatus and publish to subscribers
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS001sheet.write(VIS_001_12_07_3_row, VIS_001_12_07_3_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS001sheet.write(VIS_001_12_07_3_row, VIS_001_12_07_3_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
+
+    @unittest.skip('No idea about what to do yet.')
+    def test_VIS_001_12_07_4(self):
+        """
+        VIS-001-7-4 - Select voyage plan with incorrect syntax of  routeStatus and publish to subscribers
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS001sheet.write(VIS_001_12_07_4_row, VIS_001_12_07_4_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS001sheet.write(VIS_001_12_07_4_row, VIS_001_12_07_4_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
 
 if __name__ == '__main__':
     unittest.main()
