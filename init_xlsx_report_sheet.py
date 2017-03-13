@@ -5,7 +5,7 @@ import time
 workbook = xlsxwriter.Workbook('VIS-TestCaseCollection_report.xlsx')
 worksheet = workbook.add_worksheet("VIS Test Case Summary")
 worksheet.set_column(0, 10, 15)
-VIS001sheet = workbook.add_worksheet("VIS001")
+VIS001sheet = workbook.add_worksheet("vis001")
 VIS001sheet.set_column(0, 0, 5)
 VIS001sheet.set_column(1, 1, 20)
 VIS001sheet.set_column(2, 2, 10)
@@ -23,20 +23,14 @@ VIS008sheet = workbook.add_worksheet("VIS008")
 VIS009sheet = workbook.add_worksheet("VIS009")
 VIS010sheet = workbook.add_worksheet("VIS010")
 
-# Some data we want to write to the worksheet.
-expenses = (
-    ['Rent', 1000],
-    ['Gas',   100],
-    ['Food',  300],
-    ['Gym',    50],
-)
-
 # Start from the first cell. Rows and columns are zero indexed.
 row = 0
 col = 0
 
 normal = workbook.add_format()
 normal.set_text_wrap()
+normalright = workbook.add_format()
+normalright.set_align('right')
 bold = workbook.add_format({'bold': True})
 bold.set_text_wrap()
 boldcenter = workbook.add_format({'bold': True})
@@ -68,6 +62,8 @@ worksheet.write(row, 9, "Pass/Fail", boldcenter)
 worksheet.write(row, 10, "Finding & Comment", boldcenter)
 
 row = 6
+VIS_001_row = row
+VIS_001_col = 9
 worksheet.write(row, 0, "MO", boldcenter)
 worksheet.write(row, 2, "Authorize and Publish Voyage Plan", bold)
 worksheet.write(row, 3, "Test publish voyage plan and give authorization (access) to chosen identities. Authorized identities (organisations) can request (GET) and subscribe to voyage plans", bold)
@@ -345,10 +341,21 @@ VIS001sheet.write(row, 2, "Main test", normal)
 row = 6
 VIS001sheet.write(row, 1, "Description", bold)
 VIS001sheet.write(row, 2, "Test publish voyage plan and give authorization (access) to chosen identities. Authorized identities (organisations) can request (GET) and subscribe to voyage plans. ", normal)
+VIS001sheet.write(row, 4, "Total:", normalright)
+VIS001sheet.write(row, 5, '=IF(F10>0,"NOT EXECUTED",IF(F9>0,"FAIL","PASS"))', normalright)
 row = 7
 VIS001sheet.write(row, 1, "Preconditions", bold)
+VIS001sheet.write(row, 4, "Pass:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F12:F23, "PASS")', normalright)
 row = 8
 VIS001sheet.write(row, 1, "Dependencies", bold)
+VIS001sheet.write(row, 4, "Fail:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F12:F23, "FAIL")', normalright)
+row = 9
+VIS001sheet.write(row, 4, "Not executed:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F12:F23, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_001_row, VIS_001_col, '=VIS001.F7', bold)
 
 VIS001sheet.add_table('A11:G23')
 row = 10
@@ -467,12 +474,21 @@ VIS001sheet.write(row, 2, "Variant – Publish voyage plan based on different sc
 row = 29
 VIS001sheet.write(row, 1, "Description", bold)
 VIS001sheet.write(row, 2, "Test different validity periods in RTZ to show the behaviour in VIS. Presently there is no requirement that VIS shall check the validity period.", normal)
+VIS001sheet.write(row, 4, "Total:", normalright)
+VIS001sheet.write(row, 5, '=IF(F33>0,"NOT EXECUTED",IF(F32>0,"FAIL","PASS"))', normalright)
 row = 30
 VIS001sheet.write(row, 1, "Preconditions", bold)
+VIS001sheet.write(row, 4, "Pass:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F35:F37, "PASS")', normalright)
 row = 31
 VIS001sheet.write(row, 1, "Dependencies", bold)
+VIS001sheet.write(row, 4, "Fail:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F35:F37, "FAIL")', normalright)
+row = 32
+VIS001sheet.write(row, 4, "Not executed:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F35:F37, "NOT EXECUTED")', normalright)
 
-VIS001sheet.add_table('A33:G36')
+VIS001sheet.add_table('A34:G37')
 row = 33
 VIS001sheet.write(row, 0, "Step#", boldcenter)
 VIS001sheet.write(row, 1, "Test Step", boldcenter)
@@ -517,15 +533,25 @@ VIS001sheet.write(row, 2, "Variant – Publish voyage plan based on different sc
 row = 40
 VIS001sheet.write(row, 1, "Description", bold)
 VIS001sheet.write(row, 2, "Test different RTZ schema versions", normal)
+VIS001sheet.write(row, 4, "Total:", normalright)
+VIS001sheet.write(row, 5, '=IF(F44>0,"NOT EXECUTED",IF(F43>0,"FAIL","PASS"))', normalright)
 
 row = 41
 VIS001sheet.write(row, 1, "Preconditions", bold)
+VIS001sheet.write(row, 4, "Pass:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F46:F48, "PASS")', normalright)
 
 row = 42
 VIS001sheet.write(row, 1, "Dependencies", bold)
+VIS001sheet.write(row, 4, "Fail:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F46:F48, "FAIL")', normalright)
+
+row = 43
+VIS001sheet.write(row, 4, "Not executed:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F46:F48, "NOT EXECUTED")', normalright)
 
 VIS001sheet.add_table('A45:G48')
-row = 45
+row = 44
 VIS001sheet.write(row, 0, "Step#", boldcenter)
 VIS001sheet.write(row, 1, "Test Step", boldcenter)
 VIS001sheet.write(row, 2, "Test Data", boldcenter)
@@ -569,14 +595,25 @@ VIS001sheet.write(row, 2, "Variant – Publish incorrect voyage plan according t
 row = 55
 VIS001sheet.write(row, 1, "Description", bold)
 VIS001sheet.write(row, 2, "Test error handling in VIS for incorrect RTZ XML and RTZ not according to schema", normal)
+VIS001sheet.write(row, 4, "Total:", normalright)
+VIS001sheet.write(row, 5, '=IF(F59>0,"NOT EXECUTED",IF(F58>0,"FAIL","PASS"))', normalright)
 
 row = 56
 VIS001sheet.write(row, 1, "Preconditions", bold)
+VIS001sheet.write(row, 4, "Pass:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F61:F62, "PASS")', normalright)
 
 row = 57
 VIS001sheet.write(row, 1, "Dependencies", bold)
+VIS001sheet.write(row, 4, "Fail:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F61:F62, "FAIL")', normalright)
 
-VIS001sheet.add_table('A59:G61')
+row = 58
+VIS001sheet.write(row, 4, "Not executed:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F61:F62, "NOT EXECUTED")', normalright)
+
+
+VIS001sheet.add_table('A60:G62')
 row = 59
 VIS001sheet.write(row, 0, "Step#", boldcenter)
 VIS001sheet.write(row, 1, "Test Step", boldcenter)
@@ -600,6 +637,52 @@ VIS_001_12_05_2_col = 5
 VIS001sheet.write(row, 0, "2", bold)
 VIS001sheet.write(row, 1, "Select VP not following schema RTZ  and publish to VIS-1 ", bold)
 VIS001sheet.write(row, 3, "STM-Module-1 gets error in response. Log entry in VIS-1", bold)
+VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 66
+VIS001sheet.write(row, 1, "Test ID", bold)
+VIS001sheet.write(row, 2, "TEST-VIS-001-6", bold)
+
+row = 67
+VIS001sheet.write(row, 1, "Title", bold)
+VIS001sheet.write(row, 2, "Variant – Publish voyage plan for another ship", normal)
+
+row = 68
+VIS001sheet.write(row, 1, "Description", bold)
+VIS001sheet.write(row, 2, "Test/show behaviour for VIS if an ship publishes a RTZ for another ship", normal)
+VIS001sheet.write(row, 4, "Total:", normalright)
+VIS001sheet.write(row, 5, '=IF(F72>0,"NOT EXECUTED",IF(F71>0,"FAIL","PASS"))', normalright)
+
+row = 69
+VIS001sheet.write(row, 1, "Preconditions", bold)
+VIS001sheet.write(row, 4, "Pass:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F74:F74, "PASS")', normalright)
+
+row = 70
+VIS001sheet.write(row, 1, "Dependencies", bold)
+VIS001sheet.write(row, 4, "Fail:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F74:F74, "FAIL")', normalright)
+
+row = 71
+VIS001sheet.write(row, 4, "Not executed:", normalright)
+VIS001sheet.write(row, 5, '=COUNTIF(F74:F74, "NOT EXECUTED")', normalright)
+
+VIS001sheet.add_table('A73:G74')
+row = 72
+VIS001sheet.write(row, 0, "Step#", boldcenter)
+VIS001sheet.write(row, 1, "Test Step", boldcenter)
+VIS001sheet.write(row, 2, "Test Data", boldcenter)
+VIS001sheet.write(row, 3, "Expected Result", boldcenter)
+VIS001sheet.write(row, 4, "Actual", boldcenter)
+VIS001sheet.write(row, 5, "Pass Fail", boldcenter)
+VIS001sheet.write(row, 6, "Findings & Comments", boldcenter)
+
+row = 73
+VIS_001_12_06_1_row = row
+VIS_001_12_06_1_col = 5
+VIS001sheet.write(row, 0, "1", bold)
+VIS001sheet.write(row, 1, "Select VP for another ship and publish to subscribers", bold)
+VIS001sheet.write(row, 3, "Voyage Plan is published and sent to nominated actors (subscribing actors)", bold)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 '''

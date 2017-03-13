@@ -757,6 +757,33 @@ VIS001sheet.write(VIS_001_12_05_2_row, VIS_001_12_05_2_col, "FAIL", boldcenter)
 
         self.assert500(response, "Response body is : " + response.text)
 
+    def test_VIS_001_12_06_1(self):
+        """
+        VIS-001-6-1 - Select VP for another ship and publish to subscribers
+
+
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': 'urn:mrn:stm:voyage:id:new:plan'
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS001sheet.write(VIS_001_12_06_1_row, VIS_001_12_06_1_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS001sheet.write(VIS_001_12_06_1_row, VIS_001_12_06_1_col, "FAIL", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
+
 
 if __name__ == '__main__':
     unittest.main()
