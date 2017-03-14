@@ -87,6 +87,14 @@ normalright.set_align('right')
 bold = workbook.add_format({'bold': True})
 bold.set_text_wrap()
 bold.set_align('top')
+mainbold = workbook.add_format({'bold': True})
+mainbold.set_text_wrap()
+mainbold.set_align('top')
+mainbold.set_bg_color('#cccccc')
+variantbold = workbook.add_format({'bold': True})
+variantbold.set_text_wrap()
+variantbold.set_align('top')
+variantbold.set_bg_color('#dddddd')
 boldbld = workbook.add_format({'bold': True})
 boldbld.set_text_wrap()
 boldbld.set_align('top')
@@ -102,6 +110,16 @@ boldcenter = workbook.add_format({'bold': True})
 boldcenter.set_align('center')
 boldcenter.set_align('top')
 boldcenter.set_text_wrap()
+mainboldcenter = workbook.add_format({'bold': True})
+mainboldcenter.set_align('center')
+mainboldcenter.set_align('top')
+mainboldcenter.set_text_wrap()
+mainboldcenter.set_bg_color('#cccccc')
+variantboldcenter = workbook.add_format({'bold': True})
+variantboldcenter.set_align('center')
+variantboldcenter.set_align('top')
+variantboldcenter.set_text_wrap()
+variantboldcenter.set_bg_color('#dddddd')
 boldcenterwhite = workbook.add_format({'bold': True})
 boldcenterwhite.set_align('center')
 boldcenterwhite.set_text_wrap()
@@ -140,333 +158,421 @@ row = 6
 VIS_001_row = row
 VIS_001_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Authorize and Publish Voyage Plan", bold)
-worksheet.write(row, 3, "Test publish voyage plan and give authorization (access) to chosen identities. Authorized identities (organisations) can request (GET) and subscribe to voyage plans", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-001", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 8, "RTZ-001", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Authorize and Publish Voyage Plan", mainbold)
+worksheet.write(row, 3, "Test publish voyage plan and give authorization (access) to chosen identities. Authorized identities (organisations) can request (GET) and subscribe to voyage plans", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-001", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "RTZ-001", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 7
 VIS_001_3_row = row
 VIS_001_3_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant – Publish voyage plan with validityPeriod", bold)
-worksheet.write(row, 3, "Publish old voyage plan where validityPeriod has passed", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-001-3", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 8, "RTZ with different validityPeriods", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant – Publish voyage plan with validityPeriod", variantbold)
+worksheet.write(row, 3, "Publish old voyage plan where validityPeriod has passed", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-001-3", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "RTZ with different validityPeriods", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 8
 VIS_001_4_row = row
 VIS_001_4_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant – Publish voyage plan based on different schema versions", bold)
-worksheet.write(row, 3, "Publish future voyage plan according to different schema versions", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-001-4", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant – Publish voyage plan based on different schema versions", variantbold)
+worksheet.write(row, 3, "Publish future voyage plan according to different schema versions", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-001-4", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 9
 VIS_001_5_row = row
 VIS_001_5_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant – Publish incorrect voyage plan according to schema", bold)
-worksheet.write(row, 3, "Publish incorrect voyage plan according to RTZ schema", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-001-5", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant – Publish incorrect voyage plan according to schema", variantbold)
+worksheet.write(row, 3, "Publish incorrect voyage plan according to RTZ schema", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-001-5", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 10
 VIS_001_6_row = row
 VIS_001_6_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant – Publish voyage plan for another ship", bold)
-worksheet.write(row, 3, "Test/show behaviour for VIS if an ship publishes a RTZ for another ship", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-001-6", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant – Publish voyage plan for another ship", variantbold)
+worksheet.write(row, 3, "Test/show behaviour for VIS if an ship publishes a RTZ for another ship", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-001-6", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 11
 VIS_001_7_row = row
 VIS_001_7_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant – Publish voyage plan without UVID and/or status", bold)
-worksheet.write(row, 3, "Test/show behaviour of VIS if publishing a voyage plan with no or incorrect vesselVoyage and/or routeStatus", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-001-7", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant – Publish voyage plan without UVID and/or status", variantbold)
+worksheet.write(row, 3, "Test/show behaviour of VIS if publishing a voyage plan with no or incorrect vesselVoyage and/or routeStatus", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-001-7", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 12
 VIS_002_row = row
 VIS_002_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Request Voyage Plan", bold)
-worksheet.write(row, 3, "Test request (get) voyage plan(s)", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-002", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Request Voyage Plan", mainbold)
+worksheet.write(row, 3, "Test request (get) voyage plan(s)", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-002", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 13
 VIS_002_1_row = row
 VIS_002_1_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant – Test rule “Only 1 voyage plan used for monitoring per ship”", bold)
-worksheet.write(row, 3, "Test maintained rule « Only one voyage per ship can be in status « Used for monitoring » (7) when requesting voyage plans", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-002-1", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant – Test rule “Only 1 voyage plan used for monitoring per ship”", variantbold)
+worksheet.write(row, 3, "Test maintained rule « Only one voyage per ship can be in status « Used for monitoring » (7) when requesting voyage plans", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-002-1", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 14
 VIS_003_row = row
 VIS_003_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Subscribe to Voyage Plan", bold)
-worksheet.write(row, 3, "Test subscription on voyage plans", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-003", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Subscribe to Voyage Plan", mainbold)
+worksheet.write(row, 3, "Test subscription on voyage plans", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-003", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 15
 VIS_003_1_row = row
 VIS_003_1_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Subscribe to Voyage Plan – incorrect callback endpoint", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-003-1", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Subscribe to Voyage Plan – incorrect callback endpoint", variantbold)
+worksheet.write(row, 3, "", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-003-1", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 16
 VIS_003_2_row = row
 VIS_003_2_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Subscribe to Voyage Plan – incorrect UVID", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-003-2", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Subscribe to Voyage Plan – incorrect UVID", variantbold)
+worksheet.write(row, 3, "", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-003-2", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 17
 VIS_003_3_row = row
 VIS_003_3_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Duplicate subscription requests", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-003-3", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Duplicate subscription requests", variantbold)
+worksheet.write(row, 3, "", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-003-3", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 18
 VIS_004_row = row
 VIS_004_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Remove Subscription to Voyage Plan", bold)
-worksheet.write(row, 3, "Remove subscription to the voyage plan(s)", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-004", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Remove Subscription to Voyage Plan", mainbold)
+worksheet.write(row, 3, "Remove subscription to the voyage plan(s)", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-004", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 19
 VIS_004_1_row = row
 VIS_004_1_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Remove subscription with incorrect parameters", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-004-1", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Remove subscription with incorrect parameters", variantbold)
+worksheet.write(row, 3, "", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-004-1", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 20
 VIS_005_row = row
 VIS_005_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Upload Voyage Plan", bold)
-worksheet.write(row, 3, "Find VIS and send (upload) a voyage plan. No ACK is requested. The STM Module is notified by VIS and the message is retrieved.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-005", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Upload Voyage Plan", mainbold)
+worksheet.write(row, 3, "Find VIS and send (upload) a voyage plan. No ACK is requested. The STM Module is notified by VIS and the message is retrieved.", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-005", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 21
 VIS_005_1_row = row
 VIS_005_1_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Upload Voyage Plan with ACK request", bold)
-worksheet.write(row, 3, "Same as TEST-005 but ACK is requested.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-005-1", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Upload Voyage Plan with ACK request", variantbold)
+worksheet.write(row, 3, "Same as TEST-005 but ACK is requested.", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-005-1", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 22
 VIS_005_2_row = row
 VIS_005_2_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Upload Voyage Plan with ACK request but no STM Module retrieves the message", bold)
-worksheet.write(row, 3, "Same as TEST-005-1 but no STM Module receives the message.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-005-2", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Upload Voyage Plan with ACK request but no STM Module retrieves the message", variantbold)
+worksheet.write(row, 3, "Same as TEST-005-1 but no STM Module receives the message.", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-005-2", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 23
 VIS_005_3_row = row
 VIS_005_3_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Upload Voyage Plan with explicit callback endpoint", bold)
-worksheet.write(row, 3, "Upload voyage plan (RTZ) with explicit callback endpoint where returned result is expected", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-005-3", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Upload Voyage Plan with explicit callback endpoint", variantbold)
+worksheet.write(row, 3, "Upload voyage plan (RTZ) with explicit callback endpoint where returned result is expected", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-005-3", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 24
 VIS_005_4_row = row
 VIS_005_4_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Upload Voyage Plan for another ship to a ship", bold)
-worksheet.write(row, 3, "Test/show the behaviour of VIS if a service provider uploads a voyage plan for another ship than the receiver", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-005-4", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Upload Voyage Plan for another ship to a ship", variantbold)
+worksheet.write(row, 3, "Test/show the behaviour of VIS if a service provider uploads a voyage plan for another ship than the receiver", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-005-4", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 25
 VIS_006_row = row
 VIS_006_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Upload Text Message", bold)
-worksheet.write(row, 3, "Test upload text message to VIS. No ACK is requested. The STM Module gets notified by VIS and the message is retrieved.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-006", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Upload Text Message", mainbold)
+worksheet.write(row, 3, "Test upload text message to VIS. No ACK is requested. The STM Module gets notified by VIS and the message is retrieved.", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-006", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 26
 VIS_006_1_row = row
 VIS_006_1_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Upload Text Message with ACK request", bold)
-worksheet.write(row, 3, "Same as TEST-006 but ACK is requested.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-006-1", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Upload Text Message with ACK request", variantbold)
+worksheet.write(row, 3, "Same as TEST-006 but ACK is requested.", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-006-1", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 27
 VIS_006_2_row = row
 VIS_006_2_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Upload TXT message with ACK request but no STM Module retrieves the message", bold)
-worksheet.write(row, 3, "Same as TEST-006-1 but no STM Module receives the message.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-006-2", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Upload TXT message with ACK request but no STM Module retrieves the message", variantbold)
+worksheet.write(row, 3, "Same as TEST-006-1 but no STM Module receives the message.", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-006-2", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 28
 VIS_007_row = row
 VIS_007_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Upload Area (S-124) Message", bold)
-worksheet.write(row, 3, "Test send (upload) area message. No ACK is requested. The STM Module gets notified by VIS and the message is retrieved.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-007", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Upload Area (S-124) Message", mainbold)
+worksheet.write(row, 3, "Test send (upload) area message. No ACK is requested. The STM Module gets notified by VIS and the message is retrieved.", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-007", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 29
 VIS_007_1_row = row
 VIS_007_1_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Upload Area Message with ACK request", bold)
-worksheet.write(row, 3, "Test send (upload) area message. ACK is requested. The STM Module gets notified by VIS and the message is retrieved.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-007-1", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Upload Area Message with ACK request", variantbold)
+worksheet.write(row, 3, "Test send (upload) area message. ACK is requested. The STM Module gets notified by VIS and the message is retrieved.", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-007-1", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 30
 VIS_007_2_row = row
 VIS_007_2_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Variant - Upload S124 message with ACK request but no STM Module retrieves the message", bold)
-worksheet.write(row, 3, "Same as TEST-007-1 but no STM Module receives the message.", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-007-2", bold)
-worksheet.write(row, 6, "Variant", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", variantboldcenter)
+worksheet.write(row, 1, "", variantbold)
+worksheet.write(row, 2, "Variant - Upload S124 message with ACK request but no STM Module retrieves the message", variantbold)
+worksheet.write(row, 3, "Same as TEST-007-1 but no STM Module receives the message.", variantbold)
+worksheet.write(row, 4, "VIS", variantbold)
+worksheet.write(row, 5, "VIS-007-2", variantbold)
+worksheet.write(row, 6, "Variant", variantbold)
+worksheet.write(row, 7, "", variantbold)
+worksheet.write(row, 8, "", variantbold)
+worksheet.write(row, 9, "NOT EXECUTED", variantbold)
 
 row = 31
 VIS_008_row = row
 VIS_008_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "DEPRECATED - Notification to STM Module", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-008", bold)
-worksheet.write(row, 6, "Main", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "DEPRECATED - Notification to STM Module", mainbold)
+worksheet.write(row, 3, "", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-008", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "", mainbold)
 
 row = 32
 VIS_009_row = row
 VIS_009_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Logging in VIS", bold)
-worksheet.write(row, 3, "Check log in VIS", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-009", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Logging in VIS", mainbold)
+worksheet.write(row, 3, "Check log in VIS", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-009", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 33
 VIS_010_row = row
 VIS_010_col = 9
 worksheet.set_row(row, 30)
-worksheet.write(row, 0, "MO", boldcenter)
-worksheet.write(row, 2, "Find Voyage Information Services", bold)
-worksheet.write(row, 3, "Test search for voyage information services to consume", bold)
-worksheet.write(row, 4, "VIS", bold)
-worksheet.write(row, 5, "VIS-010", bold)
-worksheet.write(row, 6, "Main", bold)
-worksheet.write(row, 9, "NOT EXECUTED", bold)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Find Voyage Information Services", mainbold)
+worksheet.write(row, 3, "Test search for voyage information services to consume", mainbold)
+worksheet.write(row, 4, "VIS", mainbold)
+worksheet.write(row, 5, "VIS-010", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
 
 row = 0
 col = 0
@@ -516,7 +622,7 @@ row = 9
 VIS001sheet.write(row, 4, "Not executed:", normalright)
 VIS001sheet.write(row, 5, '=COUNTIF(F12:F23, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_001_row, VIS_001_col, '=VIS001.F7', bold)
+worksheet.write(VIS_001_row, VIS_001_col, '=VIS001.F7', mainbold)
 
 VIS001sheet.add_table('A11:G23')
 
@@ -686,7 +792,7 @@ row = 29
 VIS001sheet.write(row, 4, "Not executed:", normalright)
 VIS001sheet.write(row, 5, '=COUNTIF(F32:F34, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_001_3_row, VIS_001_3_col, '=VIS001.F27', bold)
+worksheet.write(VIS_001_3_row, VIS_001_3_col, '=$VIS001.F27', variantbold)
 
 VIS001sheet.add_table('A31:G34')
 row = 30
@@ -764,7 +870,7 @@ row = 40
 VIS001sheet.write(row, 4, "Not executed:", normalright)
 VIS001sheet.write(row, 5, '=COUNTIF(F43:F45, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_001_4_row, VIS_001_4_col, '=VIS001.F38', bold)
+worksheet.write(VIS_001_4_row, VIS_001_4_col, '=$VIS001.F38', variantbold)
 
 VIS001sheet.add_table('A42:G45')
 row = 41
@@ -842,7 +948,7 @@ row = 51
 VIS001sheet.write(row, 4, "Not executed:", normalright)
 VIS001sheet.write(row, 5, '=COUNTIF(F54:F55, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_001_5_row, VIS_001_5_col, '=VIS001.F49', bold)
+worksheet.write(VIS_001_5_row, VIS_001_5_col, '=$VIS001.F49', variantbold)
 
 VIS001sheet.add_table('A53:G55')
 row = 52
@@ -910,7 +1016,7 @@ row = 61
 VIS001sheet.write(row, 4, "Not executed:", normalright)
 VIS001sheet.write(row, 5, '=COUNTIF(F64:F64, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_001_6_row, VIS_001_6_col, '=VIS001.F59', bold)
+worksheet.write(VIS_001_6_row, VIS_001_6_col, '=$VIS001.F59', variantbold)
 
 VIS001sheet.add_table('A63:G64')
 row = 62
@@ -968,7 +1074,7 @@ row = 70
 VIS001sheet.write(row, 4, "Not executed:", normalright)
 VIS001sheet.write(row, 5, '=COUNTIF(F73:F76, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_001_7_row, VIS_001_7_col, '=VIS001.F68', bold)
+worksheet.write(VIS_001_7_row, VIS_001_7_col, '=$VIS001.F68', variantbold)
 
 VIS001sheet.add_table('A72:G76')
 row = 71
@@ -1068,7 +1174,7 @@ row = 9
 VIS002sheet.write(row, 4, "Not executed:", normalright)
 VIS002sheet.write(row, 5, '=COUNTIF(F12:F20, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_002_row, VIS_002_col, '=VIS002.F7', bold)
+worksheet.write(VIS_002_row, VIS_002_col, '=$VIS002.F7', mainbold)
 
 VIS002sheet.add_table('A11:G20')
 row = 10
@@ -1206,7 +1312,7 @@ row = 26
 VIS002sheet.write(row, 4, "Not executed:", normalright)
 VIS002sheet.write(row, 5, '=COUNTIF(F29:F37, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_002_1_row, VIS_002_1_col, '=VIS002.F24', bold)
+worksheet.write(VIS_002_1_row, VIS_002_1_col, '=$VIS002.F24', variantbold)
 
 VIS002sheet.add_table('A28:G37')
 row = 27
@@ -1359,7 +1465,7 @@ row = 9
 VIS003sheet.write(row, 4, "Not executed:", normalright)
 VIS003sheet.write(row, 5, '=COUNTIF(F12:F18, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_003_row, VIS_003_col, '=VIS003.F7', bold)
+worksheet.write(VIS_003_row, VIS_003_col, '=$VIS003.F7', mainbold)
 
 VIS003sheet.add_table('A11:G18')
 row = 10
@@ -1390,6 +1496,7 @@ VIS003sheet.write(row, 1, "VIS-2 logs event", boldbld)
 VIS003sheet.write(row, 2, "", boldbld)
 VIS003sheet.write(row, 3, "event logged", boldbld)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS003sheet.write(row, 6, "There is a separate test suite for logging. Why should VIS003 micro-manage logging?", normal)
 
 row = 13
 VIS_003_03_row = row
@@ -1400,6 +1507,7 @@ VIS003sheet.write(row, 1, "VIS-1 gets a POST subscription request", boldbl)
 VIS003sheet.write(row, 2, "", boldbl)
 VIS003sheet.write(row, 3, "event logged", boldbl)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS003sheet.write(row, 6, "Completely redundant. If you already received 200 as a response to your POST.", normal)
 
 row = 14
 VIS_003_04_row = row
@@ -1410,6 +1518,7 @@ VIS003sheet.write(row, 1, "VIS-1 logs event", boldbld)
 VIS003sheet.write(row, 2, "", boldbld)
 VIS003sheet.write(row, 3, "event logged", boldbld)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS003sheet.write(row, 6, "There is a separate test suite for logging. Why should VIS003 micro-manage logging?", normal)
 
 row = 15
 VIS_003_05_row = row
@@ -1420,6 +1529,7 @@ VIS003sheet.write(row, 1, "VIS-1 checks against ACL and get OK", boldbl)
 VIS003sheet.write(row, 2, "", boldbl)
 VIS003sheet.write(row, 3, "check", boldbl)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS003sheet.write(row, 6, "Completely redundant. You already received 200 instead of 403 as a response to your POST.", normal)
 
 row = 16
 VIS_003_06_row = row
@@ -1479,7 +1589,7 @@ row = 24
 VIS003sheet.write(row, 4, "Not executed:", normalright)
 VIS003sheet.write(row, 5, '=COUNTIF(F27:F28, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_003_1_row, VIS_003_1_col, '=VIS003.F22', bold)
+worksheet.write(VIS_003_1_row, VIS_003_1_col, '=$VIS003.F22', variantbold)
 
 VIS003sheet.add_table('A26:G28')
 row = 25
@@ -1549,7 +1659,7 @@ row = 34
 VIS003sheet.write(row, 4, "Not executed:", normalright)
 VIS003sheet.write(row, 5, '=COUNTIF(F37:F38, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_003_2_row, VIS_003_2_col, '=VIS003.F32', bold)
+worksheet.write(VIS_003_2_row, VIS_003_2_col, '=$VIS003.F32', variantbold)
 
 VIS003sheet.add_table('A36:G38')
 row = 35
@@ -1619,7 +1729,7 @@ row = 44
 VIS003sheet.write(row, 4, "Not executed:", normalright)
 VIS003sheet.write(row, 5, '=COUNTIF(F47:F50, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_003_3_row, VIS_003_3_col, '=VIS003.F42', bold)
+worksheet.write(VIS_003_3_row, VIS_003_3_col, '=$VIS003.F42', variantbold)
 
 VIS003sheet.add_table('A46:G50')
 row = 45
@@ -1724,7 +1834,7 @@ row = 9
 VIS004sheet.write(row, 4, "Not executed:", normalright)
 VIS004sheet.write(row, 5, '=COUNTIF(F12:F15, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_004_row, VIS_004_col, '=VIS004.F7', bold)
+worksheet.write(VIS_004_row, VIS_004_col, '=$VIS004.F7', mainbold)
 
 VIS004sheet.add_table('A11:G15')
 row = 10
@@ -1814,7 +1924,7 @@ row = 21
 VIS004sheet.write(row, 4, "Not executed:", normalright)
 VIS004sheet.write(row, 5, '=COUNTIF(F24:F28, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_004_1_row, VIS_004_1_col, '=VIS004.F19', bold)
+worksheet.write(VIS_004_1_row, VIS_004_1_col, '=$VIS004.F19', variantbold)
 
 VIS004sheet.add_table('A23:G28')
 row = 22
@@ -1927,7 +2037,7 @@ row = 9
 VIS005sheet.write(row, 4, "Not executed:", normalright)
 VIS005sheet.write(row, 5, '=COUNTIF(F12:F13, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_005_row, VIS_005_col, '=VIS005.F7', bold)
+worksheet.write(VIS_005_row, VIS_005_col, '=$VIS005.F7', mainbold)
 
 VIS005sheet.add_table('A11:G13')
 row = 10
@@ -1997,7 +2107,7 @@ row = 19
 VIS005sheet.write(row, 4, "Not executed:", normalright)
 VIS005sheet.write(row, 5, '=COUNTIF(F22:F23, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_005_1_row, VIS_005_1_col, '=VIS005.F17', bold)
+worksheet.write(VIS_005_1_row, VIS_005_1_col, '=$VIS005.F17', variantbold)
 
 VIS005sheet.add_table('A21:G23')
 row = 20
@@ -2067,7 +2177,7 @@ row = 29
 VIS005sheet.write(row, 4, "Not executed:", normalright)
 VIS005sheet.write(row, 5, '=COUNTIF(F32:F33, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_005_2_row, VIS_005_2_col, '=VIS005.F27', bold)
+worksheet.write(VIS_005_2_row, VIS_005_2_col, '=$VIS005.F27', variantbold)
 
 VIS005sheet.add_table('A31:G33')
 row = 30
@@ -2138,7 +2248,7 @@ row = 39
 VIS005sheet.write(row, 4, "Not executed:", normalright)
 VIS005sheet.write(row, 5, '=COUNTIF(F42:F43, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_005_3_row, VIS_005_3_col, '=VIS005.F37', bold)
+worksheet.write(VIS_005_3_row, VIS_005_3_col, '=$VIS005.F37', variantbold)
 
 VIS005sheet.add_table('A41:G43')
 row = 40
@@ -2220,7 +2330,7 @@ row = 50
 VIS005sheet.write(row, 4, "Not executed:", normalright)
 VIS005sheet.write(row, 5, '=COUNTIF(F53:F53, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_005_4_row, VIS_005_4_col, '=VIS005.F48', bold)
+worksheet.write(VIS_005_4_row, VIS_005_4_col, '=$VIS005.F48', variantbold)
 
 VIS005sheet.add_table('A52:G53')
 row = 51
@@ -2241,7 +2351,6 @@ VIS005sheet.write(row, 1, "VIS-1: Select voyage plan for another ship than VIS-2
 VIS005sheet.write(row, 2, "", boldbl)
 VIS005sheet.write(row, 3, "VIS-2 receives the uploaded voyage plan", boldbl)
 VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS005sheet.write(row, 6, "There is no such thing as an explicit callbackEndpoint", normal)
 
 row = 0
 col = 0
@@ -2293,7 +2402,7 @@ row = 9
 VIS006sheet.write(row, 4, "Not executed:", normalright)
 VIS006sheet.write(row, 5, '=COUNTIF(F12:F14, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_006_row, VIS_006_col, '=VIS006.F7', bold)
+worksheet.write(VIS_006_row, VIS_006_col, '=$VIS006.F7', mainbold)
 
 VIS006sheet.add_table('A11:G14')
 row = 10
@@ -2375,7 +2484,7 @@ row = 20
 VIS006sheet.write(row, 4, "Not executed:", normalright)
 VIS006sheet.write(row, 5, '=COUNTIF(F23:F24, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_006_1_row, VIS_006_1_col, '=VIS006.F18', bold)
+worksheet.write(VIS_006_1_row, VIS_006_1_col, '=$VIS006.F18', variantbold)
 
 VIS006sheet.add_table('A22:G24')
 row = 21
@@ -2445,7 +2554,7 @@ row = 30
 VIS006sheet.write(row, 4, "Not executed:", normalright)
 VIS006sheet.write(row, 5, '=COUNTIF(F33:F34, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_006_2_row, VIS_006_2_col, '=VIS006.F28', bold)
+worksheet.write(VIS_006_2_row, VIS_006_2_col, '=$VIS006.F28', variantbold)
 
 VIS006sheet.add_table('A32:G34')
 row = 31
@@ -2528,7 +2637,7 @@ row = 9
 VIS007sheet.write(row, 4, "Not executed:", normalright)
 VIS007sheet.write(row, 5, '=COUNTIF(F12:F13, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_007_row, VIS_007_col, '=VIS007.F7', bold)
+worksheet.write(VIS_007_row, VIS_007_col, '=$VIS007.F7', mainbold)
 
 VIS007sheet.add_table('A11:G13')
 row = 10
@@ -2598,7 +2707,7 @@ row = 19
 VIS007sheet.write(row, 4, "Not executed:", normalright)
 VIS007sheet.write(row, 5, '=COUNTIF(F22:F23, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_007_1_row, VIS_007_1_col, '=VIS007.F17', bold)
+worksheet.write(VIS_007_1_row, VIS_007_1_col, '=$VIS007.F17', variantbold)
 
 VIS007sheet.add_table('A21:G23')
 row = 20
@@ -2681,7 +2790,7 @@ row = 9
 VIS009sheet.write(row, 4, "Not executed:", normalright)
 VIS009sheet.write(row, 5, '=COUNTIF(F12:F24, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_009_row, VIS_009_col, '=VIS009.F7', bold)
+worksheet.write(VIS_009_row, VIS_009_col, '=$VIS009.F7', mainbold)
 
 VIS009sheet.add_table('A11:G24')
 row = 10
@@ -2876,7 +2985,7 @@ row = 9
 VIS010sheet.write(row, 4, "Not executed:", normalright)
 VIS010sheet.write(row, 5, '=COUNTIF(F12:F25, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_010_row, VIS_010_col, '=VIS010.F7', bold)
+worksheet.write(VIS_010_row, VIS_010_col, '=$VIS010.F7', mainbold)
 
 VIS010sheet.add_table('A11:G25')
 row = 10
@@ -2997,7 +3106,6 @@ VIS010sheet.write(row, 1, "Find Route Optimization Service to consume", boldbl)
 VIS010sheet.write(row, 2, "", boldbl)
 VIS010sheet.write(row, 3, "", boldbl)
 VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS010sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
 
 row = 22
 VIS_010_12_row = row
@@ -3008,7 +3116,6 @@ VIS010sheet.write(row, 1, "Find Route Check Service to consume", boldbld)
 VIS010sheet.write(row, 2, "", boldbld)
 VIS010sheet.write(row, 3, "", boldbld)
 VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS010sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
 
 row = 23
 VIS_010_13_row = row
