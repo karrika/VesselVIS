@@ -1610,6 +1610,7 @@ VIS003sheet.write(row, 1, "In VIS-2, request subscription on voyage plans from V
 VIS003sheet.write(row, 2, "", boldbl)
 VIS003sheet.write(row, 3, "Notification in VIS-1 of incorrect callbackEndpoint. Response in VIS-2 that subscription request failed", boldbl)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS003sheet.write(row, 6, "How can VIS-1 find out that the callbackEndpoint is invalid? Should it be checked against the service registry? The problem here is that the subscription can not be validated during this POST operation.", normal)
 
 row = 27
 VIS_003_1_2_row = row
@@ -1618,8 +1619,9 @@ VIS003sheet.set_row(row, 30)
 VIS003sheet.write(row, 0, "2", boldbld)
 VIS003sheet.write(row, 1, "Publish voyage plan to VIS 1 instance", boldbld)
 VIS003sheet.write(row, 2, "", boldbld)
-VIS003sheet.write(row, 3, "Notification in VIS-1 of incorrect callbackEndpointi. No voyage plans in VIS-2", boldbld)
+VIS003sheet.write(row, 3, "Notification in VIS-1 of incorrect callbackEndpoint. No voyage plans in VIS-2", boldbld)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS003sheet.write(row, 6, "How can VIS-1 find out that the callbackEndpoint is invalid? Should it be checked against the service registry? What about temporary network problems for POSTing voyage plans. Is this an incorrect callbackEndpoint?", normal)
 
 row = 28
 
@@ -1690,6 +1692,7 @@ VIS003sheet.write(row, 1, "Publish voyage plan to VIS 1 instance", boldbld)
 VIS003sheet.write(row, 2, "", boldbld)
 VIS003sheet.write(row, 3, "No voyage plans in VIS-2", boldbld)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS003sheet.write(row, 6, "What is the idea of this test case? The request did already fail in last step meaning that no subscription exists. If we want to run this test then what UVID should we use?", normal)
 
 row = 38
 

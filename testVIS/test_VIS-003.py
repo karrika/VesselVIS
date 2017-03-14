@@ -65,7 +65,7 @@ class TestVIS_003(BaseTestCase):
         """
         sub='/voyagePlans/subscription'
         parameters={
-            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'callbackEndpoint': callbackurl,
             'uvid': voyageuvid
         }
         payload={}
@@ -114,15 +114,227 @@ VIS003sheet.write(VIS_003_03_row, VIS_003_03_col, "PASS", boldcenter)
 
         
         """
+        report='''
+VIS003sheet.write(VIS_003_04_row, VIS_003_04_col, "PASS", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
         pass
 
     def test_VIS_003_05(self):
         """
-        VIS-003-4 - VIS-1 checks against ACL and get OK
+        VIS-003-5 - VIS-1 checks against ACL and get OK
+
+        
+        """
+        report='''
+VIS003sheet.write(VIS_003_05_row, VIS_003_05_col, "PASS", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+        pass
+
+    @unittest.skip('Check for existence of voyage plan in VIS-2')
+    def test_VIS_003_06(self):
+        """
+        VIS-003-6 - VIS-1 returns the latest published voyage plan for each UVID with routeStatus<8
 
         
         """
         pass
+
+    @unittest.skip('Publish voyage plan to VIS-1. The plan will then be posted to VIS-2 also.')
+    def test_VIS_003_07(self):
+        """
+        VIS-003-7 - VIS-1 returns the latest published voyage plan for each UVID with routeStatus<8
+
+        
+        """
+        pass
+
+
+    def test_VIS_003_1_1(self):
+        """
+        VIS-003-1-1 - In VIS-2, request subscription on voyage plans from VIS-1 
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': 'https://localhost:99',
+            'uvid': voyageuvid
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS003sheet.write(VIS_003_1_1_row, VIS_003_1_1_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS003sheet.write(VIS_003_1_1_row, VIS_003_1_1_col, "FAIL", boldcenter)
+VIS003sheet.write(VIS_003_1_1_row, VIS_003_1_1_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert400(response, "Response body is : " + response.text)
+
+    def test_VIS_003_2_1(self):
+        """
+        VIS-003-2-1 - In VIS-2, request subscription on voyage plans from VIS-1, but with incorrect UVID
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl,
+            'uvid': 'urn:mrn:stm:voyage:id:not:existing'
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 404:
+            report='''
+VIS003sheet.write(VIS_003_2_1_row, VIS_003_2_1_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS003sheet.write(VIS_003_2_1_row, VIS_003_2_1_col, "FAIL", boldcenter)
+VIS003sheet.write(VIS_003_2_1_row, VIS_003_2_1_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert404(response, "Response body is : " + response.text)
+
+    def test_VIS_003_2_2(self):
+        """
+        VIS-003-2-2 - Publish voyage plan to VIS 1 instance
+
+        
+        """
+        report='''
+VIS003sheet.write(VIS_003_2_2_row, VIS_003_2_2_col, "PASS", boldcenter)
+'''
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+        pass
+
+
+    def test_VIS_003_3_1(self):
+        """
+        VIS-003-3-1 - VIS-2: Request subscription from VIS-1
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS003sheet.write(VIS_003_3_1_row, VIS_003_3_1_col, "PASS", boldcenter)
+VIS003sheet.write(VIS_003_3_1_row, VIS_003_3_1_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS003sheet.write(VIS_003_3_1_row, VIS_003_3_1_col, "FAIL", boldcenter)
+VIS003sheet.write(VIS_003_3_1_row, VIS_003_3_1_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_003_3_2(self):
+        """
+        VIS-003-3-2 - VIS-2: Request subscription from VIS-1
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS003sheet.write(VIS_003_3_2_row, VIS_003_3_2_col, "PASS", boldcenter)
+VIS003sheet.write(VIS_003_3_2_row, VIS_003_3_2_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS003sheet.write(VIS_003_3_2_row, VIS_003_3_2_col, "FAIL", boldcenter)
+VIS003sheet.write(VIS_003_3_2_row, VIS_003_3_2_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_003_3_3(self):
+        """
+        VIS-003-3-3 - VIS-2: Request subscription from VIS-1
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl,
+            'uvid': voyageuvid
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS003sheet.write(VIS_003_3_3_row, VIS_003_3_3_col, "PASS", boldcenter)
+VIS003sheet.write(VIS_003_3_3_row, VIS_003_3_3_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS003sheet.write(VIS_003_3_3_row, VIS_003_3_3_col, "FAIL", boldcenter)
+VIS003sheet.write(VIS_003_3_3_row, VIS_003_3_3_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_003_3_4(self):
+        """
+        VIS-003-3-4 - VIS-2: Request subscription from VIS-1
+
+        
+        """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl,
+            'uvid': voyageuvid
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS003sheet.write(VIS_003_3_4_row, VIS_003_3_4_col, "PASS", boldcenter)
+VIS003sheet.write(VIS_003_3_4_row, VIS_003_3_4_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS003sheet.write(VIS_003_3_4_row, VIS_003_3_4_col, "FAIL", boldcenter)
+VIS003sheet.write(VIS_003_3_4_row, VIS_003_3_4_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
 
 
 
