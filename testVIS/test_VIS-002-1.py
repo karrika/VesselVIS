@@ -117,7 +117,7 @@ VIS002sheet.write(VIS_002_1_1_row, VIS_002_1_1_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_1_1_row, VIS_002_1_1_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_1_1_row, VIS_002_1_1_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
@@ -143,7 +143,7 @@ VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
@@ -171,7 +171,7 @@ VIS002sheet.write(VIS_002_1_3_row, VIS_002_1_3_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_1_3_row, VIS_002_1_3_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_1_3_row, VIS_002_1_3_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
@@ -197,7 +197,7 @@ VIS002sheet.write(VIS_002_1_4_row, VIS_002_1_4_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_1_4_row, VIS_002_1_4_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_1_4_row, VIS_002_1_4_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
@@ -225,7 +225,7 @@ VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
@@ -243,6 +243,19 @@ VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col, "FAIL", boldcenter)
             'uvid': newvoyageuvid2
         }
         response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_1_6_row, VIS_002_1_6_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_1_6_row, VIS_002_1_6_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_1_6_row, VIS_002_1_6_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_002_9_7(self):
@@ -258,9 +271,21 @@ VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col, "FAIL", boldcenter)
         }
         payload={'route': voyageplan}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS002sheet.write(VIS_002_1_7_row, VIS_002_1_7_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_1_7_row, VIS_002_1_7_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_1_7_row, VIS_002_1_7_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Multiple voyages through one get is not yet supported.')
     def test_VIS_002_9_8(self):
         """
         VIS-002-1-8 - VIS-2 : Request voyage plans from VIS-1
@@ -269,6 +294,19 @@ VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col, "FAIL", boldcenter)
         """
         sub='/voyagePlans'
         response=requests.get(url + sub, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 400:
+            report='''
+VIS002sheet.write(VIS_002_1_8_row, VIS_002_1_8_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS002sheet.write(VIS_002_1_8_row, VIS_002_1_8_col, "FAIL", boldcenter)
+VIS002sheet.write(VIS_002_1_8_row, VIS_002_1_8_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
 

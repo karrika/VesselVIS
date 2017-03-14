@@ -78,7 +78,7 @@ VIS003sheet.write(VIS_003_01_row, VIS_003_01_col, "PASS", boldcenter)
         else:
             report='''
 VIS003sheet.write(VIS_003_01_row, VIS_003_01_col, "FAIL", boldcenter)
-'''
+VIS003sheet.write(VIS_003_01_row, VIS_003_01_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
