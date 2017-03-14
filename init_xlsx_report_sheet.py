@@ -61,14 +61,6 @@ VIS007sheet.set_column(3, 3, 40)
 VIS007sheet.set_column(4, 4, 10)
 VIS007sheet.set_column(5, 5, 15)
 VIS007sheet.set_column(6, 4, 20)
-VIS008sheet = workbook.add_worksheet("VIS008")
-VIS008sheet.set_column(0, 0, 10)
-VIS008sheet.set_column(1, 1, 40)
-VIS008sheet.set_column(2, 2, 10)
-VIS008sheet.set_column(3, 3, 40)
-VIS008sheet.set_column(4, 4, 10)
-VIS008sheet.set_column(5, 5, 15)
-VIS008sheet.set_column(6, 4, 20)
 VIS009sheet = workbook.add_worksheet("VIS009")
 VIS009sheet.set_column(0, 0, 10)
 VIS009sheet.set_column(1, 1, 40)
@@ -2250,6 +2242,783 @@ VIS005sheet.write(row, 2, "", boldbl)
 VIS005sheet.write(row, 3, "VIS-2 receives the uploaded voyage plan", boldbl)
 VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
 VIS005sheet.write(row, 6, "There is no such thing as an explicit callbackEndpoint", normal)
+
+row = 0
+col = 0
+VIS006sheet.write(row, 1, "Test Protocol", bold)
+
+row = 1
+VIS006sheet.write(row, 1, "Executed by", bold)
+VIS006sheet.merge_range(row, 2, row, 3, "Karri Kaksonen", bold)
+
+row = 2
+VIS006sheet.write(row, 1, "Executed date", bold)
+VIS006sheet.merge_range(row, 2, row, 3, time.strftime("%Y-%m-%d %H:%M"), bold)
+
+row = 3
+
+row = 4
+VIS006sheet.write(row, 0, "", boldblue)
+VIS006sheet.write(row, 1, "Test ID", boldblue)
+VIS006sheet.merge_range(row, 2, row, 3, "TEST-VIS-006", boldblue)
+VIS006sheet.write(row, 3, "", boldblue)
+VIS006sheet.write(row, 4, "", boldblue)
+VIS006sheet.write(row, 5, "", boldblue)
+VIS006sheet.write(row, 6, "", boldblue)
+
+row = 5
+VIS006sheet.write(row, 1, "Title", bold)
+VIS006sheet.merge_range(row, 2, row, 3, "Main test - Upload Text Message", normal)
+
+row = 6
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 1, "Description", bold)
+VIS006sheet.merge_range(row, 2, row, 3, "Test upload text message to VIS.", normal)
+VIS006sheet.write(row, 4, "Total:", normalright)
+VIS006sheet.write(row, 5, '=IF(F10>0,"NOT EXECUTED",IF(F9>0,"FAIL","PASS"))', normalright)
+
+row = 7
+VIS006sheet.write(row, 1, "Preconditions", bold)
+VIS006sheet.write(row, 2, "", normal)
+VIS006sheet.write(row, 4, "Pass:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F12:F14, "PASS")', normalright)
+
+row = 8
+VIS006sheet.write(row, 1, "Dependencies", bold)
+VIS006sheet.write(row, 2, "", normal)
+VIS006sheet.write(row, 4, "Fail:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F12:F14, "FAIL")', normalright)
+
+row = 9
+VIS006sheet.write(row, 4, "Not executed:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F12:F14, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_006_row, VIS_006_col, '=VIS006.F7', bold)
+
+VIS006sheet.add_table('A11:G14')
+row = 10
+VIS006sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS006sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS006sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS006sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS006sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS006sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS006sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
+
+row = 11
+VIS_006_01_row = row
+VIS_006_01_col = 5
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 0, "1", boldbl)
+VIS006sheet.write(row, 1, "VIS-2: Select TXT message and send (upload) the TXT message to VIS-1", boldbl)
+VIS006sheet.write(row, 2, "", boldbl)
+VIS006sheet.write(row, 3, "Test Message received", boldbl)
+VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 12
+VIS_006_02_row = row
+VIS_006_02_col = 5
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 0, "2", boldbld)
+VIS006sheet.write(row, 1, "", boldbld)
+VIS006sheet.write(row, 2, "", boldbld)
+VIS006sheet.write(row, 3, "STM Module receives the uplodaded txt message. VIS-1 sends ACK to VIS-2", boldbld)
+VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS006sheet.write(row, 6, "There is no ack request so it should not send anything at all", normal)
+
+row = 13
+VIS_006_03_row = row
+VIS_006_03_col = 5
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 0, "3", boldbl)
+VIS006sheet.write(row, 1, "", boldbl)
+VIS006sheet.write(row, 2, "", boldbl)
+VIS006sheet.write(row, 3, "VIS-2 receives ACK. VIS-2 logs ACK event", boldbl)
+VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS006sheet.write(row, 6, "There is no ack request so it should not receive anything at all", normal)
+
+row = 14
+
+row = 15
+VIS006sheet.write(row, 0, "", boldblue)
+VIS006sheet.write(row, 1, "Test ID", boldblue)
+VIS006sheet.merge_range(row, 2, row, 3, "TEST-VIS-006-1", boldblue)
+VIS006sheet.write(row, 3, "", boldblue)
+VIS006sheet.write(row, 4, "", boldblue)
+VIS006sheet.write(row, 5, "", boldblue)
+VIS006sheet.write(row, 6, "", boldblue)
+
+row = 16
+VIS006sheet.write(row, 1, "Title", bold)
+VIS006sheet.merge_range(row, 2, row, 3, "Variant - Upload Text Message with ACK request", normal)
+
+row = 17
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 1, "Description", bold)
+VIS006sheet.merge_range(row, 2, row, 3, "Test upload text message to VIS.", normal)
+VIS006sheet.write(row, 4, "Total:", normalright)
+VIS006sheet.write(row, 5, '=IF(F21>0,"NOT EXECUTED",IF(F20>0,"FAIL","PASS"))', normalright)
+
+row = 18
+VIS006sheet.write(row, 1, "Preconditions", bold)
+VIS006sheet.write(row, 2, "", normal)
+VIS006sheet.write(row, 4, "Pass:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F23:F24, "PASS")', normalright)
+
+row = 19
+VIS006sheet.write(row, 1, "Dependencies", bold)
+VIS006sheet.write(row, 2, "", normal)
+VIS006sheet.write(row, 4, "Fail:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F23:F24, "FAIL")', normalright)
+
+row = 20
+VIS006sheet.write(row, 4, "Not executed:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F23:F24, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_006_1_row, VIS_006_1_col, '=VIS006.F18', bold)
+
+VIS006sheet.add_table('A22:G24')
+row = 21
+VIS006sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS006sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS006sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS006sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS006sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS006sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS006sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
+
+row = 22
+VIS_006_1_1_row = row
+VIS_006_1_1_col = 5
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 0, "1", boldbl)
+VIS006sheet.write(row, 1, "In VIS-2, select TXT message and send (upload) to VIS-1 with ACKendpoint", boldbl)
+VIS006sheet.write(row, 2, "", boldbl)
+VIS006sheet.write(row, 3, "Message received", boldbl)
+VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 23
+VIS_006_1_2_row = row
+VIS_006_1_2_col = 5
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 0, "2", boldbld)
+VIS006sheet.write(row, 1, "Retrieve/receive the uploaded message in private application of VIS-1", boldbld)
+VIS006sheet.write(row, 2, "", boldbld)
+VIS006sheet.write(row, 3, "Acknowledgement received by VIS-2", boldbld)
+VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 24
+
+row = 25
+VIS006sheet.write(row, 0, "", boldblue)
+VIS006sheet.write(row, 1, "Test ID", boldblue)
+VIS006sheet.merge_range(row, 2, row, 3, "TEST-VIS-006-2", boldblue)
+VIS006sheet.write(row, 3, "", boldblue)
+VIS006sheet.write(row, 4, "", boldblue)
+VIS006sheet.write(row, 5, "", boldblue)
+VIS006sheet.write(row, 6, "", boldblue)
+
+row = 26
+VIS006sheet.write(row, 1, "Title", bold)
+VIS006sheet.merge_range(row, 2, row, 3, "Variant -  Upload TXT message with ACK request but no STM Module retrieves the message", normal)
+
+row = 27
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 1, "Description", bold)
+VIS006sheet.merge_range(row, 2, row, 3, "Test upload of Text Message with no receiver for the message", normal)
+VIS006sheet.write(row, 4, "Total:", normalright)
+VIS006sheet.write(row, 5, '=IF(F31>0,"NOT EXECUTED",IF(F30>0,"FAIL","PASS"))', normalright)
+
+row = 28
+VIS006sheet.write(row, 1, "Preconditions", bold)
+VIS006sheet.write(row, 2, "", normal)
+VIS006sheet.write(row, 4, "Pass:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F33:F34, "PASS")', normalright)
+
+row = 29
+VIS006sheet.write(row, 1, "Dependencies", bold)
+VIS006sheet.write(row, 2, "", normal)
+VIS006sheet.write(row, 4, "Fail:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F33:F34, "FAIL")', normalright)
+
+row = 30
+VIS006sheet.write(row, 4, "Not executed:", normalright)
+VIS006sheet.write(row, 5, '=COUNTIF(F33:F34, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_006_2_row, VIS_006_2_col, '=VIS006.F28', bold)
+
+VIS006sheet.add_table('A32:G34')
+row = 31
+VIS006sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS006sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS006sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS006sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS006sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS006sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS006sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
+
+row = 32
+VIS_006_2_1_row = row
+VIS_006_2_1_col = 5
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 0, "1", boldbl)
+VIS006sheet.write(row, 1, "In VIS-2, select TXT message and send (upload) to VIS-1 with ACKendpoint", boldbl)
+VIS006sheet.write(row, 2, "", boldbl)
+VIS006sheet.write(row, 3, "VIS-1 receives the uploaded TXT message", boldbl)
+VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 33
+VIS_006_2_2_row = row
+VIS_006_2_2_col = 5
+VIS006sheet.set_row(row, 30)
+VIS006sheet.write(row, 0, "2", boldbld)
+VIS006sheet.write(row, 1, "No private application retrieves/receives the message", boldbld)
+VIS006sheet.write(row, 2, "", boldbld)
+VIS006sheet.write(row, 3, "No private application (such as STM Module, ECDIS, etc) retrieves/receives the message.", boldbld)
+VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS006sheet.write(row, 6, "What is this test testing? Timeouts somewhere? Why does it fail?", normal)
+
+row = 0
+col = 0
+VIS007sheet.write(row, 1, "Test Protocol", bold)
+
+row = 1
+VIS007sheet.write(row, 1, "Executed by", bold)
+VIS007sheet.merge_range(row, 2, row, 3, "Karri Kaksonen", bold)
+
+row = 2
+VIS007sheet.write(row, 1, "Executed date", bold)
+VIS007sheet.merge_range(row, 2, row, 3, time.strftime("%Y-%m-%d %H:%M"), bold)
+
+row = 3
+
+row = 4
+VIS007sheet.write(row, 0, "", boldblue)
+VIS007sheet.write(row, 1, "Test ID", boldblue)
+VIS007sheet.merge_range(row, 2, row, 3, "TEST-VIS-007", boldblue)
+VIS007sheet.write(row, 3, "", boldblue)
+VIS007sheet.write(row, 4, "", boldblue)
+VIS007sheet.write(row, 5, "", boldblue)
+VIS007sheet.write(row, 6, "", boldblue)
+
+row = 5
+VIS007sheet.write(row, 1, "Title", bold)
+VIS007sheet.merge_range(row, 2, row, 3, "Main test - –Upload Area Message with ACK request", normal)
+
+row = 6
+VIS007sheet.set_row(row, 30)
+VIS007sheet.write(row, 1, "Description", bold)
+VIS007sheet.merge_range(row, 2, row, 3, "Test send (upload) area message. ACK is requested. The STM Module gets notified by VIS and the message is retrieved.", normal)
+VIS007sheet.write(row, 4, "Total:", normalright)
+VIS007sheet.write(row, 5, '=IF(F10>0,"NOT EXECUTED",IF(F9>0,"FAIL","PASS"))', normalright)
+
+row = 7
+VIS007sheet.write(row, 1, "Preconditions", bold)
+VIS007sheet.write(row, 2, "Configuration A", normal)
+VIS007sheet.write(row, 4, "Pass:", normalright)
+VIS007sheet.write(row, 5, '=COUNTIF(F12:F13, "PASS")', normalright)
+
+row = 8
+VIS007sheet.write(row, 1, "Dependencies", bold)
+VIS007sheet.write(row, 2, "VIS, SR, IR, S124", normal)
+VIS007sheet.write(row, 4, "Fail:", normalright)
+VIS007sheet.write(row, 5, '=COUNTIF(F12:F13, "FAIL")', normalright)
+
+row = 9
+VIS007sheet.write(row, 4, "Not executed:", normalright)
+VIS007sheet.write(row, 5, '=COUNTIF(F12:F13, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_007_row, VIS_007_col, '=VIS007.F7', bold)
+
+VIS007sheet.add_table('A11:G13')
+row = 10
+VIS007sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS007sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS007sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS007sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS007sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS007sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS007sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
+
+row = 11
+VIS_007_01_row = row
+VIS_007_01_col = 5
+VIS007sheet.set_row(row, 30)
+VIS007sheet.write(row, 0, "1", boldbl)
+VIS007sheet.write(row, 1, "VIS-2;  Select S124 message and send (upload) to VIS-1 with ACKendpoint", boldbl)
+VIS007sheet.write(row, 2, "", boldbl)
+VIS007sheet.write(row, 3, "Message received", boldbl)
+VIS007sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 12
+VIS_007_02_row = row
+VIS_007_02_col = 5
+VIS007sheet.set_row(row, 30)
+VIS007sheet.write(row, 0, "2", boldbld)
+VIS007sheet.write(row, 1, "STM Module retrieves messages from VIS-1", boldbld)
+VIS007sheet.write(row, 2, "", boldbld)
+VIS007sheet.write(row, 3, "VIS-2 receives ACK", boldbld)
+VIS007sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 13
+
+row = 14
+VIS007sheet.write(row, 0, "", boldblue)
+VIS007sheet.write(row, 1, "Test ID", boldblue)
+VIS007sheet.merge_range(row, 2, row, 3, "TEST-VIS-007-1", boldblue)
+VIS007sheet.write(row, 3, "", boldblue)
+VIS007sheet.write(row, 4, "", boldblue)
+VIS007sheet.write(row, 5, "", boldblue)
+VIS007sheet.write(row, 6, "", boldblue)
+
+row = 15
+VIS007sheet.write(row, 1, "Title", bold)
+VIS007sheet.merge_range(row, 2, row, 3, "Variant- Upload S124 message with ACK request but no STM Module retrieves the message", normal)
+
+row = 16
+VIS007sheet.set_row(row, 30)
+VIS007sheet.write(row, 1, "Description", bold)
+VIS007sheet.merge_range(row, 2, row, 3, "", normal)
+VIS007sheet.write(row, 4, "Total:", normalright)
+VIS007sheet.write(row, 5, '=IF(F20>0,"NOT EXECUTED",IF(F19>0,"FAIL","PASS"))', normalright)
+
+row = 17
+VIS007sheet.write(row, 1, "Preconditions", bold)
+VIS007sheet.write(row, 2, "", normal)
+VIS007sheet.write(row, 4, "Pass:", normalright)
+VIS007sheet.write(row, 5, '=COUNTIF(F22:F23, "PASS")', normalright)
+
+row = 18
+VIS007sheet.write(row, 1, "Dependencies", bold)
+VIS007sheet.write(row, 2, "VIS, SR, IR, S124", normal)
+VIS007sheet.write(row, 4, "Fail:", normalright)
+VIS007sheet.write(row, 5, '=COUNTIF(F22:F23, "FAIL")', normalright)
+
+row = 19
+VIS007sheet.write(row, 4, "Not executed:", normalright)
+VIS007sheet.write(row, 5, '=COUNTIF(F22:F23, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_007_1_row, VIS_007_1_col, '=VIS007.F17', bold)
+
+VIS007sheet.add_table('A21:G23')
+row = 20
+VIS007sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS007sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS007sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS007sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS007sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS007sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS007sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
+
+row = 21
+VIS_007_1_1_row = row
+VIS_007_1_1_col = 5
+VIS007sheet.set_row(row, 30)
+VIS007sheet.write(row, 0, "1", boldbl)
+VIS007sheet.write(row, 1, "In VIS-2, select S124 message and send (upload) to VIS-1 with ACKendpoint", boldbl)
+VIS007sheet.write(row, 2, "", boldbl)
+VIS007sheet.write(row, 3, "VIS-1 receives the uploaded S124 message", boldbl)
+VIS007sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 22
+VIS_007_1_2_row = row
+VIS_007_1_2_col = 5
+VIS007sheet.set_row(row, 30)
+VIS007sheet.write(row, 0, "2", boldbld)
+VIS007sheet.write(row, 1, "No private application retrieves the message", boldbld)
+VIS007sheet.write(row, 2, "", boldbld)
+VIS007sheet.write(row, 3, "No Acknowledgement received", boldbld)
+VIS007sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS007sheet.write(row, 6, "What is this test testing? Timeouts somewhere? Why does it fail?", normal)
+
+row = 0
+col = 0
+VIS009sheet.write(row, 1, "Test Protocol", bold)
+
+row = 1
+VIS009sheet.write(row, 1, "Executed by", bold)
+VIS009sheet.merge_range(row, 2, row, 3, "Karri Kaksonen", bold)
+
+row = 2
+VIS009sheet.write(row, 1, "Executed date", bold)
+VIS009sheet.merge_range(row, 2, row, 3, time.strftime("%Y-%m-%d %H:%M"), bold)
+
+row = 3
+
+row = 4
+VIS009sheet.write(row, 0, "", boldblue)
+VIS009sheet.write(row, 1, "Test ID", boldblue)
+VIS009sheet.merge_range(row, 2, row, 3, "TEST-VIS-009", boldblue)
+VIS009sheet.write(row, 3, "", boldblue)
+VIS009sheet.write(row, 4, "", boldblue)
+VIS009sheet.write(row, 5, "", boldblue)
+VIS009sheet.write(row, 6, "", boldblue)
+
+row = 5
+VIS009sheet.write(row, 1, "Title", bold)
+VIS009sheet.merge_range(row, 2, row, 3, "Main test -  Logging in VIS", normal)
+
+row = 6
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 1, "Description", bold)
+VIS009sheet.merge_range(row, 2, row, 3, "Check log in VIS", normal)
+VIS009sheet.write(row, 4, "Total:", normalright)
+VIS009sheet.write(row, 5, '=IF(F10>0,"NOT EXECUTED",IF(F9>0,"FAIL","PASS"))', normalright)
+
+row = 7
+VIS009sheet.write(row, 1, "Preconditions", bold)
+VIS009sheet.write(row, 2, "Messages exchanged with VIS", normal)
+VIS009sheet.write(row, 4, "Pass:", normalright)
+VIS009sheet.write(row, 5, '=COUNTIF(F12:F24, "PASS")', normalright)
+
+row = 8
+VIS009sheet.write(row, 1, "Dependencies", bold)
+VIS009sheet.write(row, 2, "VIS, SR, IR, S124", normal)
+VIS009sheet.write(row, 4, "Fail:", normalright)
+VIS009sheet.write(row, 5, '=COUNTIF(F12:F24, "FAIL")', normalright)
+
+row = 9
+VIS009sheet.write(row, 4, "Not executed:", normalright)
+VIS009sheet.write(row, 5, '=COUNTIF(F12:F24, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_009_row, VIS_009_col, '=VIS009.F7', bold)
+
+VIS009sheet.add_table('A11:G24')
+row = 10
+VIS009sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS009sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS009sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS009sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS009sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS009sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS009sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
+
+row = 11
+VIS_009_01_row = row
+VIS_009_01_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "1", boldbl)
+VIS009sheet.write(row, 1, "Open log and check events and data", boldbl)
+VIS009sheet.write(row, 2, "", boldbl)
+VIS009sheet.write(row, 3, "Times, events and data exchanged logged. Format correct", boldbl)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 12
+VIS_009_02_row = row
+VIS_009_02_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "2", boldbld)
+VIS009sheet.write(row, 1, "Request voyage plan from VIS", boldbld)
+VIS009sheet.write(row, 2, "", boldbld)
+VIS009sheet.write(row, 3, "", boldbld)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 13
+VIS_009_03_row = row
+VIS_009_03_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "3", boldbl)
+VIS009sheet.write(row, 1, "Request subscription from VIS", boldbl)
+VIS009sheet.write(row, 2, "", boldbl)
+VIS009sheet.write(row, 3, "", boldbl)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 14
+VIS_009_04_row = row
+VIS_009_04_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "4", boldbld)
+VIS009sheet.write(row, 1, "Remove subscription", boldbld)
+VIS009sheet.write(row, 2, "", boldbld)
+VIS009sheet.write(row, 3, "", boldbld)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 15
+VIS_009_05_row = row
+VIS_009_05_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "5", boldbl)
+VIS009sheet.write(row, 1, "Upload voyage plan", boldbl)
+VIS009sheet.write(row, 2, "", boldbl)
+VIS009sheet.write(row, 3, "", boldbl)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 16
+VIS_009_06_row = row
+VIS_009_06_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "6", boldbld)
+VIS009sheet.write(row, 1, "Upload text message", boldbld)
+VIS009sheet.write(row, 2, "", boldbld)
+VIS009sheet.write(row, 3, "", boldbld)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 17
+VIS_009_07_row = row
+VIS_009_07_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "7", boldbl)
+VIS009sheet.write(row, 1, "Upload area message", boldbl)
+VIS009sheet.write(row, 2, "", boldbl)
+VIS009sheet.write(row, 3, "", boldbl)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 18
+VIS_009_08_row = row
+VIS_009_08_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "8", boldbld)
+VIS009sheet.write(row, 1, "Receive Acknowledgement", boldbld)
+VIS009sheet.write(row, 2, "", boldbld)
+VIS009sheet.write(row, 3, "", boldbld)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 19
+VIS_009_09_row = row
+VIS_009_09_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "9", boldbl)
+VIS009sheet.write(row, 1, "Send voyage plan to subscribers", boldbl)
+VIS009sheet.write(row, 2, "", boldbl)
+VIS009sheet.write(row, 3, "", boldbl)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 20
+VIS_009_10_row = row
+VIS_009_10_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "10", boldbld)
+VIS009sheet.write(row, 1, "findServices", boldbld)
+VIS009sheet.write(row, 2, "", boldbld)
+VIS009sheet.write(row, 3, "", boldbld)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS009sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
+
+row = 21
+VIS_009_11_row = row
+VIS_009_11_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "11", boldbl)
+VIS009sheet.write(row, 1, "callService", boldbl)
+VIS009sheet.write(row, 2, "", boldbl)
+VIS009sheet.write(row, 3, "", boldbl)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS009sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
+
+row = 22
+VIS_009_12_row = row
+VIS_009_12_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "12", boldbld)
+VIS009sheet.write(row, 1, "findIdentities", boldbld)
+VIS009sheet.write(row, 2, "", boldbld)
+VIS009sheet.write(row, 3, "", boldbld)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS009sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
+
+row = 23
+VIS_009_13_row = row
+VIS_009_13_col = 5
+VIS009sheet.set_row(row, 30)
+VIS009sheet.write(row, 0, "13", boldbl)
+VIS009sheet.write(row, 1, "Test both successful calls and erroneous calls", boldbl)
+VIS009sheet.write(row, 2, "", boldbl)
+VIS009sheet.write(row, 3, "", boldbl)
+VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 0
+col = 0
+VIS010sheet.write(row, 1, "Test Protocol", bold)
+
+row = 1
+VIS010sheet.write(row, 1, "Executed by", bold)
+VIS010sheet.merge_range(row, 2, row, 3, "Karri Kaksonen", bold)
+
+row = 2
+VIS010sheet.write(row, 1, "Executed date", bold)
+VIS010sheet.merge_range(row, 2, row, 3, time.strftime("%Y-%m-%d %H:%M"), bold)
+
+row = 3
+
+row = 4
+VIS010sheet.write(row, 0, "", boldblue)
+VIS010sheet.write(row, 1, "Test ID", boldblue)
+VIS010sheet.merge_range(row, 2, row, 3, "TEST-VIS-010", boldblue)
+VIS010sheet.write(row, 3, "", boldblue)
+VIS010sheet.write(row, 4, "", boldblue)
+VIS010sheet.write(row, 5, "", boldblue)
+VIS010sheet.write(row, 6, "", boldblue)
+
+row = 5
+VIS010sheet.write(row, 1, "Title", bold)
+VIS010sheet.merge_range(row, 2, row, 3, "Find Voyage Information Services", normal)
+
+row = 6
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 1, "Description", bold)
+VIS010sheet.merge_range(row, 2, row, 3, "Test search for voyage information services to consume using different search parameters.", normal)
+VIS010sheet.write(row, 4, "Total:", normalright)
+VIS010sheet.write(row, 5, '=IF(F10>0,"NOT EXECUTED",IF(F9>0,"FAIL","PASS"))', normalright)
+
+row = 7
+VIS010sheet.write(row, 1, "Preconditions", bold)
+VIS010sheet.write(row, 2, "Service Instances registered", normal)
+VIS010sheet.write(row, 4, "Pass:", normalright)
+VIS010sheet.write(row, 5, '=COUNTIF(F12:F25, "PASS")', normalright)
+
+row = 8
+VIS010sheet.write(row, 1, "Dependencies", bold)
+VIS010sheet.write(row, 2, "SR, IR", normal)
+VIS010sheet.write(row, 4, "Fail:", normalright)
+VIS010sheet.write(row, 5, '=COUNTIF(F12:F25, "FAIL")', normalright)
+
+row = 9
+VIS010sheet.write(row, 4, "Not executed:", normalright)
+VIS010sheet.write(row, 5, '=COUNTIF(F12:F25, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_010_row, VIS_010_col, '=VIS010.F7', bold)
+
+VIS010sheet.add_table('A11:G25')
+row = 10
+VIS010sheet.write(row, 0, "Step#", boldcenterwhite)
+VIS010sheet.write(row, 1, "Test Step", boldcenterwhite)
+VIS010sheet.write(row, 2, "Test Data", boldcenterwhite)
+VIS010sheet.write(row, 3, "Expected Result", boldcenterwhite)
+VIS010sheet.write(row, 4, "Actual", boldcenterwhite)
+VIS010sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+VIS010sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
+
+row = 11
+VIS_010_01_row = row
+VIS_010_01_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "1", boldbl)
+VIS010sheet.write(row, 1, "Find keyword ROS", boldbl)
+VIS010sheet.write(row, 2, "", boldbl)
+VIS010sheet.write(row, 3, "", boldbl)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 12
+VIS_010_02_row = row
+VIS_010_02_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "2", boldbld)
+VIS010sheet.write(row, 1, "Find keyword ROS + SSPA", boldbld)
+VIS010sheet.write(row, 2, "", boldbld)
+VIS010sheet.write(row, 3, "", boldbld)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 13
+VIS_010_03_row = row
+VIS_010_03_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "3", boldbl)
+VIS010sheet.write(row, 1, "Find keyword RO", boldbl)
+VIS010sheet.write(row, 2, "", boldbl)
+VIS010sheet.write(row, 3, "", boldbl)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 14
+VIS_010_04_row = row
+VIS_010_04_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "4", boldbld)
+VIS010sheet.write(row, 1, "Find keyword ros", boldbld)
+VIS010sheet.write(row, 2, "", boldbld)
+VIS010sheet.write(row, 3, "", boldbld)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 15
+VIS_010_05_row = row
+VIS_010_05_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "5", boldbl)
+VIS010sheet.write(row, 1, "Find keyword voyage", boldbl)
+VIS010sheet.write(row, 2, "", boldbl)
+VIS010sheet.write(row, 3, "", boldbl)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 16
+VIS_010_06_row = row
+VIS_010_06_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "6", boldbld)
+VIS010sheet.write(row, 1, "Find keyword service", boldbld)
+VIS010sheet.write(row, 2, "", boldbld)
+VIS010sheet.write(row, 3, "", boldbld)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 17
+VIS_010_07_row = row
+VIS_010_07_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "7", boldbl)
+VIS010sheet.write(row, 1, "Find IMO 8719188", boldbl)
+VIS010sheet.write(row, 2, "", boldbl)
+VIS010sheet.write(row, 3, "", boldbl)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 18
+VIS_010_08_row = row
+VIS_010_08_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "8", boldbld)
+VIS010sheet.write(row, 1, "Find ship VIS by MMSI", boldbld)
+VIS010sheet.write(row, 2, "", boldbld)
+VIS010sheet.write(row, 3, "", boldbld)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 19
+VIS_010_09_row = row
+VIS_010_09_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "9", boldbl)
+VIS010sheet.write(row, 1, "Find ship VIS by serviceType", boldbl)
+VIS010sheet.write(row, 2, "", boldbl)
+VIS010sheet.write(row, 3, "", boldbl)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 20
+VIS_010_10_row = row
+VIS_010_10_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "10", boldbld)
+VIS010sheet.write(row, 1, "Find IMO 8719188 + Keyword ROS", boldbld)
+VIS010sheet.write(row, 2, "", boldbld)
+VIS010sheet.write(row, 3, "", boldbld)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 21
+VIS_010_11_row = row
+VIS_010_11_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "11", boldbl)
+VIS010sheet.write(row, 1, "Find Route Optimization Service to consume", boldbl)
+VIS010sheet.write(row, 2, "", boldbl)
+VIS010sheet.write(row, 3, "", boldbl)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS010sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
+
+row = 22
+VIS_010_12_row = row
+VIS_010_12_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "12", boldbld)
+VIS010sheet.write(row, 1, "Find Route Check Service to consume", boldbld)
+VIS010sheet.write(row, 2, "", boldbld)
+VIS010sheet.write(row, 3, "", boldbld)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS010sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
+
+row = 23
+VIS_010_13_row = row
+VIS_010_13_col = 5
+VIS010sheet.set_row(row, 30)
+VIS010sheet.write(row, 0, "13", boldbl)
+VIS010sheet.write(row, 1, "Find Enhanced Monitoring Service to consume", boldbl)
+VIS010sheet.write(row, 2, "", boldbl)
+VIS010sheet.write(row, 3, "", boldbl)
+VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
 
 '''
 
