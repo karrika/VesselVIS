@@ -134,7 +134,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
     if routeStatus is not None:
         if routeStatus != data['routeStatus']:
             return 'Voyage plan with routeStatus' + routeStatus + ' not found', 404
-    if not check_acl(str(uvids[0])):
+    if not check_acl(str(uvids[0]).split('/')[1].split('.')[0]):
         return 'Forbidden', 403
     ret = GetVPResponseObject()
     vp = VoyagePlan()
