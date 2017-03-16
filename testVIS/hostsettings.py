@@ -35,7 +35,7 @@ trustchain=str(vis_trust[0])
 
 url="https://localhost:8001"
 callbackurl="https://localhost:8001"
-voyageuvid='urn:mrn:stm:voyage:id:8320767'
+voyageuvid='urn:mrn:stm:voyage:id:8320767:2017021010'
 newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'
 vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
@@ -46,7 +46,7 @@ def set_acl(id, uvid=None):
     if uvid is None: 
         f = open('export/all.acl', 'w')
     else:
-        f = open('export/' + voyageuvid + '.acl', 'w')
+        f = open('export/' + uvid + '.acl', 'w')
     data=[ id ]
     f.write(json.dumps(data))
     f.close()
@@ -63,23 +63,51 @@ def rtz_exists(uvid):
 
 def subs_exists(uvid):
     p = Path('export')
-    uvids = list(p.glob('**/' + uvid + '.subs'))
+    if uvid is None:
+        uvids = list(p.glob('**/all.subs'))
+    else:
+        uvids = list(p.glob('**/' + uvid + '.subs'))
     return len(uvids) > 0
 
 def acl_exists(uvid):
     p = Path('export')
-    uvids = list(p.glob('**/' + uvid + '.acl'))
+    if uvid is None:
+        uvids = list(p.glob('**/all.acl'))
+    else:
+        uvids = list(p.glob('**/' + uvid + '.acl'))
     return len(uvids) > 0
 
+def rm_acl(id, uvid=None):
+    if uvid is None:
+        if acl_exists(None):
+            os.remove('export/all.acl') 
+    else:
+        if acl_exists(uvid):
+            os.remove('export/' + uvid + '.acl') 
+
+def rm_subs(id, uvid=None):
+    if uvid is None:
+        if subs_exists(None):
+            os.remove('export/all.subs') 
+    else:
+        if subs_exists(uvid):
+            os.remove('export/' + uvid + '.subs') 
+
 def rm_uvid(uvid):
-    if uvid_exists(uvid):
-        os.remove('export/' + uvid + '.uvid') 
-    if rtz_exists(uvid):
-        os.remove('export/' + uvid + '.rtz') 
-    if subs_exists(uvid):
-        os.remove('export/' + uvid + '.subs') 
-    if acl_exists(uvid):
-        os.remove('export/' + uvid + '.acl') 
+    if uvid is None:
+        if subs_exists(None):
+            os.remove('export/all.subs') 
+        if acl_exists(uvid):
+            os.remove('export/all.acl') 
+    else:
+        if uvid_exists(uvid):
+            os.remove('export/' + uvid + '.uvid') 
+        if rtz_exists(uvid):
+            os.remove('export/' + uvid + '.rtz') 
+        if subs_exists(uvid):
+            os.remove('export/' + uvid + '.subs') 
+        if acl_exists(uvid):
+            os.remove('export/' + uvid + '.acl') 
 
 def vessel_connects():
     p = Path('import')
@@ -88,7 +116,7 @@ def vessel_connects():
         shutil.copyfile(str(item), 'export/' + item.parts[1])
         os.remove(str(item)) 
     rtzs = list(p.glob('**/*.rtz'))
-    if item in rtzs:
+    for item in rtzs:
         shutil.copyfile(str(item), 'export/' + item.parts[1])
         os.remove(str(item)) 
 

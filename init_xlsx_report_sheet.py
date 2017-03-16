@@ -2,7 +2,7 @@ init_workbook = '''import xlsxwriter
 import time
 
 # Create a workbook and add a worksheet.
-workbook = xlsxwriter.Workbook('VIS-TestCaseCollection_report.xlsx')
+workbook = xlsxwriter.Workbook('testCaseCollection_V1_Furuno.xlsx')
 worksheet = workbook.add_worksheet("VIS Test Case Summary")
 worksheet.set_column(0, 10, 15)
 VIS001sheet = workbook.add_worksheet("VIS001")
@@ -805,8 +805,8 @@ VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
 VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 31
-VIS_001_12_03_1_row = row
-VIS_001_12_03_1_col = 5
+VIS_001_12_3_1_row = row
+VIS_001_12_3_1_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "1", boldbl)
 VIS001sheet.write(row, 1, "VIS-1: Select VP with validityPeriodStart and validityPeriodStop in past and publish to subscribers ", boldbl)
@@ -815,8 +815,8 @@ VIS001sheet.write(row, 3, "Ok, message published and shared", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 32
-VIS_001_12_03_2_row = row
-VIS_001_12_03_2_col = 5
+VIS_001_12_3_2_row = row
+VIS_001_12_3_2_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "1", boldbld)
 VIS001sheet.write(row, 1, "Change validityPeriodStop to future and publish to VIS-1", boldbld)
@@ -825,8 +825,8 @@ VIS001sheet.write(row, 3, "Ok, message published and shared", boldbld)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 33
-VIS_001_12_03_3_row = row
-VIS_001_12_03_3_col = 5
+VIS_001_12_3_3_row = row
+VIS_001_12_3_3_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "1", boldbl)
 VIS001sheet.write(row, 1, "Change validityPeriodStart to future and publish to VIS-1", boldbl)
@@ -883,8 +883,8 @@ VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
 VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 42
-VIS_001_12_04_1_row = row
-VIS_001_12_04_1_col = 5
+VIS_001_12_4_1_row = row
+VIS_001_12_4_1_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "1", boldbl)
 VIS001sheet.write(row, 1, "Select VP according to schema RTZ 1.0 and publish to VIS-1", boldbl)
@@ -893,8 +893,8 @@ VIS001sheet.write(row, 3, "Success", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 43
-VIS_001_12_04_2_row = row
-VIS_001_12_04_2_col = 5
+VIS_001_12_4_2_row = row
+VIS_001_12_4_2_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "2", boldbld)
 VIS001sheet.write(row, 1, "Select VP according to schema RTZ 1.1 and publish to VIS-1", boldbld)
@@ -903,8 +903,8 @@ VIS001sheet.write(row, 3, "Success", boldbld)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 44
-VIS_001_12_04_3_row = row
-VIS_001_12_04_3_col = 5
+VIS_001_12_4_3_row = row
+VIS_001_12_4_3_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "3", boldbl)
 VIS001sheet.write(row, 1, "Select VP according to schema RTZ STM 2.0 and publish to VIS-1", boldbl)
@@ -961,8 +961,8 @@ VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
 VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 53
-VIS_001_12_05_1_row = row
-VIS_001_12_05_1_col = 5
+VIS_001_12_5_1_row = row
+VIS_001_12_5_1_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "1", boldbl)
 VIS001sheet.write(row, 1, "Select VP in incorrect XML and publish to VIS-1 ", boldbl)
@@ -971,8 +971,8 @@ VIS001sheet.write(row, 3, "STM-Module-1 gets error in response. Log entry in VIS
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 54
-VIS_001_12_05_2_row = row
-VIS_001_12_05_2_col = 5
+VIS_001_12_5_2_row = row
+VIS_001_12_5_2_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "2", boldbld)
 VIS001sheet.write(row, 1, "Select VP not following schema RTZ  and publish to VIS-1 ", boldbld)
@@ -1029,8 +1029,8 @@ VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
 VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 63
-VIS_001_12_06_1_row = row
-VIS_001_12_06_1_col = 5
+VIS_001_12_6_1_row = row
+VIS_001_12_6_1_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "1", boldbl)
 VIS001sheet.write(row, 1, "Select VP for another ship and publish to subscribers", boldbl)
@@ -1087,8 +1087,8 @@ VIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
 VIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
 row = 72
-VIS_001_12_07_1_row = row
-VIS_001_12_07_1_col = 5
+VIS_001_12_7_1_row = row
+VIS_001_12_7_1_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "1", boldbl)
 VIS001sheet.write(row, 1, "Select voyage plan with missing vesselVoyage and publish to subscribers", boldbl)
@@ -1097,18 +1097,19 @@ VIS001sheet.write(row, 3, "No voyage plan received by subscribers", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 73
-VIS_001_12_07_2_row = row
-VIS_001_12_07_2_col = 5
+VIS_001_12_7_2_row = row
+VIS_001_12_7_2_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "2", boldbld)
 VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  vesselVoyage and publish to subscribers", boldbld)
 VIS001sheet.write(row, 2, "", boldbld)
 VIS001sheet.write(row, 3, "No voyage plan received by subscribers", boldbld)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS001sheet.write(row, 6, "This is kind of problematic. The schema does not include a pattern for matching the ID. Obviously someone need to come up with a pattern for the route xsd file.", normal)
 
 row = 74
-VIS_001_12_07_3_row = row
-VIS_001_12_07_3_col = 5
+VIS_001_12_7_3_row = row
+VIS_001_12_7_3_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "3", boldbl)
 VIS001sheet.write(row, 1, "Select voyage plan with missing routeStatus and publish to subscribers", boldbl)
@@ -1117,8 +1118,8 @@ VIS001sheet.write(row, 3, "No voyage plan received by subscribers", boldbl)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 75
-VIS_001_12_07_4_row = row
-VIS_001_12_07_4_col = 5
+VIS_001_12_7_4_row = row
+VIS_001_12_7_4_col = 5
 VIS001sheet.set_row(row, 30)
 VIS001sheet.write(row, 0, "4", boldbld)
 VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  routeStatus and publish to subscribers", boldbld)
@@ -1281,7 +1282,7 @@ row = 20
 row = 21
 VIS002sheet.write(row, 0, "", boldblue)
 VIS002sheet.write(row, 1, "Test ID", boldblue)
-VIS002sheet.merge_range(row, 2, row, 3, "TEST-VIS-002", boldblue)
+VIS002sheet.merge_range(row, 2, row, 3, "TEST-VIS-002-1", boldblue)
 VIS002sheet.write(row, 3, "", boldblue)
 VIS002sheet.write(row, 4, "", boldblue)
 VIS002sheet.write(row, 5, "", boldblue)

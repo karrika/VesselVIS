@@ -28,7 +28,7 @@ callbackurl=hostsettings.callbackurl
 voyageuvid=hostsettings.voyageuvid
 newvoyageuvid=hostsettings.newvoyageuvid
 newvoyageuvid2=hostsettings.newvoyageuvid2
-vis_uvid=hostsettings.vis_uvid
+vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='\
 <?xml version="1.0" encoding="UTF-8"?>\
@@ -62,14 +62,7 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
-        data=[ vis_uvid ]
-        f.write(json.dumps(data))
-        f.close()
-        f = open('../VIS-1/export/all.acl', 'w')
-        data=[ vis_uvid ]
-        f.write(json.dumps(data))
-        f.close()
+        hostsettings.set_acl(vis2_uvid, voyageuvid)
 
         report='''
 VIS002sheet.write(VIS_002_00_row, VIS_002_00_col, "PASS", boldcenter)
@@ -79,7 +72,7 @@ VIS002sheet.write(VIS_002_00_row, VIS_002_00_col, "PASS", boldcenter)
         f.close()
         pass
 
-    def test_VIS_002_1(self):
+    def test_VIS_002_01(self):
         """
         VIS-002-1 - VIS-2 request voyage plan from VIS-1, no specific UVID or status, hence no parameters given
 
@@ -95,14 +88,14 @@ VIS002sheet.write(VIS_002_01_row, VIS_002_01_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_01_row, VIS_002_01_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_01_row, VIS_002_01_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
 
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_VIS_002_2(self):
+    def test_VIS_002_02(self):
         """
         VIS-002-2 - VIS-2 request voyage plan with chosen UVID from VIS-1, no specific status
 
@@ -121,14 +114,14 @@ VIS002sheet.write(VIS_002_02_row, VIS_002_02_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_02_row, VIS_002_02_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_02_row, VIS_002_02_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
 
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_VIS_002_3(self):
+    def test_VIS_002_03(self):
         """
         VIS-002-3 - VIS-2 request voyage plan with routeStatus= 7 from VIS-1, no specific UVID
 
@@ -147,14 +140,14 @@ VIS002sheet.write(VIS_002_03_row, VIS_002_03_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_03_row, VIS_002_03_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_03_row, VIS_002_03_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
 
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_VIS_002_4(self):
+    def test_VIS_002_04(self):
         """
         VIS-002-4 - VIS-2 request voyage plan with chosen UVID and routeStatus=7 from VIS-1
 
@@ -174,14 +167,14 @@ VIS002sheet.write(VIS_002_04_row, VIS_002_04_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_04_row, VIS_002_04_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_04_row, VIS_002_04_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
 
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_VIS_002_5(self):
+    def test_VIS_002_05(self):
         """
         VIS-002-5 - VIS-2 request voyage plan with another (non published) UVID and routeStatus=7 from VIS-1
 
@@ -201,14 +194,14 @@ VIS002sheet.write(VIS_002_05_row, VIS_002_05_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_05_row, VIS_002_05_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_05_row, VIS_002_05_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
 
         self.assert404(response, "Response body is : " + response.text)
 
-    def test_VIS_002_6(self):
+    def test_VIS_002_06(self):
         """
         VIS-002-6 - VIS-2 request voyage plan with chosen UVID and routeStatus=6 from VIS-1
 
@@ -228,14 +221,14 @@ VIS002sheet.write(VIS_002_06_row, VIS_002_06_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_06_row, VIS_002_06_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_06_row, VIS_002_06_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
 
         self.assert404(response, "Response body is : " + response.text)
 
-    def test_VIS_002_7(self):
+    def test_VIS_002_07(self):
         """
         VIS-002-7 - VIS-2 request voyage plan with another (non published) UVID from VIS-1, no specific status
 
@@ -254,14 +247,14 @@ VIS002sheet.write(VIS_002_07_row, VIS_002_07_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_07_row, VIS_002_07_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_07_row, VIS_002_07_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
 
         self.assert404(response, "Response body is : " + response.text)
 
-    def test_VIS_002_8(self):
+    def test_VIS_002_08(self):
         """
         VIS-002-8 - VIS-2 request voyage plan with routeStatus= 6 (non published)  from VIS-1, no specific UVID
 
@@ -280,7 +273,7 @@ VIS002sheet.write(VIS_002_08_row, VIS_002_08_col, "PASS", boldcenter)
         else:
             report='''
 VIS002sheet.write(VIS_002_08_row, VIS_002_08_col, "FAIL", boldcenter)
-'''
+VIS002sheet.write(VIS_002_08_row, VIS_002_08_col - 1, "''' + response.reason + '", normal)'
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()

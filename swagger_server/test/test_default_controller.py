@@ -14,7 +14,7 @@ from six import BytesIO
 from flask import json
 
 voyageuvid='urn:mrn:stm:voyage:id:8320767:1'
-vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
+vis_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 
 f = open('export/' + voyageuvid + '.acl', 'w')
 data=[ vis_uvid ]
@@ -70,7 +70,7 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        query_string = [('uvid', 'urn:mrn:stm:voyage:id:8320767'),
+        query_string = [('uvid', 'urn:mrn:stm:voyage:id:8320767:1'),
                         ('routeStatus', '7')]
         response = self.client.open('/voyagePlans',
                                     method='GET',
@@ -99,7 +99,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         query_string = [('callbackEndpoint', 'http://localhost:8002'),
-                        ('uvid', 'urn:mrn:stm:voyage:id:8320767')]
+                        ('uvid', 'urn:mrn:stm:voyage:id:8320767:1')]
         response = self.client.open('/voyagePlans/subscription',
                                     method='DELETE',
                                     content_type='application/json',
@@ -126,7 +126,7 @@ class TestDefaultController(BaseTestCase):
         
         """
         query_string = [('callbackEndpoint', 'http://localhost:8002'),
-                        ('uvid', 'urn:mrn:stm:voyage:id:8320767')]
+                        ('uvid', 'urn:mrn:stm:voyage:id:8320767:1')]
         response = self.client.open('/voyagePlans/subscription',
                                     method='POST',
                                     content_type='application/json',

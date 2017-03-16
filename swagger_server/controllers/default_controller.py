@@ -19,38 +19,40 @@ import io
 import re
 from . import rtz10
 from . import rtz11
-from . import rtz20
 from . import rtzstm20
 
 
 def client_mrn():
     """
     Placeholder for real client mrn service from certificate context
+    print(connexion.request.getpeercert(True))
     """
-    return 'urn:mrn:stm:service:instance:furuno:imo8320767'
+    if not connexion.request.authorization:
+        print('Not authorized')
+    else:
+        print('Great! Authorized')
+    return 'urn:mrn:stm:service:instance:furuno:vis2'
 
 def check_acl(uvid):
     """
     Check if client is authorized in the access list of the voyage
     """
-    if uvid is None:
-        f = open('export/all.acl', 'r')
-        data = json.loads(f.read())
+    p = Path('export')
+    acl = list(p.glob('**/all.acl'))
+    if len(acl) > 0:
+        with acl[0].open() as f: data = json.loads(f.read())
         f.close()
         if client_mrn() in data:
             return True
-        else:
-            return False
-    p = Path('export')
-    acl = list(p.glob('**/' + uvid + '.acl'))
-    if len(acl) == 0:
-        return False
-    with acl[0].open() as f: data = json.loads(f.read())
-    f.close()
-    if client_mrn() in data:
-        return True
-    else:
-        return False
+
+    if uvid is not None:
+        acl = list(p.glob('**/' + uvid + '.acl'))
+        if len(acl) > 0:
+            with acl[0].open() as f: data = json.loads(f.read())
+            f.close()
+            if client_mrn() in data:
+                return True
+    return False
 
 def send_ack(endPoint):
     """
@@ -132,7 +134,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
     if routeStatus is not None:
         if routeStatus != data['routeStatus']:
             return 'Voyage plan with routeStatus' + routeStatus + ' not found', 404
-    if not check_acl(uvid):
+    if not check_acl(str(uvids[0])):
         return 'Forbidden', 403
     ret = GetVPResponseObject()
     vp = VoyagePlan()
@@ -340,19 +342,13 @@ def upload_voyage_plan(uvid, voyagePlan, deliveryAckEndPoint=None):
                 return ret, 400
         else:
             if root.tag == '{http://www.cirm.org/RTZ/2/0}route':
-                if rtz20.xmlschema.validate(doc) == False:
+                if rtzstm20.xmlschema.validate(doc) == False:
                     rtz.close()
-                    ret.body = rtz20.xmlschema.error_log
+                    ret.body = rtzstm20.xmlschema.error_log
                     return ret, 400
             else:
-                if root.tag == '{http://www.cirm.org/RTZ/2/0}route':
-                    if rtzstm20.xmlschema.validate(doc) == False:
-                        rtz.close()
-                        ret.body = rtzstm20.xmlschema.error_log
-                        return ret, 400
-                else:
-                    ret.body = 'Unsupported route format'
-                    return ret, 400
+                ret.body = 'Unsupported route format'
+                return ret, 400
     data = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))

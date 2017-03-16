@@ -2,7 +2,7 @@
 <!--route node-->
 <route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">
   <!--routeInfo node-->
-  <routeInfo routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeName="HAN-VIS" routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:8320767:2017021010" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension manufacturer="Furuno" name="AdditionalRouteInfo" version="1.0">
         <property income="0" channelLimitMode="0" safetyContour="30" ukcLimit="30.000000"/>

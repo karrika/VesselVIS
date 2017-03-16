@@ -28,7 +28,7 @@ callbackurl=hostsettings.callbackurl
 voyageuvid=hostsettings.voyageuvid
 newvoyageuvid=hostsettings.newvoyageuvid
 newvoyageuvid2=hostsettings.newvoyageuvid2
-vis_uvid=hostsettings.vis_uvid
+vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='\
 <?xml version="1.0" encoding="UTF-8"?>\
@@ -50,14 +50,6 @@ class TestVIS_002_1(BaseTestCase):
     """ VIS-002 tests """
 
     def setUp(self):
-        f = open('../VIS-1/export/' + voyageuvid + '.acl', 'w')
-        data=[ vis_uvid ]
-        f.write(json.dumps(data))
-        f.close()
-        f = open('../VIS-1/export/all.acl', 'w')
-        data=[ vis_uvid ]
-        f.write(json.dumps(data))
-        f.close()
         pass
 
     def tearDown(self):
@@ -74,18 +66,9 @@ class TestVIS_002_1(BaseTestCase):
 
         
         """
-        f = open('../VIS-1/export/' + newvoyageuvid + '.acl', 'w')
-        data=[ vis_uvid ]
-        f.write(json.dumps(data))
-        f.close()
-        f = open('../VIS-1/export/' + newvoyageuvid2 + '.acl', 'w')
-        data=[ vis_uvid ]
-        f.write(json.dumps(data))
-        f.close()
-        p = Path('../VIS-1/export')
-        vp = list(p.glob('**/' + newvoyageuvid + '.uvid'))
-        if len(vp) > 0:
-            os.remove('../VIS-1/export/' + newvoyageuvid + '.uvid')
+        hostsettings.rm_uvid(newvoyageuvid)
+        hostsettings.set_acl(vis2_uvid, newvoyageuvid)
+        hostsettings.set_acl(vis2_uvid, newvoyageuvid2)
 
         report='''
 VIS002sheet.write(VIS_002_1_0_row, VIS_002_08_col, "PASS", boldcenter)
