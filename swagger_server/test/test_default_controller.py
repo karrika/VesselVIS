@@ -13,7 +13,7 @@ from . import BaseTestCase
 from six import BytesIO
 from flask import json
 
-voyageuvid='urn:mrn:stm:voyage:id:8320767'
+voyageuvid='urn:mrn:stm:voyage:id:8320767:1'
 vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
 
 f = open('export/' + voyageuvid + '.acl', 'w')
@@ -190,7 +190,7 @@ class TestDefaultController(BaseTestCase):
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="1" routeName="HAN-VIS" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">

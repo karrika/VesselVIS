@@ -118,7 +118,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         <xsd:documentation>The author of route.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="routeStatus" type="RouteStatusType">
+    <xsd:attribute name="routeStatus" type="RouteStatusType" use="required">
       <xsd:annotation>
         <xsd:documentation>Status of route.</xsd:documentation>
       </xsd:annotation>
@@ -152,7 +152,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         <xsd:documentation>IMO number of ship.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="vesselVoyage" type="xsd:string">
+    <xsd:attribute name="vesselVoyage" type="xsd:string" use="required">
       <xsd:annotation>
         <xsd:documentation>Number of the voyage.</xsd:documentation>
       </xsd:annotation>
