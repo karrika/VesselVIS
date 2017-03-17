@@ -99,11 +99,15 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
   <!--                                      -->
   <xsd:complexType name="RouteInfo">
     <xsd:sequence>
+      <xsd:element name="routeChangesHistory" type="RouteChangesHistory" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Route changes history.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="extensions" type="Extensions" minOccurs="0" maxOccurs="1">
         <xsd:annotation>
           <xsd:documentation>
-            You can add extend RTZ by adding your own elements from another schema
-            here.
+            You can add extend RTZ by adding your own elements from another schema here.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -118,7 +122,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         <xsd:documentation>The author of route.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="routeStatus" type="RouteStatusType" use="required">
+    <xsd:attribute name="routeStatus" type="RouteStatusType">
       <xsd:annotation>
         <xsd:documentation>Status of route.</xsd:documentation>
       </xsd:annotation>
@@ -152,7 +156,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         <xsd:documentation>IMO number of ship.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="vesselVoyage" type="xsd:string" use="required">
+    <xsd:attribute name="vesselVoyage" type="xsd:string">
       <xsd:annotation>
         <xsd:documentation>Number of the voyage.</xsd:documentation>
       </xsd:annotation>
@@ -191,10 +195,10 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="vesselMaxWind" type="SpeedTypeMPS">
+    <xsd:attribute name="vesselMaxWind" type="SpeedType">
       <xsd:annotation>
         <xsd:documentation>
-          Max wind speed limit of ship in metres per second.
+          Max wind speed limit of ship in knots.
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
@@ -217,14 +221,20 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="routeChangesHistory" type="xsd:string">
-      <xsd:annotation>
-        <xsd:documentation>
-          Cause of route change, originator and reason.
-        </xsd:documentation>
-      </xsd:annotation>
-    </xsd:attribute>
   </xsd:complexType>
+  
+  <!--                                 -->
+  <!--"NonEmptyString" type definition -->
+  <!--                                 -->
+  <xsd:simpleType name="NonEmptyString">
+    <xsd:annotation>
+      <xsd:documentation>Non-empty string.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:pattern value=".*[0-9a-zA-Z].*"></xsd:pattern>
+    </xsd:restriction>
+  </xsd:simpleType>
   
   <!--                                 -->
   <!--"RouteStatus" type definition -->
@@ -263,18 +273,62 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
     </xsd:restriction>
   </xsd:simpleType>
   
-  <!--                                        -->
-  <!-- "SpeedTypeMPS" element type definition -->
-  <!--                                        -->
-  <xsd:simpleType name="SpeedTypeMPS">
+  <!--                                       -->
+  <!-- "DateTimeUTC" element type definition -->
+  <!--                                       -->
+  <xsd:simpleType name="DateTimeUTC">
     <xsd:annotation>
-      <xsd:documentation>Speed in meters per second.</xsd:documentation>
+      <xsd:documentation>Length type.</xsd:documentation>
     </xsd:annotation>
-    <xsd:restriction base="xsd:decimal">
-      <xsd:minInclusive value="0.0"/>
+    <xsd:restriction base="xsd:dateTime">
+      <xsd:pattern value=".*Z"/>
     </xsd:restriction>
   </xsd:simpleType>
+
+  <!--                                    -->
+  <!-- RouteChangeHistory type definition -->
+  <!--                                    -->
+  <xsd:complexType name="RouteChangesHistory">
+    <xsd:annotation>
+      <xsd:documentation>
+        Data for route changes history.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="historyItem" type="HistoryItem" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>History item details.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
   
+  <!--                                    -->
+  <!-- HistoryItem type definition        -->
+  <!--                                    -->
+  <xsd:complexType name="HistoryItem">
+    <xsd:annotation>
+      <xsd:documentation>
+        Route change history item.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="dateTime" type="DateTimeUTC" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Date and time of change.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="author" type="NonEmptyString" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Author of change.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="reason" type="NonEmptyString" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Reason of change.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
   <!--                                 -->
   <!-- Extension point type definition -->
   <!--                                 -->
@@ -359,7 +413,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
     </xsd:annotation>
     <xsd:restriction base="xsd:decimal">
       <xsd:minInclusive value="0.0"/>
-      <xsd:maxExclusive value="10.0"/>
+      <xsd:maxInclusive value="5.0"/>
     </xsd:restriction>
   </xsd:simpleType>
 
@@ -732,14 +786,14 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
     <xsd:attribute name="etdWindowBefore" type="xsd:duration">
       <xsd:annotation>
         <xsd:documentation>
-          Describes the uncertainty of the predicted ETD after optimization.
+          The maximum value of time interval prior to the ETD used to adjust the ETD to get the earliest probable date/time.
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
     <xsd:attribute name="etdWindowAfter" type="xsd:duration">
       <xsd:annotation>
         <xsd:documentation>
-          Describes the uncertainty of the predicted ETD after optimization.
+          The maximum value of time interval after the ETD used to adjust the ETD to get the latest probable date/time.
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
@@ -753,14 +807,14 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
     <xsd:attribute name="etaWindowBefore" type="xsd:duration">
       <xsd:annotation>
         <xsd:documentation>
-          Describes the uncertainty of the predicted ETA after optimization.
+          The maximum value of time interval prior to the ETA used to adjust the eta to get the earliest probable date/time.
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
     <xsd:attribute name="etaWindowAfter" type="xsd:duration">
       <xsd:annotation>
         <xsd:documentation>
-          Describes the uncertainty of the predicted ETA after optimization.
+          The maximum value of time interval after the ETA used to adjust the ETA to get the latest probable date/time.
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
@@ -781,9 +835,9 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="windSpeed" type="SpeedTypeMPS">
+    <xsd:attribute name="windSpeed" type="SpeedType">
       <xsd:annotation>
-        <xsd:documentation>True wind speed in metres per second.</xsd:documentation>
+        <xsd:documentation>True wind speed in knots.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
     <xsd:attribute name="windDirection" type="CourseType">
@@ -799,6 +853,16 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
     <xsd:attribute name="currentDirection" type="CourseType">
       <xsd:annotation>
         <xsd:documentation>Current direction in degrees.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="waveHeight" type="LengthType">
+      <xsd:annotation>
+        <xsd:documentation>Height of waves in metres.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="waveDirection" type="CourseType">
+      <xsd:annotation>
+        <xsd:documentation>Wave direction in degrees.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
     <xsd:attribute name="windLoss" type="SpeedType">
