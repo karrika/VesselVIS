@@ -364,7 +364,7 @@ VIS001sheet.write(VIS_001_00_row, VIS_001_00_col, "PASS", boldcenter)
         if response.status_code == 404:
             report='''
 VIS001sheet.write(VIS_001_01_row, VIS_001_01_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_01_row, VIS_001_01_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_01_row, VIS_001_01_col, "FAIL", boldcenter)
@@ -392,7 +392,7 @@ VIS001sheet.write(VIS_001_01_row, VIS_001_01_col - 1, "''' + response.reason + '
         if response.status_code == 404:
             report='''
 VIS001sheet.write(VIS_001_02_row, VIS_001_02_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_02_row, VIS_001_02_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_02_row, VIS_001_02_col, "FAIL", boldcenter)
@@ -419,7 +419,7 @@ VIS001sheet.write(VIS_001_02_row, VIS_001_02_col - 1, "''' + response.reason + '
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_03_row, VIS_001_03_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_03_row, VIS_001_03_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_03_row, VIS_001_03_col, "FAIL", boldcenter)
@@ -445,7 +445,7 @@ VIS001sheet.write(VIS_001_03_row, VIS_001_03_col - 1, "''' + response.reason + '
         if response.status_code == 403:
             report='''
 VIS001sheet.write(VIS_001_04_row, VIS_001_04_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_04_row, VIS_001_04_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_04_row, VIS_001_04_col, "FAIL", boldcenter)
@@ -473,7 +473,7 @@ VIS001sheet.write(VIS_001_04_row, VIS_001_04_col - 1, "''' + response.reason + '
         if response.status_code == 403:
             report='''
 VIS001sheet.write(VIS_001_05_row, VIS_001_05_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_05_row, VIS_001_05_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_05_row, VIS_001_05_col, "FAIL", boldcenter)
@@ -516,7 +516,7 @@ VIS001sheet.write(VIS_001_06_row, VIS_001_06_col, "PASS", boldcenter)
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_07_row, VIS_001_07_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_07_row, VIS_001_07_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_07_row, VIS_001_07_col, "FAIL", boldcenter)
@@ -544,7 +544,7 @@ VIS001sheet.write(VIS_001_07_row, VIS_001_07_col - 1, "''' + response.reason + '
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_08_row, VIS_001_08_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_08_row, VIS_001_08_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_08_row, VIS_001_08_col, "FAIL", boldcenter)
@@ -587,7 +587,7 @@ VIS001sheet.write(VIS_001_09_row, VIS_001_09_col, "PASS", boldcenter)
         if response.status_code == 403:
             report='''
 VIS001sheet.write(VIS_001_10_row, VIS_001_10_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_10_row, VIS_001_10_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_10_row, VIS_001_10_col, "FAIL", boldcenter)
@@ -615,7 +615,7 @@ VIS001sheet.write(VIS_001_10_row, VIS_001_10_col - 1, "''' + response.reason + '
         if response.status_code == 403:
             report='''
 VIS001sheet.write(VIS_001_11_row, VIS_001_11_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_11_row, VIS_001_11_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_11_row, VIS_001_11_col, "FAIL", boldcenter)
@@ -642,7 +642,7 @@ VIS001sheet.write(VIS_001_11_row, VIS_001_11_col - 1, "''' + response.reason + '
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col, "FAIL", boldcenter)
@@ -669,7 +669,7 @@ VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col - 1, "''' + response.re
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col, "FAIL", boldcenter)
@@ -696,7 +696,7 @@ VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col - 1, "''' + response.re
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col, "FAIL", boldcenter)
@@ -723,7 +723,7 @@ VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col - 1, "''' + response.re
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col, "FAIL", boldcenter)
@@ -750,7 +750,7 @@ VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col - 1, "''' + response.re
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col, "FAIL", boldcenter)
@@ -777,7 +777,7 @@ VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col - 1, "''' + response.re
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col, "FAIL", boldcenter)
@@ -804,7 +804,7 @@ VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col - 1, "''' + response.re
         if response.status_code == 500:
             report='''
 VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col, "FAIL", boldcenter)
@@ -831,7 +831,7 @@ VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.re
         if response.status_code == 500:
             report='''
 VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col, "FAIL", boldcenter)
@@ -858,7 +858,7 @@ VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.re
         if response.status_code == 200:
             report='''
 VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col, "FAIL", boldcenter)
@@ -885,7 +885,7 @@ VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col - 1, "''' + response.re
         if response.status_code == 500:
             report='''
 VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col, "FAIL", boldcenter)
@@ -912,7 +912,7 @@ VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.re
         if response.status_code == 500:
             report='''
 VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col, "FAIL", boldcenter)
@@ -939,7 +939,7 @@ VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.re
         if response.status_code == 500:
             report='''
 VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col, "FAIL", boldcenter)
@@ -966,7 +966,7 @@ VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.re
         if response.status_code == 500:
             report='''
 VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col, "PASS", boldcenter)
-'''
+VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.reason + '", normal)'
         else:
             report='''
 VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col, "FAIL", boldcenter)

@@ -28,7 +28,7 @@ callbackurl=hostsettings.callbackurl
 voyageuvid=hostsettings.voyageuvid
 newvoyageuvid=hostsettings.newvoyageuvid
 newvoyageuvid2=hostsettings.newvoyageuvid2
-vis_uvid=hostsettings.vis_uvid
+vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='\
 <?xml version="1.0" encoding="UTF-8"?>\
@@ -45,19 +45,22 @@ voyageplan='\
 </route>\
 '
 
-
 class TestVIS_004(BaseTestCase):
     """ VIS-004 tests """
 
     def setUp(self):
-        hostsettings.set_acl(vis_uvid, voyageuvid)
-        hostsettings.set_acl(vis_uvid, None)
+        hostsettings.set_acl(vis2_uvid, voyageuvid)
+        hostsettings.set_acl(vis2_uvid, None)
         pass
 
     def tearDown(self):
         pass
 
-    def test_VIS_004_1(self):
+    def vessel_connects(self):
+        hostsettings.vessel_connects()
+        pass
+
+    def test_VIS_004_01(self):
         """
         VIS-004-1 - VIS-2: Request subscription on VIS-1
 
@@ -65,58 +68,106 @@ class TestVIS_004(BaseTestCase):
         """
         sub='/voyagePlans/subscription'
         parameters={
-            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'callbackEndpoint': callbackurl,
             'uvid': voyageuvid
         }
         payload={}
         response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS004sheet.write(VIS_004_01_row, VIS_004_01_col, "PASS", boldcenter)
+VIS004sheet.write(VIS_004_01_row, VIS_004_01_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS004sheet.write(VIS_004_01_row, VIS_004_01_col, "FAIL", boldcenter)
+VIS004sheet.write(VIS_004_01_row, VIS_004_01_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Testing subscription with receiving the packet requires two instances. Not set up yet.')
-    def test_VIS_004_2(self):
+    def test_VIS_004_02(self):
         """
-        VIS-004-2 - VIS-1: Publish voyage plan to VIS-1 instance
+        VIS-004-2 - Publish voyage plan to VIS-1 with chosen UVID
+
+        
+        """
+        sub='/voyagePlans'
+        parameters={
+            'uvid': newvoyageuvid
+        }
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 900:
+            report='''
+VIS004sheet.write(VIS_004_02_row, VIS_004_02_col, "PASS", boldcenter)
+VIS004sheet.write(VIS_004_02_row, VIS_004_02_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS004sheet.write(VIS_004_02_row, VIS_004_02_col, "FAIL", boldcenter)
+VIS004sheet.write(VIS_004_02_row, VIS_004_02_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_004_03(self):
+        """
+        VIS-004-4 - VIS-2: Request remove of subscription to voyage plan from VIS-1
 
         
         """
         sub='/voyagePlans/subscription'
         parameters={
-            'callbackEndpoint': callbackurl + '/voyagePlans',
+            'callbackEndpoint': callbackurl,
             'uvid': voyageuvid
         }
         payload={}
         response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS004sheet.write(VIS_004_03_row, VIS_004_03_col, "PASS", boldcenter)
+VIS004sheet.write(VIS_004_03_row, VIS_004_03_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS004sheet.write(VIS_004_03_row, VIS_004_03_col, "FAIL", boldcenter)
+VIS004sheet.write(VIS_004_03_row, VIS_004_03_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_VIS_004_3(self):
+    def test_VIS_004_04(self):
         """
-        VIS-004-3 - VIS-2: Request remove of subscription to voyage plan from VIS-1
+        VIS-004-4 - Publish voyage plan to VIS-1 with chosen UVID
 
         
         """
-        sub='/voyagePlans/subscription'
+        sub='/voyagePlans'
         parameters={
-            'callbackEndpoint': callbackurl + '/voyagePlans',
-            'uvid': voyageuvid
+            'uvid': newvoyageuvid
         }
-        payload={}
-        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-        self.assert200(response, "Response body is : " + response.text)
+        payload={'route': voyageplan}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
 
-    @unittest.skip('Testing subscription with receiving the packet requires two instances. Not set up yet.')
-    def test_VIS_004_4(self):
-        """
-        VIS-004-4 - VIS-1: Publish voyage plan to VIS-1 instance
+        if response.status_code == 900:
+            report='''
+VIS004sheet.write(VIS_004_04_row, VIS_004_04_col, "PASS", boldcenter)
+VIS004sheet.write(VIS_004_04_row, VIS_004_04_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS004sheet.write(VIS_004_04_row, VIS_004_04_col, "FAIL", boldcenter)
+VIS004sheet.write(VIS_004_04_row, VIS_004_04_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
 
-        
-        """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl + '/voyagePlans',
-            'uvid': voyageuvid
-        }
-        payload={}
-        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
 

@@ -2099,21 +2099,21 @@ row = 17
 VIS005sheet.write(row, 1, "Preconditions", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Pass:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F22:F23, "PASS")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F22:F24, "PASS")', normalright)
 
 row = 18
 VIS005sheet.write(row, 1, "Dependencies", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Fail:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F22:F23, "FAIL")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F22:F24, "FAIL")', normalright)
 
 row = 19
 VIS005sheet.write(row, 4, "Not executed:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F22:F23, "NOT EXECUTED")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F22:F24, "NOT EXECUTED")', normalright)
 
 worksheet.write(VIS_005_1_row, VIS_005_1_col, '=$VIS005.F17', variantbold)
 
-VIS005sheet.add_table('A21:G23')
+VIS005sheet.add_table('A21:G24')
 row = 20
 VIS005sheet.write(row, 0, "Step#", boldcenterwhite)
 VIS005sheet.write(row, 1, "Test Step", boldcenterwhite)
@@ -2144,8 +2144,18 @@ VIS005sheet.write(row, 3, "STM Module receives the uploaded voyage plan VIS-1 se
 VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 23
+VIS_005_1_3_row = row
+VIS_005_1_3_col = 5
+VIS005sheet.set_row(row, 30)
+VIS005sheet.write(row, 0, "3", boldbld)
+VIS005sheet.write(row, 1, "STM Module-2 uploads response voyage plan to callbackEndpoint", boldbld)
+VIS005sheet.write(row, 2, "", boldbld)
+VIS005sheet.write(row, 3, "VIS-1 receives the uploaded voyage plan", boldbld)
+VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
 
 row = 24
+
+row = 25
 VIS005sheet.write(row, 0, "", boldblue)
 VIS005sheet.write(row, 1, "Test ID", boldblue)
 VIS005sheet.merge_range(row, 2, row, 3, "TEST-VIS-005-2", boldblue)
@@ -2154,37 +2164,37 @@ VIS005sheet.write(row, 4, "", boldblue)
 VIS005sheet.write(row, 5, "", boldblue)
 VIS005sheet.write(row, 6, "", boldblue)
 
-row = 25
+row = 26
 VIS005sheet.write(row, 1, "Title", bold)
 VIS005sheet.merge_range(row, 2, row, 3, "Variant - Upload Voyage Plan with ACK request but no STM Module retrieves the message", normal)
 
-row = 26
+row = 27
 VIS005sheet.set_row(row, 30)
 VIS005sheet.write(row, 1, "Description", bold)
 VIS005sheet.merge_range(row, 2, row, 3, "", normal)
 VIS005sheet.write(row, 4, "Total:", normalright)
-VIS005sheet.write(row, 5, '=IF(F30>0,"NOT EXECUTED",IF(F29>0,"FAIL","PASS"))', normalright)
+VIS005sheet.write(row, 5, '=IF(F31>0,"NOT EXECUTED",IF(F30>0,"FAIL","PASS"))', normalright)
 
-row = 27
+row = 28
 VIS005sheet.write(row, 1, "Preconditions", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Pass:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F32:F33, "PASS")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F33:F34, "PASS")', normalright)
 
-row = 28
+row = 29
 VIS005sheet.write(row, 1, "Dependencies", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Fail:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F32:F33, "FAIL")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F33:F34, "FAIL")', normalright)
 
-row = 29
-VIS005sheet.write(row, 4, "Not executed:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F32:F33, "NOT EXECUTED")', normalright)
-
-worksheet.write(VIS_005_2_row, VIS_005_2_col, '=$VIS005.F27', variantbold)
-
-VIS005sheet.add_table('A31:G33')
 row = 30
+VIS005sheet.write(row, 4, "Not executed:", normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F33:F34, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_005_2_row, VIS_005_2_col, '=$VIS005.F28', variantbold)
+
+VIS005sheet.add_table('A32:G34')
+row = 31
 VIS005sheet.write(row, 0, "Step#", boldcenterwhite)
 VIS005sheet.write(row, 1, "Test Step", boldcenterwhite)
 VIS005sheet.write(row, 2, "Test Data", boldcenterwhite)
@@ -2193,7 +2203,7 @@ VIS005sheet.write(row, 4, "Actual", boldcenterwhite)
 VIS005sheet.write(row, 5, "Pass Fail", boldcenterwhite)
 VIS005sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
-row = 31
+row = 32
 VIS_005_2_1_row = row
 VIS_005_2_1_col = 5
 VIS005sheet.set_row(row, 30)
@@ -2203,7 +2213,7 @@ VIS005sheet.write(row, 2, "", boldbl)
 VIS005sheet.write(row, 3, "VIS-1 receives the uploaded voyage plan", boldbl)
 VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
 
-row = 32
+row = 33
 VIS_005_2_2_row = row
 VIS_005_2_2_col = 5
 VIS005sheet.set_row(row, 30)
@@ -2214,9 +2224,9 @@ VIS005sheet.write(row, 3, "", boldbld)
 VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
 VIS005sheet.write(row, 6, "What is this test case supposed to accomplish? Measuring the wait time of what?", normal)
 
-row = 33
-
 row = 34
+
+row = 35
 VIS005sheet.write(row, 0, "", boldblue)
 VIS005sheet.write(row, 1, "Test ID", boldblue)
 VIS005sheet.merge_range(row, 2, row, 3, "TEST-VIS-005-3", boldblue)
@@ -2225,37 +2235,37 @@ VIS005sheet.write(row, 4, "", boldblue)
 VIS005sheet.write(row, 5, "", boldblue)
 VIS005sheet.write(row, 6, "", boldblue)
 
-row = 35
+row = 36
 VIS005sheet.write(row, 1, "Title", bold)
 VIS005sheet.merge_range(row, 2, row, 3, "Variant - Upload Voyage Plan with explicit callback endpoint", normal)
 
-row = 36
+row = 37
 VIS005sheet.set_row(row, 30)
 VIS005sheet.write(row, 1, "Description", bold)
 VIS005sheet.merge_range(row, 2, row, 3, "", normal)
 VIS005sheet.write(row, 4, "Total:", normalright)
 VIS005sheet.write(row, 5, '=IF(F40>0,"NOT EXECUTED",IF(F39>0,"FAIL","PASS"))', normalright)
 
-row = 37
+row = 38
 VIS005sheet.write(row, 1, "Preconditions", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Pass:", normalright)
 VIS005sheet.write(row, 5, '=COUNTIF(F42:F43, "PASS")', normalright)
 
-row = 38
+row = 39
 VIS005sheet.write(row, 1, "Dependencies", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Fail:", normalright)
 VIS005sheet.write(row, 5, '=COUNTIF(F42:F43, "FAIL")', normalright)
 
-row = 39
+row = 40
 VIS005sheet.write(row, 4, "Not executed:", normalright)
 VIS005sheet.write(row, 5, '=COUNTIF(F42:F43, "NOT EXECUTED")', normalright)
 
-worksheet.write(VIS_005_3_row, VIS_005_3_col, '=$VIS005.F37', variantbold)
+worksheet.write(VIS_005_3_row, VIS_005_3_col, '=$VIS005.F38', variantbold)
 
 VIS005sheet.add_table('A41:G43')
-row = 40
+row = 41
 VIS005sheet.write(row, 0, "Step#", boldcenterwhite)
 VIS005sheet.write(row, 1, "Test Step", boldcenterwhite)
 VIS005sheet.write(row, 2, "Test Data", boldcenterwhite)
@@ -2264,7 +2274,7 @@ VIS005sheet.write(row, 4, "Actual", boldcenterwhite)
 VIS005sheet.write(row, 5, "Pass Fail", boldcenterwhite)
 VIS005sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
-row = 41
+row = 42
 VIS_005_3_1_row = row
 VIS_005_3_1_col = 5
 VIS005sheet.set_row(row, 30)
@@ -2275,7 +2285,7 @@ VIS005sheet.write(row, 3, "VIS-2 receives the uploaded voyage plan", boldbl)
 VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
 VIS005sheet.write(row, 6, "There is no such thing as an explicit callbackEndpoint", normal)
 
-row = 42
+row = 43
 VIS_005_3_2_row = row
 VIS_005_3_2_col = 5
 VIS005sheet.set_row(row, 30)
@@ -2285,7 +2295,7 @@ VIS005sheet.write(row, 2, "", boldbld)
 VIS005sheet.write(row, 3, "STM Module-2 receives the uploaded voyage plan", boldbld)
 VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
 
-row = 43
+row = 44
 VIS_005_3_3_row = row
 VIS_005_3_3_col = 5
 VIS005sheet.set_row(row, 30)
@@ -2296,9 +2306,9 @@ VIS005sheet.write(row, 3, "VIS-1 receives the uploaded voyage plan", boldbl)
 VIS005sheet.write(row, 5, "NOT EXECUTED", bold)
 VIS005sheet.write(row, 6, "There is no such thing as an explicit callbackEndpoint", normal)
 
-row = 44
-
 row = 45
+
+row = 46
 VIS005sheet.write(row, 0, "", boldblue)
 VIS005sheet.write(row, 1, "Test ID", boldblue)
 VIS005sheet.merge_range(row, 2, row, 3, "TEST-VIS-005-4", boldblue)
@@ -2307,37 +2317,37 @@ VIS005sheet.write(row, 4, "", boldblue)
 VIS005sheet.write(row, 5, "", boldblue)
 VIS005sheet.write(row, 6, "", boldblue)
 
-row = 46
+row = 47
 VIS005sheet.write(row, 1, "Title", bold)
 VIS005sheet.merge_range(row, 2, row, 3, "Variant - Upload Voyage Plan for another ship to a ship", normal)
 
-row = 47
+row = 48
 VIS005sheet.set_row(row, 30)
 VIS005sheet.write(row, 1, "Description", bold)
 VIS005sheet.merge_range(row, 2, row, 3, "", normal)
 VIS005sheet.write(row, 4, "Total:", normalright)
-VIS005sheet.write(row, 5, '=IF(F51>0,"NOT EXECUTED",IF(F50>0,"FAIL","PASS"))', normalright)
+VIS005sheet.write(row, 5, '=IF(F52>0,"NOT EXECUTED",IF(F51>0,"FAIL","PASS"))', normalright)
 
-row = 48
+row = 49
 VIS005sheet.write(row, 1, "Preconditions", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Pass:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F53:F53, "PASS")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F54:F54, "PASS")', normalright)
 
-row = 49
+row = 50
 VIS005sheet.write(row, 1, "Dependencies", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Fail:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F53:F53, "FAIL")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F54:F54, "FAIL")', normalright)
 
-row = 50
-VIS005sheet.write(row, 4, "Not executed:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F53:F53, "NOT EXECUTED")', normalright)
-
-worksheet.write(VIS_005_4_row, VIS_005_4_col, '=$VIS005.F48', variantbold)
-
-VIS005sheet.add_table('A52:G53')
 row = 51
+VIS005sheet.write(row, 4, "Not executed:", normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F54:F54, "NOT EXECUTED")', normalright)
+
+worksheet.write(VIS_005_4_row, VIS_005_4_col, '=$VIS005.F49', variantbold)
+
+VIS005sheet.add_table('A53:G54')
+row = 52
 VIS005sheet.write(row, 0, "Step#", boldcenterwhite)
 VIS005sheet.write(row, 1, "Test Step", boldcenterwhite)
 VIS005sheet.write(row, 2, "Test Data", boldcenterwhite)
@@ -2346,7 +2356,7 @@ VIS005sheet.write(row, 4, "Actual", boldcenterwhite)
 VIS005sheet.write(row, 5, "Pass Fail", boldcenterwhite)
 VIS005sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
 
-row = 52
+row = 53
 VIS_005_4_1_row = row
 VIS_005_4_1_col = 5
 VIS005sheet.set_row(row, 30)

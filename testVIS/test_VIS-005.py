@@ -64,6 +64,12 @@ class TestVIS_005(BaseTestCase):
         
         """
         hostsettings.rm_uvid(newvoyageuvid)
+        report='''
+VIS005sheet.write(VIS_005_01_row, VIS_005_01_col, "PASS", boldcenter)
+VIS005sheet.write(VIS_005_01_row, VIS_005_01_col - 1, "''' + 'OK' + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
         pass
 
     def test_VIS_005_0_2(self):
@@ -80,6 +86,19 @@ class TestVIS_005(BaseTestCase):
         }
         payload={'route': voyageplan}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS005sheet.write(VIS_005_02_row, VIS_005_02_col, "PASS", boldcenter)
+VIS005sheet.write(VIS_005_02_row, VIS_005_02_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS005sheet.write(VIS_005_02_row, VIS_005_02_col, "FAIL", boldcenter)
+VIS005sheet.write(VIS_005_02_row, VIS_005_02_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_005_0_3(self):
@@ -112,6 +131,19 @@ class TestVIS_005(BaseTestCase):
         }
         payload={'route': voyageplan}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS005sheet.write(VIS_005_1_2_row, VIS_005_1_2_col, "PASS", boldcenter)
+VIS005sheet.write(VIS_005_1_2_row, VIS_005_1_2_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS005sheet.write(VIS_005_1_2_row, VIS_005_1_2_col, "FAIL", boldcenter)
+VIS005sheet.write(VIS_005_1_2_row, VIS_005_1_2_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_005_1_3(self):
@@ -133,6 +165,19 @@ class TestVIS_005(BaseTestCase):
             'toName': 'VIS-2'
         }
         response=requests.post(deliveryAckEndPoint + sub, json=payload, cert=vis_cert, verify=trustchain)
+
+        if response.status_code == 200:
+            report='''
+VIS005sheet.write(VIS_005_1_3_row, VIS_005_1_3_col, "PASS", boldcenter)
+VIS005sheet.write(VIS_005_1_3_row, VIS_005_1_3_col - 1, "''' + response.reason + '", normal)'
+        else:
+            report='''
+VIS005sheet.write(VIS_005_1_3_row, VIS_005_1_3_col, "FAIL", boldcenter)
+VIS005sheet.write(VIS_005_1_3_row, VIS_005_1_3_col - 1, "''' + response.reason + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_005_2_1(self):
