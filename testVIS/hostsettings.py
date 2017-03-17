@@ -110,6 +110,56 @@ def rm_uvid(uvid):
             os.remove('export/' + uvid + '.acl') 
 
 def vessel_connects():
+    '''
+    Check the possible new subsciptions and merge them with existing ones.
+    '''
+    p = Path('import')
+    subs = list(p.glob('**/*.subs'))
+    if len(subs) > 0:
+        for sub in subs:
+            with sub.open() as f:
+                new_subs = json.loads(f.read())
+            os.remove(str(sub))
+            q = Path('export')
+            q = q / sub.parts[1]
+            if q.exists():
+                with q.open() as f:
+                    old_subs = json.loads(f.read())
+                for subscriber in old_subs:
+                    if not ( subscriber in new_subs ):
+                        new_subs.append(subscriber)
+            f = open(str(q), 'w')
+            f.write(json.dumps(new_subs))
+            f.close()
+    '''
+    Check the possible new subsciption removals and take care of them.
+    '''
+    p = Path('import')
+    rmsubs = list(p.glob('**/*.rmsubs'))
+    if len(rmsubs) > 0:
+        for rmsub in rmsubs:
+            with rmsub.open() as f:
+                new_rmsubs = json.loads(f.read())
+            os.remove(str(rmsub))
+            sub = str(rmsub.parts[1]).split('.')[0] + '.subs'
+            q = Path('export')
+            q = q / sub
+            if q.exists():
+                with q.open() as f:
+                    old_subs = json.loads(f.read())
+                for subscriber in new_rmsubs:
+                    if subscriber in old_subs:
+                        old_subs.remove(subscriber)
+                if len(old_subs) == 0:
+                    os.remove(str(q))
+                else:
+                    f = open(str(q), 'w')
+                    f.write(json.dumps(old_subs))
+                    f.close()
+    '''
+    Check for new voyage plans being uploaded and send ack if required.
+    Also send the plans further is an active subscription exists.
+    '''
     p = Path('import')
     uvids = list(p.glob('**/*.uvid'))
     for item in uvids:
@@ -119,4 +169,10 @@ def vessel_connects():
     for item in rtzs:
         shutil.copyfile(str(item), 'export/' + item.parts[1])
         os.remove(str(item)) 
+    '''
+    Check for new areas being uploaded and send ack if required.
+    '''
+    '''
+    Check for new text messages being uploaded and send ack if required.
+    '''
 

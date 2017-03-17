@@ -30,20 +30,31 @@ newvoyageuvid=hostsettings.newvoyageuvid
 newvoyageuvid2=hostsettings.newvoyageuvid2
 vis2_uvid=hostsettings.vis2_uvid
 
-voyageplan='\
-<?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
-    <routeInfo routeName="Test-Mini-1" routeStatus="7"/>\
-        <waypoints>\
-                <waypoint id="1">\
-                        <position lat="53.5123" lon="8.11998"/>\
-                </waypoint>\
-                <waypoint id="15">\
-                        <position lat="53.0492" lon="8.87731"/>\
-                </waypoint>\
-        </waypoints>\
-</route>\
-'
+voyageplan='''<?xml version="1.0"?>
+<route version="1.1" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  </routeInfo>
+  <waypoints>
+    <waypoint id="1" name="Hango" radius="0.800000">
+      <position lat="59.811700" lon="22.935567"/>
+    </waypoint>
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.758817" lon="23.020267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <scheduleElement etd="2017-02-15T10:00:00Z" waypointId="1"/>
+        <scheduleElement eta="2017-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
 class TestVIS_004(BaseTestCase):
     """ VIS-004 tests """

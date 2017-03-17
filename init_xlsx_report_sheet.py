@@ -2244,27 +2244,27 @@ VIS005sheet.set_row(row, 30)
 VIS005sheet.write(row, 1, "Description", bold)
 VIS005sheet.merge_range(row, 2, row, 3, "", normal)
 VIS005sheet.write(row, 4, "Total:", normalright)
-VIS005sheet.write(row, 5, '=IF(F40>0,"NOT EXECUTED",IF(F39>0,"FAIL","PASS"))', normalright)
+VIS005sheet.write(row, 5, '=IF(F41>0,"NOT EXECUTED",IF(F40>0,"FAIL","PASS"))', normalright)
 
 row = 38
 VIS005sheet.write(row, 1, "Preconditions", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Pass:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F42:F43, "PASS")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F43:F45, "PASS")', normalright)
 
 row = 39
 VIS005sheet.write(row, 1, "Dependencies", bold)
 VIS005sheet.write(row, 2, "", normal)
 VIS005sheet.write(row, 4, "Fail:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F42:F43, "FAIL")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F43:F45, "FAIL")', normalright)
 
 row = 40
 VIS005sheet.write(row, 4, "Not executed:", normalright)
-VIS005sheet.write(row, 5, '=COUNTIF(F42:F43, "NOT EXECUTED")', normalright)
+VIS005sheet.write(row, 5, '=COUNTIF(F43:F45, "NOT EXECUTED")', normalright)
 
 worksheet.write(VIS_005_3_row, VIS_005_3_col, '=$VIS005.F38', variantbold)
 
-VIS005sheet.add_table('A41:G43')
+VIS005sheet.add_table('A42:G45')
 row = 41
 VIS005sheet.write(row, 0, "Step#", boldcenterwhite)
 VIS005sheet.write(row, 1, "Test Step", boldcenterwhite)
