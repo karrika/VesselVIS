@@ -36,7 +36,7 @@ class VoyagePlan(Model):
 
         :param dikt: A dict.
         :type: dict
-        :return: The voyagePlan of this VoyagePlan.
+        :return: The VoyagePlan of this VoyagePlan.
         :rtype: VoyagePlan
         """
         return deserialize_model(dikt, cls)
@@ -45,6 +45,7 @@ class VoyagePlan(Model):
     def route(self) -> str:
         """
         Gets the route of this VoyagePlan.
+        A voyage plan in RTZ XML format
 
         :return: The route of this VoyagePlan.
         :rtype: str
@@ -55,12 +56,11 @@ class VoyagePlan(Model):
     def route(self, route: str):
         """
         Sets the route of this VoyagePlan.
+        A voyage plan in RTZ XML format
 
         :param route: The route of this VoyagePlan.
         :type route: str
         """
-        if route is None:
-            raise ValueError("Invalid value for `route`, must not be `None`")
 
         self._route = route
 

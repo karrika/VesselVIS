@@ -5,7 +5,6 @@ from .base_model_ import Model
 from datetime import date, datetime
 from typing import List, Dict
 from ..util import deserialize_model
-import re
 
 
 class DeliveryAck(Model):
@@ -72,7 +71,7 @@ class DeliveryAck(Model):
 
         :param dikt: A dict.
         :type: dict
-        :return: The deliveryAck of this DeliveryAck.
+        :return: The DeliveryAck of this DeliveryAck.
         :rtype: DeliveryAck
         """
         return deserialize_model(dikt, cls)
@@ -81,7 +80,7 @@ class DeliveryAck(Model):
     def id(self) -> str:
         """
         Gets the id of this DeliveryAck.
-        Id for the ACK
+        Acknowledgement ID
 
         :return: The id of this DeliveryAck.
         :rtype: str
@@ -92,13 +91,11 @@ class DeliveryAck(Model):
     def id(self, id: str):
         """
         Sets the id of this DeliveryAck.
-        Id for the ACK
+        Acknowledgement ID
 
         :param id: The id of this DeliveryAck.
         :type id: str
         """
-        if id is None:
-            raise ValueError("Invalid value for `id`, must not be `None`")
 
         self._id = id
 
@@ -106,7 +103,7 @@ class DeliveryAck(Model):
     def reference_id(self) -> str:
         """
         Gets the reference_id of this DeliveryAck.
-        Reference to delivered message (URN)
+        Reference ID such as a UVID, TXT id or area message id
 
         :return: The reference_id of this DeliveryAck.
         :rtype: str
@@ -117,15 +114,11 @@ class DeliveryAck(Model):
     def reference_id(self, reference_id: str):
         """
         Sets the reference_id of this DeliveryAck.
-        Reference to delivered message (URN)
+        Reference ID such as a UVID, TXT id or area message id
 
         :param reference_id: The reference_id of this DeliveryAck.
         :type reference_id: str
         """
-        if reference_id is None:
-            raise ValueError("Invalid value for `reference_id`, must not be `None`")
-        if reference_id is not None and not re.search('', reference_id):
-            raise ValueError("Invalid value for `reference_id`, must be a follow pattern or equal to `/urn:mrn:/`")
 
         self._reference_id = reference_id
 
@@ -133,7 +126,7 @@ class DeliveryAck(Model):
     def time_of_delivery(self) -> datetime:
         """
         Gets the time_of_delivery of this DeliveryAck.
-        Time of delivery
+        Time of Delivery of message to consumer
 
         :return: The time_of_delivery of this DeliveryAck.
         :rtype: datetime
@@ -144,13 +137,11 @@ class DeliveryAck(Model):
     def time_of_delivery(self, time_of_delivery: datetime):
         """
         Sets the time_of_delivery of this DeliveryAck.
-        Time of delivery
+        Time of Delivery of message to consumer
 
         :param time_of_delivery: The time_of_delivery of this DeliveryAck.
         :type time_of_delivery: datetime
         """
-        if time_of_delivery is None:
-            raise ValueError("Invalid value for `time_of_delivery`, must not be `None`")
 
         self._time_of_delivery = time_of_delivery
 
@@ -158,7 +149,7 @@ class DeliveryAck(Model):
     def from_id(self) -> str:
         """
         Gets the from_id of this DeliveryAck.
-        Identity of source (sender) of message that have been delivered (URN)
+        Identity O (organisation) of the message sender in MRN format
 
         :return: The from_id of this DeliveryAck.
         :rtype: str
@@ -169,15 +160,11 @@ class DeliveryAck(Model):
     def from_id(self, from_id: str):
         """
         Sets the from_id of this DeliveryAck.
-        Identity of source (sender) of message that have been delivered (URN)
+        Identity O (organisation) of the message sender in MRN format
 
         :param from_id: The from_id of this DeliveryAck.
         :type from_id: str
         """
-        if from_id is None:
-            raise ValueError("Invalid value for `from_id`, must not be `None`")
-        if from_id is not None and not re.search('', from_id):
-            raise ValueError("Invalid value for `from_id`, must be a follow pattern or equal to `/urn:mrn:/`")
 
         self._from_id = from_id
 
@@ -185,7 +172,7 @@ class DeliveryAck(Model):
     def from_name(self) -> str:
         """
         Gets the from_name of this DeliveryAck.
-        Friendly name of sender
+        \"Identity O (organisation) of the message sender in full name
 
         :return: The from_name of this DeliveryAck.
         :rtype: str
@@ -196,13 +183,11 @@ class DeliveryAck(Model):
     def from_name(self, from_name: str):
         """
         Sets the from_name of this DeliveryAck.
-        Friendly name of sender
+        \"Identity O (organisation) of the message sender in full name
 
         :param from_name: The from_name of this DeliveryAck.
         :type from_name: str
         """
-        if from_name is None:
-            raise ValueError("Invalid value for `from_name`, must not be `None`")
 
         self._from_name = from_name
 
@@ -210,7 +195,7 @@ class DeliveryAck(Model):
     def to_id(self) -> str:
         """
         Gets the to_id of this DeliveryAck.
-        Identity of target (recipient) of message delivery (URN)
+        Identity O (organisation) of the message receiver in MRN format
 
         :return: The to_id of this DeliveryAck.
         :rtype: str
@@ -221,15 +206,11 @@ class DeliveryAck(Model):
     def to_id(self, to_id: str):
         """
         Sets the to_id of this DeliveryAck.
-        Identity of target (recipient) of message delivery (URN)
+        Identity O (organisation) of the message receiver in MRN format
 
         :param to_id: The to_id of this DeliveryAck.
         :type to_id: str
         """
-        if to_id is None:
-            raise ValueError("Invalid value for `to_id`, must not be `None`")
-        if to_id is not None and not re.search('', to_id):
-            raise ValueError("Invalid value for `to_id`, must be a follow pattern or equal to `/urn:mrn:/`")
 
         self._to_id = to_id
 
@@ -237,7 +218,7 @@ class DeliveryAck(Model):
     def to_name(self) -> str:
         """
         Gets the to_name of this DeliveryAck.
-        Friendly name of recipient
+        IIdentity O (organisation) of the message receiver in full name
 
         :return: The to_name of this DeliveryAck.
         :rtype: str
@@ -248,13 +229,11 @@ class DeliveryAck(Model):
     def to_name(self, to_name: str):
         """
         Sets the to_name of this DeliveryAck.
-        Friendly name of recipient
+        IIdentity O (organisation) of the message receiver in full name
 
         :param to_name: The to_name of this DeliveryAck.
         :type to_name: str
         """
-        if to_name is None:
-            raise ValueError("Invalid value for `to_name`, must not be `None`")
 
         self._to_name = to_name
 
@@ -262,6 +241,7 @@ class DeliveryAck(Model):
     def ack_result(self) -> str:
         """
         Gets the ack_result of this DeliveryAck.
+        Descriptive acknowledgement message
 
         :return: The ack_result of this DeliveryAck.
         :rtype: str
@@ -272,12 +252,11 @@ class DeliveryAck(Model):
     def ack_result(self, ack_result: str):
         """
         Sets the ack_result of this DeliveryAck.
+        Descriptive acknowledgement message
 
         :param ack_result: The ack_result of this DeliveryAck.
         :type ack_result: str
         """
-        if ack_result is None:
-            raise ValueError("Invalid value for `ack_result`, must not be `None`")
 
         self._ack_result = ack_result
 

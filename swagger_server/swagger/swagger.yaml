@@ -1,40 +1,175 @@
 ---
 swagger: "2.0"
 info:
-  description: "Voyage Information Service API facing SeaSWIM through SSC exposing\
-    \ interfaces to SeaSWIM stakeholders"
-  version: "1.0.0"
+  description: "Changes in 1.1.0 is; Update of descriptions; GetVoyagePlanResponse;\
+    \ VoyagePlan"
+  version: "1.1.0"
   title: "STM Voyage Information Service SeaSWIM API"
-  termsOfService: "http://helloreverb.com/terms/"
-  contact:
-    name: "SMA"
-    url: "http://sjofartsverket.se"
-    email: "per.lofbom@sjofartsverket.se"
-  license:
-    name: "SMA"
-    url: "http://opensource.org"
-host: "ec2-35-157-50-165.eu-central-1.compute.amazonaws.com"
+host: "localhost"
 basePath: "/"
 schemes:
+- "http"
 - "https"
-consumes:
-- "application/json"
-produces:
-- "application/json"
 paths:
-  /voyagePlans:
-    get:
-      description: "Returns active VoyagePlans"
-      operationId: "get_voyage_plans"
+  /acknowledgement:
+    post:
+      tags:
+      - "Acknowledgement"
+      summary: ""
+      description: "Endpoint for receipt of acknowledgement of uploaded message"
+      operationId: "acknowledgement"
+      consumes:
+      - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
+      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
+      parameters:
+      - in: "body"
+        name: "deliveryAck"
+        description: "Acknowledgement"
+        required: true
+        schema:
+          $ref: "#/definitions/DeliveryAck"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Unauthorized (the user cannot be authenticated in the Identity\
+            \ Registry)"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal Server Error"
+        default:
+          description: "unexpected error"
+      x-swagger-router-controller: "swagger_server.controllers.acknowledgement_controller"
+  /area:
+    post:
+      tags:
+      - "Area"
+      summary: ""
+      description: "Upload area message to VIS from other services i.e. Route Check\
+        \ service as an informational message"
+      operationId: "upload_area"
+      consumes:
+      - "text/xml"
+      - "text/plain"
+      - "text/javascript"
+      - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
+      parameters:
+      - in: "body"
+        name: "area"
+        description: "Uploaded area message in S124 format to consumer"
+        required: true
+        schema:
+          type: "string"
+      - name: "deliveryAckEndPoint"
+        in: "query"
+        description: "Acknowledgement expected. Base URL for VIS as in Service Registry.\
+          \ An ack is send back to this url when the private application retrieve\
+          \ the message from the VIS "
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Unauthorized (the user cannot be auhtenticated in the Identity\
+            \ Registry)"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal Server Error"
+        default:
+          description: "unexpected error"
+      x-swagger-router-controller: "swagger_server.controllers.area_controller"
+  /textMessage:
+    post:
+      tags:
+      - "TextMessage"
+      summary: ""
+      description: "Upload text message to VIS from other services i.e. Route Optimization\
+        \ service."
+      operationId: "upload_text_message"
+      consumes:
+      - "text/xml"
+      - "text/plain"
+      - "text/javascript"
+      - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
+      parameters:
+      - in: "body"
+        name: "textMessageObject"
+        description: "Uploaded Text message to consumer"
+        required: true
+        schema:
+          type: "string"
+      - name: "deliveryAckEndPoint"
+        in: "query"
+        description: "Acknowledgement expected. Base URL for VIS as in Service Registry.\
+          \ An ack is send back to this url when the private application retrieve\
+          \ the message from the VIS "
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Unauthorized (the user cannot be auhtenticated in the Identity\
+            \ Registry)"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal Server Error"
+        default:
+          description: "unexpected error"
+      x-swagger-router-controller: "swagger_server.controllers.text_message_controller"
+  /voyagePlans:
+    get:
+      tags:
+      - "VoyagePlan"
+      summary: ""
+      description: "Returns active VoyagePlans"
+      operationId: "get_voyage_plans"
+      consumes: []
+      produces:
+      - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
       parameters:
       - name: "uvid"
         in: "query"
         description: "Unique identity (URN) of a voyageplan"
         required: false
         type: "string"
-        pattern: "urn:mrn:"
       - name: "routeStatus"
         in: "query"
         description: "Status of a route for a voyageplan: 1-Original   2-Planned_for_voyage\
@@ -44,9 +179,9 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Successful"
+          description: "OK"
           schema:
-            $ref: "#/definitions/GetVPResponseObject"
+            $ref: "#/definitions/GetVoyagePlanResponse"
         400:
           description: "Bad Request"
         401:
@@ -60,119 +195,51 @@ paths:
           description: "Internal Server Error"
         default:
           description: "unexpected error"
-          schema:
-            $ref: "#/definitions/errorModel"
-      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+      x-swagger-router-controller: "swagger_server.controllers.voyage_plan_controller"
     post:
+      tags:
+      - "VoyagePlan"
+      summary: ""
       description: "Upload VoyagePlan to VIS from other services i.e. Route Optimization\
         \ service."
       operationId: "upload_voyage_plan"
+      consumes:
+      - "text/xml"
+      - "text/plain"
+      - "text/javascript"
+      - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
       parameters:
-      - name: "uvid"
-        in: "query"
-        description: "UVID of VoyagePlan to upload."
-        required: true
-        type: "string"
-        pattern: "urn:mrn:"
-      - name: "deliveryAckEndPoint"
-        in: "query"
-        description: "Acknowledgement required, optionally an URL could be provided\
-          \ to send acknowledgment."
-        required: false
-        type: "string"
       - in: "body"
         name: "voyagePlan"
-        description: "Voyage Plan to add to VIS message db"
+        description: "Voyage Plan in RTZ format"
         required: true
         schema:
-          $ref: "#/definitions/voyagePlan"
-      responses:
-        200:
-          description: "Successful"
-          schema:
-            $ref: "#/definitions/responseObj"
-        400:
-          description: "Bad Request"
-        401:
-          description: "Unauthorized (the user cannot be auhtenticated in the Identity\
-            \ Registry)"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-        default:
-          description: "unexpected error"
-          schema:
-            $ref: "#/definitions/errorModel"
-      x-swagger-router-controller: "swagger_server.controllers.default_controller"
-  /textMessage:
-    post:
-      description: "Upload text message to VIS from other services i.e. Route Optimization\
-        \ service."
-      operationId: "upload_text_message"
-      produces:
-      - "application/json"
-      parameters:
+          type: "string"
       - name: "deliveryAckEndPoint"
         in: "query"
-        description: "Acknowledgement required, optionally an URL could be provided\
-          \ to send acknowledgment."
+        description: "Acknowledgement expected. Base URL for VIS as in Service Registry.\
+          \ An ack is send back to this url when the private application retrieve\
+          \ the message from the VIS "
         required: false
         type: "string"
-      - in: "body"
-        name: "textMessageObject"
-        description: "Text message to add to VIS message db for delivery to STM Onboard\
-          \ system"
-        required: true
-        schema:
-          $ref: "#/definitions/textMessageObject"
-      responses:
-        200:
-          description: "Successful"
-          schema:
-            $ref: "#/definitions/responseObj"
-        400:
-          description: "Bad Request"
-        401:
-          description: "Unauthorized (the user cannot be auhtenticated in the Identity\
-            \ Registry)"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-        default:
-          description: "unexpected error"
-          schema:
-            $ref: "#/definitions/errorModel"
-      x-swagger-router-controller: "swagger_server.controllers.default_controller"
-  /area:
-    post:
-      description: "Upload area message to VIS from other services i.e. Route Check\
-        \ service as an informational message"
-      operationId: "upload_area"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "deliveryAckEndPoint"
+      - name: "callbackEndpoint"
         in: "query"
-        description: "Acknowledgement required, optionally an URL could be provided\
-          \ to send acknowledgment."
+        description: "Callback expected. Base url of the vis instance as in the Service\
+          \ Registry. The callback response will be sended to the voyagePlans endPoint\
+          \ of the instance"
         required: false
         type: "string"
-      - in: "body"
-        name: "area"
-        description: "Area message to add to VIS message db for delivery to STM Onboard\
-          \ system as additional information"
-        required: true
-        schema:
-          $ref: "#/definitions/S124DataSet"
       responses:
         200:
-          description: "Successful"
-          schema:
-            $ref: "#/definitions/responseObj"
+          description: "OK"
         400:
           description: "Bad Request"
         401:
@@ -184,34 +251,81 @@ paths:
           description: "Internal Server Error"
         default:
           description: "unexpected error"
-          schema:
-            $ref: "#/definitions/errorModel"
-      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+      x-swagger-router-controller: "swagger_server.controllers.voyage_plan_controller"
   /voyagePlans/subscription:
-    post:
-      description: "Request subscription for active Voyage Plan from other services\
-        \ i.e. Enhanced Monitoring"
-      operationId: "subscribe_to_voyage_plan"
+    get:
+      tags:
+      - "VoyagePlan"
+      summary: ""
+      description: "Retrieve a list of subcribed UVID for the callBackEndPoint and\
+        \ Organization"
+      operationId: "get_subscription_to_voyage_plans"
+      consumes: []
       produces:
       - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
       parameters:
       - name: "callbackEndpoint"
         in: "query"
-        description: "An endpoint (URI) specifying the address where the subscribed\
-          \ data is to be posted"
+        description: "Callback expected. Base url of the vis instance as in the Service\
+          \ Registry. The callback response will be sended to the voyagePlans endPoint\
+          \ of the instance"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/GetSubscriptionResponse"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Unauthorized (the user cannot be authenticated in the Identity\
+            \ Registry)"
+        403:
+          description: "Forbidden (Not authorized request forwarded to operator)"
+        404:
+          description: "Not Found (the requested Voyage Plan is not found)"
+        500:
+          description: "Internal Server Error"
+        default:
+          description: "unexpected error"
+      x-swagger-router-controller: "swagger_server.controllers.voyage_plan_controller"
+    post:
+      tags:
+      - "VoyagePlan"
+      summary: ""
+      description: "Request subscription for active Voyage Plan from other services\
+        \ i.e. Enhanced Monitoring"
+      operationId: "subscribe_to_voyage_plan"
+      consumes: []
+      produces:
+      - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
+      parameters:
+      - name: "callbackEndpoint"
+        in: "query"
+        description: "Callback expected. Base url of the vis instance as in the Service\
+          \ Registry. The callback response will be sended to the voyagePlans endPoint\
+          \ of the instance"
         required: true
         type: "string"
       - name: "uvid"
         in: "query"
-        description: "Unique identity (URN) of a voyageplan"
+        description: "Unique identity (URN) of a voyageplan. If no uvid is provided,\
+          \ the subcription is to all the active uvid that your organization has access\
+          \ to"
         required: false
         type: "string"
-        pattern: "urn:mrn:"
       responses:
         200:
-          description: "Successful"
-          schema:
-            $ref: "#/definitions/responseObj"
+          description: "OK"
         400:
           description: "Bad Request"
         401:
@@ -225,20 +339,26 @@ paths:
           description: "Internal Server Error"
         default:
           description: "unexpected error"
-          schema:
-            $ref: "#/definitions/errorModel"
-      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+      x-swagger-router-controller: "swagger_server.controllers.voyage_plan_controller"
     delete:
+      tags:
+      - "VoyagePlan"
+      summary: ""
       description: "Remove subscription for active Voyage Plan from other services\
         \ i.e. Enhanced Monitoring"
       operationId: "remove_voyage_plan_subscription"
+      consumes: []
       produces:
       - "application/json"
+      - "text/json"
+      - "application/xml"
+      - "text/xml"
       parameters:
       - name: "callbackEndpoint"
         in: "query"
-        description: "An endpoint (URI) specifying the address where the subscribed\
-          \ data is to be posted"
+        description: "Callback expected. Base url of the vis instance as in the Service\
+          \ Registry. The callback response will be sended to the voyagePlans endPoint\
+          \ of the instance"
         required: true
         type: "string"
       - name: "uvid"
@@ -246,12 +366,9 @@ paths:
         description: "Unique identity (URN) of a voyageplan"
         required: false
         type: "string"
-        pattern: "urn:mrn:"
       responses:
         200:
-          description: "Successful"
-          schema:
-            $ref: "#/definitions/responseObj"
+          description: "OK"
         400:
           description: "Bad Request"
         401:
@@ -265,132 +382,64 @@ paths:
           description: "Internal Server Error"
         default:
           description: "unexpected error"
-          schema:
-            $ref: "#/definitions/errorModel"
-      x-swagger-router-controller: "swagger_server.controllers.default_controller"
-  /acknowledgement:
-    post:
-      description: "Endpoint for receipt of acknowledgements"
-      operationId: "acknowledgement"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "deliveryAck"
-        description: "Acknowledgement "
-        required: true
-        schema:
-          $ref: "#/definitions/deliveryAck"
-      responses:
-        200:
-          description: "Successful"
-          schema:
-            $ref: "#/definitions/responseObj"
-        400:
-          description: "Bad Request"
-        401:
-          description: "Unauthorized (the user cannot be authenticated in the Identity\
-            \ Registry)"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-        default:
-          description: "unexpected error"
-          schema:
-            $ref: "#/definitions/errorModel"
-      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+      x-swagger-router-controller: "swagger_server.controllers.voyage_plan_controller"
 definitions:
-  voyagePlan:
+  DeliveryAck:
     type: "object"
-    required:
-    - "route"
     properties:
-      route:
+      id:
         type: "string"
-  GetVPResponseObject:
+        description: "Acknowledgement ID"
+      referenceId:
+        type: "string"
+        description: "Reference ID such as a UVID, TXT id or area message id"
+      timeOfDelivery:
+        type: "string"
+        format: "date-time"
+        description: "Time of Delivery of message to consumer"
+      fromId:
+        type: "string"
+        description: "Identity O (organisation) of the message sender in MRN format"
+      fromName:
+        type: "string"
+        description: "\"Identity O (organisation) of the message sender in full name"
+      toId:
+        type: "string"
+        description: "Identity O (organisation) of the message receiver in MRN format"
+      toName:
+        type: "string"
+        description: "IIdentity O (organisation) of the message receiver in full name"
+      ackResult:
+        type: "string"
+        description: "Descriptive acknowledgement message"
+    description: "Acknowledgement message that incoming (uploaded) message has been\
+      \ delivered to consumer"
+  GetVoyagePlanResponse:
     type: "object"
-    required:
-    - "lastInteractionTime"
     properties:
       lastInteractionTime:
         type: "string"
         format: "date-time"
-      voyagePlan:
+        description: "Last interaction time with private application. Can indicate\
+          \ the current connectivity on private side of VIS"
+      voyagePlans:
         type: "array"
+        description: "Array of voyage plans in RTZ XML format"
         items:
-          $ref: "#/definitions/voyagePlan"
-  responseObj:
+          $ref: "#/definitions/VoyagePlan"
+    description: "Response object from GET voyagePlans. Can contain 0 or several (0..*)\
+      \ voyage plans"
+  VoyagePlan:
     type: "object"
-    required:
-    - "body"
     properties:
-      body:
+      route:
         type: "string"
-  textMessageObject:
+        description: "A voyage plan in RTZ XML format"
+    description: "A voyage plan in RTZ XML format"
+  GetSubscriptionResponse:
     type: "object"
-    required:
-    - "textMessage"
     properties:
-      textMessage:
+      DataId:
         type: "string"
-  S124DataSet:
-    type: "object"
-    required:
-    - "dataSet"
-    properties:
-      dataSet:
-        type: "string"
-  deliveryAck:
-    type: "object"
-    required:
-    - "ackResult"
-    - "fromId"
-    - "fromName"
-    - "id"
-    - "referenceId"
-    - "timeOfDelivery"
-    - "toId"
-    - "toName"
-    properties:
-      id:
-        type: "string"
-        description: "Id for the ACK"
-      referenceId:
-        type: "string"
-        description: "Reference to delivered message (URN)"
-        pattern: "urn:mrn:"
-      timeOfDelivery:
-        type: "string"
-        format: "date-time"
-        description: "Time of delivery"
-      fromId:
-        type: "string"
-        description: "Identity of source (sender) of message that have been delivered\
-          \ (URN)"
-        pattern: "urn:mrn:"
-      fromName:
-        type: "string"
-        description: "Friendly name of sender"
-      toId:
-        type: "string"
-        description: "Identity of target (recipient) of message delivery (URN)"
-        pattern: "urn:mrn:"
-      toName:
-        type: "string"
-        description: "Friendly name of recipient"
-      ackResult:
-        type: "string"
-  errorModel:
-    type: "object"
-    required:
-    - "code"
-    - "errorModelId"
-    - "message"
-    properties:
-      errorModelId:
-        type: "integer"
-      code:
-        type: "integer"
-      message:
-        type: "string"
+        description: "Unique identity (URN) of a voyageplan"
+    description: "DataId object containing the UVID in URN format"
