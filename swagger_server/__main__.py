@@ -6,6 +6,7 @@ import ssl
 from pathlib import Path
 from pathlib import PurePath
 import os
+from flask import request
 
 
 if __name__ == '__main__':
@@ -21,4 +22,4 @@ if __name__ == '__main__':
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'Voyage Information Service API facing SeaSWIM through SSC exposing interfaces to SeaSWIM stakeholders'})
-    app.run(host='ec2-35-157-50-165.eu-central-1.compute.amazonaws.com', port=443, ssl_context=context)
+    app.run(host='localhost', port=8000)

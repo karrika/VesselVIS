@@ -16,12 +16,12 @@ class TestAreaController(BaseTestCase):
 
         
         """
-        area = 'area_example'
-        query_string = [('deliveryAckEndPoint', 'deliveryAckEndPoint_example')]
+        area = 'Hello World!'
+        query_string = [('deliveryAckEndPoint', 'https://localhost:8002')]
         response = self.client.open('/area',
                                     method='POST',
                                     data=json.dumps(area),
-                                    content_type='text/xml',
+                                    content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 

@@ -1,10 +1,12 @@
 import connexion
 from swagger_server.models.get_subscription_response import GetSubscriptionResponse
 from swagger_server.models.get_voyage_plan_response import GetVoyagePlanResponse
+from swagger_server.models.voyage_plan import VoyagePlan
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
 from ..util import deserialize_date, deserialize_datetime
+
 import json
 from pathlib import Path
 import os
@@ -60,7 +62,6 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
     """
     return 'do some magic!'
 
-
 def get_voyage_plans(uvid=None, routeStatus=None):
     """
     
@@ -83,21 +84,18 @@ def get_voyage_plans(uvid=None, routeStatus=None):
         else:
             return 'Voyage plan ' + uvid + ' not found', 404
     with uvids[0].open() as f: data = json.loads(f.read())
-    f.close()
     if routeStatus is not None:
         if routeStatus != data['routeStatus']:
             return 'Voyage plan with routeStatus' + routeStatus + ' not found', 404
     if not check_acl(str(uvids[0]).split('/')[1].split('.')[0]):
         return 'Forbidden', 403
-    ret = GetVoyagePlanResponse()
     vp = VoyagePlan()
     f = open('export/' + data['route'], 'r')
     vp.route = f.read()
     f.close()
     vps = [ vp ]
-    ret.voyage_plans = vps
-    ret.last_interaction_time = '2017-02-15T10:35:00Z'
-    return ret
+    timestamp = '2017-02-15T10:35:00Z'
+    return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
 
 
 def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
@@ -170,7 +168,6 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         vp = 'all'
     else:
         vp = uvid
-        ret.body = 'Subscription for ' + uvid + ' sent'
         p2 = Path('export')
         uvids = list(p2.glob('**/' + uvid + '.uvid'))
         if len(uvids) == 0:
@@ -213,12 +210,10 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        voyagePlan = VoyagePlan.from_dict(connexion.request.get_json())
     routeStatus = '1'
     RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
     rtz = io.StringIO()
-    rtz.write(RE_XML_ENCODING.sub("", voyagePlan.route, count=1))
+    rtz.write(RE_XML_ENCODING.sub("", voyagePlan, count=1))
     rtz.seek(0)
     doc = etree.parse(rtz)
     root = doc.getroot()
@@ -242,11 +237,12 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
             else:
                 ret.body = 'Unsupported route format'
                 return ret, 400
+    uvid='parse:from:rtz'
     data = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))
     f.close()
-    f = open('import/' + uvid + '.rtz', 'wb')
+    f = open('import/' + uvid + '.rtz', 'w')
     f.write(voyagePlan)
     f.close()
     if deliveryAckEndPoint is not None:
@@ -258,16 +254,18 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     Now the vessel will need to process the uploaded voyagePlan and send an ack.
     """
     os.remove('import/' + uvid + '.rtz')
-    f = open('export/' + uvid + '.rtz', 'wb')
+    f = open('export/' + uvid + '.rtz', 'w')
     f.write(voyagePlan)
     f.close()
     vp = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': '1' }
     f = open('export/' + uvid + '.uvid', 'w')
     f.write(json.dumps(vp))
     f.close()
+    """
     if deliveryAckEndPoint is not None:
         os.remove('import/' + uvid + '.ack')
         send_ack(deliveryAckEndPoint)
+    """
 
     return 'OK'
 

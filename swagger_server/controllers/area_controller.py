@@ -10,6 +10,10 @@ import requests
 from lxml import etree
 import io
 import re
+from . import rtz10
+from . import rtzstm11
+from . import rtzstm20
+
 
 def client_mrn():
     """
@@ -44,23 +48,22 @@ def check_acl(uvid):
     return False
 
 
-def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
+def upload_area(area, deliveryAckEndPoint=None):
     """
     
-    Upload text message to VIS from other services i.e. Route Optimization service.
-    :param textMessageObject: Uploaded Text message to consumer
-    :type textMessageObject: str
+    Upload area message to VIS from other services i.e. Route Check service as an informational message
+    :param area: Uploaded area message in S124 format to consumer
+    :type area: str
     :param deliveryAckEndPoint: Acknowledgement expected. Base URL for VIS as in Service Registry. An ack is send back to this url when the private application retrieve the message from the VIS 
     :type deliveryAckEndPoint: str
 
     :rtype: None
     """
-    f = open('import/' + client_mrn() + ':1' + '.txt', 'w')
-    f.write(textMessageObject)
+    f = open('import/' + client_mrn() + ':2' + '.S124', 'w')
+    f.write(area)
     f.close()
     if deliveryAckEndPoint is not None:
-        f = open('import/' + client_mrn() + ':1' + '.ack', 'w')
+        f = open('import/' + client_mrn() + ':2' + '.ack', 'w')
         f.write(deliveryAckEndPoint)
         f.close()
     return 'OK'
-

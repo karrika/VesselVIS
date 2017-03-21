@@ -20,15 +20,8 @@ paths:
       operationId: "acknowledgement"
       consumes:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
-      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
       parameters:
       - in: "body"
         name: "deliveryAck"
@@ -60,18 +53,9 @@ paths:
         \ service as an informational message"
       operationId: "upload_area"
       consumes:
-      - "text/xml"
-      - "text/plain"
-      - "text/javascript"
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
       parameters:
       - in: "body"
         name: "area"
@@ -110,18 +94,9 @@ paths:
         \ service."
       operationId: "upload_text_message"
       consumes:
-      - "text/xml"
-      - "text/plain"
-      - "text/javascript"
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
       parameters:
       - in: "body"
         name: "textMessageObject"
@@ -161,9 +136,6 @@ paths:
       consumes: []
       produces:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
       parameters:
       - name: "uvid"
         in: "query"
@@ -204,18 +176,9 @@ paths:
         \ service."
       operationId: "upload_voyage_plan"
       consumes:
-      - "text/xml"
-      - "text/plain"
-      - "text/javascript"
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
       parameters:
       - in: "body"
         name: "voyagePlan"
@@ -263,9 +226,6 @@ paths:
       consumes: []
       produces:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
       parameters:
       - name: "callbackEndpoint"
         in: "query"
@@ -305,9 +265,6 @@ paths:
       consumes: []
       produces:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
       parameters:
       - name: "callbackEndpoint"
         in: "query"
@@ -350,9 +307,6 @@ paths:
       consumes: []
       produces:
       - "application/json"
-      - "text/json"
-      - "application/xml"
-      - "text/xml"
       parameters:
       - name: "callbackEndpoint"
         in: "query"
