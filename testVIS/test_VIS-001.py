@@ -25,15 +25,14 @@ trustchain=hostsettings.trustchain
 
 url=hostsettings.url
 callbackurl=hostsettings.callbackurl
-voyageuvid=hostsettings.voyageuvid
-newvoyageuvid=hostsettings.newvoyageuvid
+newvoyageuvid='urn:mrn:stm:voyage:id:001:001'
 vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -59,7 +58,7 @@ voyageplan_in_the_past='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2016-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:002" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2016-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -351,7 +350,7 @@ VIS001sheet.write(VIS_001_00_row, VIS_001_00_col, "PASS", boldcenter)
 
     def test_VIS_001_01(self):
         """
-        VIS-001-1 - VIS-2: Request (get) voyage plan with chosen UVID from VIS-1
+        VIS-001-1 - VIS-3: Request (get) voyage plan with chosen UVID from VIS-1
 
         
         """
@@ -377,7 +376,7 @@ VIS001sheet.write(VIS_001_01_row, VIS_001_01_col - 1, "''' + response.reason + '
 
     def test_VIS_001_02(self):
         """
-        VIS-001-2 - VIS-2: Subscribe to voyage plan with chosen UVID from VIS-1
+        VIS-001-2 - VIS-3: Subscribe to voyage plan with chosen UVID from VIS-1
 
         
         """
@@ -410,11 +409,8 @@ VIS001sheet.write(VIS_001_02_row, VIS_001_02_col - 1, "''' + response.reason + '
         
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -427,12 +423,13 @@ VIS001sheet.write(VIS_001_03_row, VIS_001_03_col - 1, "''' + response.reason + '
         f = open('../create_worksheet.py', 'a')
         f.write(report)
         f.close()
+        print(response.text)
 
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_04(self):
         """
-        VIS-001-4 - VIS-2: Request voyage plan with chosen UVID from VIS-1
+        VIS-001-4 - VIS-3: Request voyage plan with chosen UVID from VIS-1
 
         
         """

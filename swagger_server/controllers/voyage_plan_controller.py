@@ -17,6 +17,7 @@ import re
 from . import rtz10
 from . import rtzstm11
 from . import rtzstm20
+import sys
 
 def client_mrn():
     """
@@ -210,10 +211,17 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
     :rtype: None
     """
+    uvid='parse:from:rtz'
+    f = open('import/' + uvid + '.rtz', 'w')
+    f.write(voyagePlan)
+    f.close()
+    f = open('import/' + uvid + '.rtz', 'r')
+    vp = f.read()
+    f.close()
     routeStatus = '1'
     RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
     rtz = io.StringIO()
-    rtz.write(RE_XML_ENCODING.sub("", voyagePlan, count=1))
+    rtz.write(RE_XML_ENCODING.sub("", vp, count=1))
     rtz.seek(0)
     doc = etree.parse(rtz)
     root = doc.getroot()
@@ -242,9 +250,6 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))
     f.close()
-    f = open('import/' + uvid + '.rtz', 'w')
-    f.write(voyagePlan)
-    f.close()
     if deliveryAckEndPoint is not None:
         f = open('import/' + uvid + '.ack', 'w')
         f.write(deliveryAckEndPoint)
@@ -266,6 +271,5 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         os.remove('import/' + uvid + '.ack')
         send_ack(deliveryAckEndPoint)
     """
-
     return 'OK'
 
