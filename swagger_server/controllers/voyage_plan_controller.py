@@ -218,7 +218,6 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     f = open('import/' + uvid + '.rtz', 'r')
     vp = f.read()
     f.close()
-    routeStatus = '1'
     RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
     rtz = io.StringIO()
     rtz.write(RE_XML_ENCODING.sub("", vp, count=1))
@@ -230,22 +229,27 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
             rtz.close()
             ret.body = rtz10.xmlschema.error_log
             return ret, 400
+        tag='{http://www.cirm.org/RTZ/1/0'
     else:
         if root.tag == '{http://www.cirm.org/RTZ/1/1}route':
             if rtzstm11.xmlschema.validate(doc) == False:
                 rtz.close()
                 ret.body = rtzstm11.xmlschema.error_log
                 return ret, 400
+            tag='{http://www.cirm.org/RTZ/1/1}'
         else:
             if root.tag == '{http://www.cirm.org/RTZ/2/0}route':
                 if rtzstm20.xmlschema.validate(doc) == False:
                     rtz.close()
                     ret.body = rtzstm20.xmlschema.error_log
                     return ret, 400
+                tag='{http://www.cirm.org/RTZ/2/0}'
             else:
                 ret.body = 'Unsupported route format'
                 return ret, 400
-    uvid='parse:from:rtz'
+    routeInfo = doc.find(tag + 'routeInfo')
+    uvid = routeInfo.get('vesselVoyage')
+    routeStatus = routeInfo.get('routeStatus')
     data = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))
