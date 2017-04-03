@@ -15,8 +15,7 @@ from lxml import etree
 import io
 import re
 from . import rtz10
-from . import rtzstm11
-from . import rtzstm20
+from . import rtz11
 import sys
 
 def client_mrn():
@@ -212,7 +211,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     :rtype: None
     """
     uvid='parse:from:rtz'
-    f = open('import/' + uvid + '.rtz', 'w')
+    f = open('import/' + uvid + '.rtz', 'wb')
     f.write(voyagePlan)
     f.close()
     f = open('import/' + uvid + '.rtz', 'r')
@@ -229,27 +228,23 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
             rtz.close()
             ret.body = rtz10.xmlschema.error_log
             return ret, 400
-        tag='{http://www.cirm.org/RTZ/1/0'
+        tag='{http://www.cirm.org/RTZ/1/0}'
     else:
         if root.tag == '{http://www.cirm.org/RTZ/1/1}route':
-            if rtzstm11.xmlschema.validate(doc) == False:
+            if rtz11.xmlschema.validate(doc) == False:
                 rtz.close()
-                ret.body = rtzstm11.xmlschema.error_log
+                ret.body = rtz11.xmlschema.error_log
                 return ret, 400
             tag='{http://www.cirm.org/RTZ/1/1}'
         else:
-            if root.tag == '{http://www.cirm.org/RTZ/2/0}route':
-                if rtzstm20.xmlschema.validate(doc) == False:
-                    rtz.close()
-                    ret.body = rtzstm20.xmlschema.error_log
-                    return ret, 400
-                tag='{http://www.cirm.org/RTZ/2/0}'
-            else:
-                ret.body = 'Unsupported route format'
-                return ret, 400
+            ret.body = 'Unsupported route format'
+            return ret, 400
     routeInfo = doc.find(tag + 'routeInfo')
     uvid = routeInfo.get('vesselVoyage')
     routeStatus = routeInfo.get('routeStatus')
+    f = open('import/' + uvid + '.rtz', 'wb')
+    f.write(voyagePlan)
+    f.close()
     data = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))
@@ -263,7 +258,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     Now the vessel will need to process the uploaded voyagePlan and send an ack.
     """
     os.remove('import/' + uvid + '.rtz')
-    f = open('export/' + uvid + '.rtz', 'w')
+    f = open('export/' + uvid + '.rtz', 'wb')
     f.write(voyagePlan)
     f.close()
     vp = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': '1' }

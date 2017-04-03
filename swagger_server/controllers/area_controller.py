@@ -10,9 +10,6 @@ import requests
 from lxml import etree
 import io
 import re
-from . import rtz10
-from . import rtzstm11
-from . import rtzstm20
 
 
 def client_mrn():

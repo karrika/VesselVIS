@@ -32,13 +32,13 @@ voyageplan='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -64,7 +64,7 @@ voyageplan_in_the_past='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -90,7 +90,7 @@ voyageplan_in_the_past_and_future='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -116,7 +116,7 @@ voyageplan_in_the_future10='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -142,7 +142,7 @@ voyageplan_in_the_future11='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -168,7 +168,7 @@ voyageplan_in_the_futurestm20='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -222,7 +222,7 @@ voyageplan_missing_vesselVoyage='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -248,7 +248,7 @@ voyageplan_wrong_syntax_vesselVoyage='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -274,7 +274,7 @@ voyageplan_missing_routeStatus='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -300,7 +300,7 @@ voyageplan_wrong_syntax_routeStatus='''<?xml version="1.0"?>
     <waypoint id="1" name="Hango" radius="0.800000">
       <position lat="59.811700" lon="22.935567"/>
     </waypoint>
-    <waypoint id="2" name="" radius="0.800000">
+    <waypoint id="2" radius="0.800000">
       <position lat="59.758817" lon="23.020267"/>
       <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
     </waypoint>
@@ -410,7 +410,7 @@ VIS001sheet.write(VIS_001_02_row, VIS_001_02_col - 1, "''' + response.reason + '
         """
         sub='/voyagePlans'
         payload=voyageplan
-        response=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -630,11 +630,8 @@ VIS001sheet.write(VIS_001_11_row, VIS_001_11_col - 1, "''' + response.reason + '
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_in_the_past}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_in_the_past
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -657,11 +654,8 @@ VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_in_the_past_and_future}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_in_the_past_and_future
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -684,11 +678,8 @@ VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_in_the_future10}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_in_the_future11
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -711,11 +702,8 @@ VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_in_the_future10}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_in_the_future10
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -738,11 +726,8 @@ VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_in_the_future11}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_in_the_future11
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -765,11 +750,8 @@ VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_in_the_futurestm20}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_in_the_futurestm20
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -792,11 +774,8 @@ VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_incorrect_xml}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_incorrect_xml
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 500:
             report='''
@@ -819,11 +798,8 @@ VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_incorrect_schema}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_incorrect_schema
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 500:
             report='''
@@ -846,11 +822,8 @@ VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -873,11 +846,8 @@ VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_missing_vesselVoyage}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_missing_vesselVoyage
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 500:
             report='''
@@ -900,11 +870,8 @@ VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_wrong_syntax_vesselVoyage}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_wrong_syntax_vesselVoyage
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 500:
             report='''
@@ -927,11 +894,8 @@ VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_missing_routeStatus}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_missing_routeStatus
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 500:
             report='''
@@ -954,11 +918,8 @@ VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.re
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan_wrong_syntax_routeStatus}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan_wrong_syntax_routeStatus
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 500:
             report='''

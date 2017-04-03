@@ -113,8 +113,7 @@ class TestVoyagePlanController(BaseTestCase):
                         ('callbackEndpoint', 'http://localhost:8002')]
         response = self.client.open('/voyagePlans',
                                     method='POST',
-                                    data=json.dumps(voyagePlan),
-                                    content_type='application/json',
+                                    data=voyagePlan,
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 

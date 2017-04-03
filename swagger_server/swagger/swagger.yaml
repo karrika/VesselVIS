@@ -133,7 +133,8 @@ paths:
       summary: ""
       description: "Returns active VoyagePlans"
       operationId: "get_voyage_plans"
-      consumes: []
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -176,7 +177,7 @@ paths:
         \ service."
       operationId: "upload_voyage_plan"
       consumes:
-      - "application/json"
+      - "text/xml"
       produces:
       - "application/json"
       parameters:
