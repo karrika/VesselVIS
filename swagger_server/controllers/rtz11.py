@@ -257,7 +257,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:any namespace="##any" processContents="skip"
+      <xsd:any namespace="##any" processContents="lax"
                minOccurs="0" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>
@@ -771,16 +771,6 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
     <xsd:attribute name="currentDirection" type="CourseType">
       <xsd:annotation>
         <xsd:documentation>Current direction in degrees.</xsd:documentation>
-      </xsd:annotation>
-    </xsd:attribute>
-    <xsd:attribute name="waveHeight" type="LengthType">
-      <xsd:annotation>
-        <xsd:documentation>Height of waves in metres.</xsd:documentation>
-      </xsd:annotation>
-    </xsd:attribute>
-    <xsd:attribute name="waveDirection" type="CourseType">
-      <xsd:annotation>
-        <xsd:documentation>Wave direction in degrees.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
     <xsd:attribute name="windLoss" type="SpeedType">

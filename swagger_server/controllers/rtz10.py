@@ -5,14 +5,14 @@ import re
 
 schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 <!--
-  
-  Route Exchange Format (RTZ)
+
+  Route Exchange Format (RTz)
 
   XML schema
 
   Revision 1.0
 
-  Source: IEC 61174 Ed 4.0:2015
+  Source: IEC 61174 Ed.4.0:2015
 -->
 
 <xsd:schema
@@ -23,10 +23,10 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 
   <xsd:annotation>
     <xsd:documentation>
-      RTZ schema version 1.1. For more information on RTZ and this schema,
+      RTZ schema version 1.0 - For more information on RTZ and this schema,
       visit http://www.cirm.org/RTZ.
 
-      RTZ uses the following conventions: all coordinates are relative to the WGS84
+      RTZ uses the following conventions: all coordinates are relative to the WGS8
       datum.
 
       All measurements are in nautical miles unless otherwise specified.
@@ -118,7 +118,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         <xsd:documentation>The author of route.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="routeStatus" type="xsd:string" use="required">
+    <xsd:attribute name="routeStatus" type="xsd:string">
       <xsd:annotation>
         <xsd:documentation>Status of route.</xsd:documentation>
       </xsd:annotation>
@@ -398,12 +398,12 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
   <xsd:complexType name="Leg">
     <xsd:attribute name="starboardXTD" type="XtdType">
       <xsd:annotation>
-        <xsd:documentation>Starboard XTD in NM.</xsd:documentation>
+        <xsd:documentation>Starboard XTE in NM.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
     <xsd:attribute name="portsideXTD" type="XtdType">
       <xsd:annotation>
-        <xsd:documentation>Port XTD in NM.</xsd:documentation>
+        <xsd:documentation>Portside XTE in NM.</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
     <xsd:attribute name="safetyContour" type="LengthType">
@@ -813,7 +813,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="absFuelSave" type="xsd:decimal">
+    <xsd:attribute name="absFuelSace" type="xsd:decimal">
       <xsd:annotation>
         <xsd:documentation>
           Absolute fuel saving after optimization.
