@@ -54,6 +54,9 @@ nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_1 > >(tee -a 
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_3 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_4 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_5 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-1
+nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_5 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_00 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)

@@ -84,7 +84,7 @@ voyageplan_in_the_past_and_future='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -110,7 +110,7 @@ voyageplan_in_the_future10='''<?xml version="1.0"?>
 <route version="1.0" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/0">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -136,7 +136,7 @@ voyageplan_in_the_future11='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -162,7 +162,7 @@ voyageplan_in_the_futurestm20='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -200,15 +200,15 @@ voyageplan_incorrect_xml='\
 voyageplan_incorrect_schema='\
 <?xml version="1.0" encoding="UTF-8"?>\
 <route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
-    <routeInfo routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
-        <waypoints>\
+    <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
+        <waypints>\
                 <waypoint id="1">\
                         <position lat="53.5123" lon="8.11998"/>\
                 </waypoint>\
                 <waypoint id="15">\
                         <position lat="53.0492" lon="8.87731"/>\
                 </waypoint>\
-        </waypoints>\
+        </waypints>\
 </route>\
 '
 
@@ -268,7 +268,7 @@ voyageplan_missing_routeStatus='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -294,7 +294,7 @@ voyageplan_wrong_syntax_routeStatus='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="Free text" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="Free text" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -801,7 +801,7 @@ VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.re
         payload=voyageplan_incorrect_schema
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 400:
+        if response.status_code == 500:
             report='''
 VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.reason + '", normal)'
@@ -813,7 +813,7 @@ VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert400(response, "Response body is : " + response.text)
+        self.assert500(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_6_1(self):
         """
@@ -849,7 +849,7 @@ VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col - 1, "''' + response.re
         payload=voyageplan_missing_vesselVoyage
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 400:
+        if response.status_code == 404:
             report='''
 VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.reason + '", normal)'
@@ -861,7 +861,7 @@ VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert400(response, "Response body is : " + response.text)
+        self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_2(self):
         """
@@ -897,7 +897,7 @@ VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.re
         payload=voyageplan_missing_routeStatus
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 400:
+        if response.status_code == 404:
             report='''
 VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.reason + '", normal)'
@@ -909,7 +909,7 @@ VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert400(response, "Response body is : " + response.text)
+        self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_4(self):
         """
@@ -934,6 +934,37 @@ VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.re
         f.close()
 
         self.assert400(response, "Response body is : " + response.text)
+
+    def test_VIS_001_12_7_5(self):
+        """
+        VIS-001-7-5 - Test cleanup
+
+
+        
+        """
+        vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
+        p = Path('import')
+        files = list(p.glob('**/' + newvoyageuvid + '.*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/' + vis2_uvid + '*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/parse*'))
+        for item in files:
+            os.remove(str(item))
+
+        p = Path('export')
+        files = list(p.glob('**/' + newvoyageuvid + '.*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/' + vis2_uvid + '*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/parse*'))
+        for item in files:
+            os.remove(str(item))
+        pass
 
 if __name__ == '__main__':
     unittest.main()

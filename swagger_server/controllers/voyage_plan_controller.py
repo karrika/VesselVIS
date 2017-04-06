@@ -256,12 +256,12 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     routeInfo = doc.find(tag + 'routeInfo')
     uvid = routeInfo.get('vesselVoyage')
     if uvid is None:
-        return 'Missing vesselVoyage', 400
+        return 'Missing vesselVoyage', 404
     if not ('urn:mrn:stm:voyage:id' in uvid):
         return 'Wrong vesselVoyage format', 400
     routeStatus = routeInfo.get('routeStatus')
     if routeStatus is None:
-        return 'Missing routeStatus', 400
+        return 'Missing routeStatus', 404
     if not (routeStatus in '12345678'):
         return 'Wrong routeStatus format', 400
     f = open('import/' + uvid + '.rtz', 'wb')
