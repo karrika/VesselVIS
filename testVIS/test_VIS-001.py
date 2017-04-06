@@ -26,6 +26,7 @@ trustchain=hostsettings.trustchain
 url=hostsettings.url
 callbackurl=hostsettings.callbackurl
 newvoyageuvid='urn:mrn:stm:voyage:id:001:001'
+newvoyageuvid2='urn:mrn:stm:voyage:id:001:002'
 vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='''<?xml version="1.0"?>
@@ -947,6 +948,9 @@ VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.re
         files = list(p.glob('**/' + newvoyageuvid + '.*'))
         for item in files:
             os.remove(str(item))
+        files = list(p.glob('**/' + newvoyageuvid2 + '.*'))
+        for item in files:
+            os.remove(str(item))
         files = list(p.glob('**/' + vis2_uvid + '*'))
         for item in files:
             os.remove(str(item))
@@ -956,6 +960,9 @@ VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.re
 
         p = Path('export')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/' + newvoyageuvid2 + '.*'))
         for item in files:
             os.remove(str(item))
         files = list(p.glob('**/' + vis2_uvid + '*'))
