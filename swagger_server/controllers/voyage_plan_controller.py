@@ -60,7 +60,17 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
 
     :rtype: List[GetSubscriptionResponse]
     """
-    return 'do some magic!'
+    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
+    p = Path('export')
+    subsl = [] 
+    uvids = list(p.glob('**/*.subs'))
+    if len(uvids) > 0:
+        with uvids[0].open() as f: data = json.loads(f.read())
+        f.close()
+        if me in data:
+            sr = GetSubscriptionResponse(str(uvids[0]))
+            subsl.append(sr)
+    return subsl
 
 def get_voyage_plans(uvid=None, routeStatus=None):
     """
@@ -83,17 +93,21 @@ def get_voyage_plans(uvid=None, routeStatus=None):
             return 'No voyage plans found', 404
         else:
             return 'Voyage plan ' + uvid + ' not found', 404
-    with uvids[0].open() as f: data = json.loads(f.read())
-    if routeStatus is not None:
-        if routeStatus != data['routeStatus']:
-            return 'Voyage plan with routeStatus' + routeStatus + ' not found', 404
-    if not check_acl(str(uvids[0]).split('/')[1].split('.')[0]):
-        return 'Forbidden', 403
-    vp = VoyagePlan()
-    f = open('export/' + data['route'], 'r')
-    vp.route = f.read()
-    f.close()
-    vps = [ vp ]
+    if routeStatus is None:
+        routeStatus = '7'
+    vps = []
+    for voyage in uvids:
+        with voyage.open() as f: data = json.loads(f.read())
+        if routeStatus == data['routeStatus']:
+            if not check_acl(str(voyage).split('/')[1].split('.')[0]):
+                return 'Forbidden', 403
+            vp = VoyagePlan()
+            f = open('export/' + data['route'], 'r')
+            vp.route = f.read()
+            f.close()
+            vps.append(vp)
+    if len(vps) == 0:
+        return 'Voyage plan with routeStatus ' + routeStatus + ' not found', 404
     timestamp = '2017-02-15T10:35:00Z'
     return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
 
@@ -226,22 +240,30 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     if root.tag == '{http://www.cirm.org/RTZ/1/0}route':
         if rtz10.xmlschema.validate(doc) == False:
             rtz.close()
-            ret.body = rtz10.xmlschema.error_log
+            ret = rtz10.xmlschema.error_log
             return ret, 400
         tag='{http://www.cirm.org/RTZ/1/0}'
     else:
         if root.tag == '{http://www.cirm.org/RTZ/1/1}route':
             if rtz11.xmlschema.validate(doc) == False:
                 rtz.close()
-                ret.body = rtz11.xmlschema.error_log
+                ret = rtz11.xmlschema.error_log
                 return ret, 400
             tag='{http://www.cirm.org/RTZ/1/1}'
         else:
-            ret.body = 'Unsupported route format'
+            ret = 'Unsupported route format'
             return ret, 400
     routeInfo = doc.find(tag + 'routeInfo')
     uvid = routeInfo.get('vesselVoyage')
+    if uvid is None:
+        return 'Missing vesselVoyage', 400
+    if not ('urn:mrn:stm:voyage:id' in uvid):
+        return 'Wrong vesselVoyage format', 400
     routeStatus = routeInfo.get('routeStatus')
+    if routeStatus is None:
+        return 'Missing routeStatus', 400
+    if not (routeStatus in '12345678'):
+        return 'Wrong routeStatus format', 400
     f = open('import/' + uvid + '.rtz', 'wb')
     f.write(voyagePlan)
     f.close()
