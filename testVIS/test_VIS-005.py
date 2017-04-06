@@ -74,12 +74,8 @@ class TestVIS_005(BaseTestCase):
         
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid,
-            'routeStatus': '7'
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -103,12 +99,8 @@ VIS005sheet.write(VIS_005_01_row, VIS_005_01_col - 1, "''' + response.reason + '
         
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid,
-            'routeStatus': '7'
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -148,12 +140,10 @@ VIS005sheet.write(VIS_005_02_row, VIS_005_02_col - 1, "''' + response.reason + '
         """
         sub='/voyagePlans'
         parameters={
-            'uvid': newvoyageuvid,
-            'routeStatus': '1',
             'deliveryAckEndPoint': 'https://localhost:8002'
         }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, params=parameters, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -211,12 +201,10 @@ VIS005sheet.write(VIS_005_1_3_row, VIS_005_1_3_col - 1, "''' + response.reason +
         """
         sub='/voyagePlans'
         parameters={
-            'uvid': newvoyageuvid,
-            'routeStatus': '1',
             'deliveryAckEndPoint': 'https://localhost'
         }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, params=parameters, data=payload, cert=vis_cert, verify=trustchain)
         self.assert200(response, "Response body is : " + response.text)
 
     @unittest.skip('Implement user timeout nagging feature when ack is missing')

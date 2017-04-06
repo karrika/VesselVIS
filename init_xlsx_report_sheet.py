@@ -1105,7 +1105,6 @@ VIS001sheet.write(row, 1, "Select voyage plan with incorrect syntax of  vesselVo
 VIS001sheet.write(row, 2, "", boldbld)
 VIS001sheet.write(row, 3, "No voyage plan received by subscribers", boldbld)
 VIS001sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS001sheet.write(row, 6, "This is kind of problematic. The schema does not include a pattern for matching the ID. Obviously someone need to come up with a pattern for the route xsd file.", normal)
 
 row = 74
 VIS_001_12_7_3_row = row
@@ -1414,7 +1413,6 @@ VIS002sheet.write(row, 1, "VIS-2 : Request voyage plans from VIS-1", boldbl)
 VIS002sheet.write(row, 2, "", boldbl)
 VIS002sheet.write(row, 3, "2 voyage plan received", boldbl)
 VIS002sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS002sheet.write(row, 6, "The problem here is that there is no good way to receive more than one voyage plan and also keep the uvid. For Furuno we may have to accept that there will be vessels that are not filling in the routeStatus or the vesselVoyage field. For these vessels the only way to be compatible with STM would be the external envelope of passing routeStatus and uvid with the RTZ file. My suggestion is to add these fields to the VoyagePlan model. Then we could implement this test case.", normal)
 
 row = 0
 col = 0

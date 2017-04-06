@@ -159,9 +159,9 @@ voyageplan_in_the_future11='''<?xml version="1.0"?>
 '''
 
 voyageplan_in_the_futurestm20='''<?xml version="1.0"?>
-<route version="2.0" 
+<route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://www.cirm.org/RTZ/2/0">
+  xmlns="http://www.cirm.org/RTZ/1/1">
   <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
@@ -801,7 +801,7 @@ VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.re
         payload=voyageplan_incorrect_schema
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 500:
+        if response.status_code == 400:
             report='''
 VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.reason + '", normal)'
@@ -813,7 +813,7 @@ VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert500(response, "Response body is : " + response.text)
+        self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_6_1(self):
         """
@@ -849,7 +849,7 @@ VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col - 1, "''' + response.re
         payload=voyageplan_missing_vesselVoyage
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 500:
+        if response.status_code == 400:
             report='''
 VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.reason + '", normal)'
@@ -861,7 +861,7 @@ VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert500(response, "Response body is : " + response.text)
+        self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_2(self):
         """
@@ -873,7 +873,7 @@ VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.re
         payload=voyageplan_wrong_syntax_vesselVoyage
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 500:
+        if response.status_code == 400:
             report='''
 VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.reason + '", normal)'
@@ -885,7 +885,7 @@ VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert500(response, "Response body is : " + response.text)
+        self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_3(self):
         """
@@ -897,7 +897,7 @@ VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.re
         payload=voyageplan_missing_routeStatus
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 500:
+        if response.status_code == 400:
             report='''
 VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.reason + '", normal)'
@@ -909,7 +909,7 @@ VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert500(response, "Response body is : " + response.text)
+        self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_4(self):
         """
@@ -921,7 +921,7 @@ VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.re
         payload=voyageplan_wrong_syntax_routeStatus
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 500:
+        if response.status_code == 400:
             report='''
 VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.reason + '", normal)'
@@ -933,7 +933,7 @@ VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert500(response, "Response body is : " + response.text)
+        self.assert400(response, "Response body is : " + response.text)
 
 if __name__ == '__main__':
     unittest.main()

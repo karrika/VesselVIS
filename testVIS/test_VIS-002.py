@@ -32,8 +32,23 @@ vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='\
 <?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
-    <routeInfo routeName="Test-Mini-1" routeStatus="7"/>\
+<route version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">\
+    <routeInfo routeName="Test-Mini-1" routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:new:plan"/>\
+        <waypoints>\
+                <waypoint id="1">\
+                        <position lat="53.5123" lon="8.11998"/>\
+                </waypoint>\
+                <waypoint id="15">\
+                        <position lat="53.0492" lon="8.87731"/>\
+                </waypoint>\
+        </waypoints>\
+</route>\
+'
+
+voyageplan2='\
+<?xml version="1.0" encoding="UTF-8"?>\
+<route version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">\
+    <routeInfo routeName="Test-Mini-1" routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:new:plan2"/>\
         <waypoints>\
                 <waypoint id="1">\
                         <position lat="53.5123" lon="8.11998"/>\
@@ -63,6 +78,8 @@ class TestVIS_002(BaseTestCase):
         
         """
         hostsettings.set_acl(vis2_uvid, voyageuvid)
+        hostsettings.set_acl(vis2_uvid, newvoyageuvid)
+        hostsettings.set_acl(vis2_uvid, newvoyageuvid2)
 
         report='''
 VIS002sheet.write(VIS_002_00_row, VIS_002_00_col, "PASS", boldcenter)
@@ -306,12 +323,8 @@ VIS002sheet.write(VIS_002_1_0_row, VIS_002_08_col, "PASS", boldcenter)
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid,
-            'routeStatus': '7'
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -334,10 +347,7 @@ VIS002sheet.write(VIS_002_1_1_row, VIS_002_1_1_col - 1, "''' + response.reason +
         
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        response=requests.get(url + sub, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -360,12 +370,8 @@ VIS002sheet.write(VIS_002_1_2_row, VIS_002_1_2_col - 1, "''' + response.reason +
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid,
-            'routeStatus': '7'
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -388,10 +394,7 @@ VIS002sheet.write(VIS_002_1_3_row, VIS_002_1_3_col - 1, "''' + response.reason +
         
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        response=requests.get(url + sub, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -414,12 +417,8 @@ VIS002sheet.write(VIS_002_1_4_row, VIS_002_1_4_col - 1, "''' + response.reason +
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid2,
-            'routeStatus': '7'
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -442,10 +441,7 @@ VIS002sheet.write(VIS_002_1_5_row, VIS_002_1_5_col - 1, "''' + response.reason +
         
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid2
-        }
-        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        response=requests.get(url + sub, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -468,12 +464,8 @@ VIS002sheet.write(VIS_002_1_6_row, VIS_002_1_6_col - 1, "''' + response.reason +
 
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid2,
-            'routeStatus': '7'
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 200:
             report='''
@@ -498,7 +490,7 @@ VIS002sheet.write(VIS_002_1_7_row, VIS_002_1_7_col - 1, "''' + response.reason +
         sub='/voyagePlans'
         response=requests.get(url + sub, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 400:
+        if response.status_code == 200:
             report='''
 VIS002sheet.write(VIS_002_1_8_row, VIS_002_1_8_col, "PASS", boldcenter)
 VIS002sheet.write(VIS_002_1_8_row, VIS_002_1_8_col - 1, "''' + response.reason + '", normal)'

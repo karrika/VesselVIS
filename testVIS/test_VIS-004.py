@@ -106,11 +106,8 @@ VIS004sheet.write(VIS_004_01_row, VIS_004_01_col - 1, "''' + response.reason + '
         
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 900:
             report='''
@@ -161,11 +158,8 @@ VIS004sheet.write(VIS_004_03_row, VIS_004_03_col - 1, "''' + response.reason + '
         
         """
         sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        payload={'route': voyageplan}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        payload=voyageplan
+        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
         if response.status_code == 900:
             report='''
