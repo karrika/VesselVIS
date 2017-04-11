@@ -249,7 +249,9 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     f.write(json.dumps(data))
     f.close()
 
-    return 'OK'
+    if check_acl(uvid):
+        return 'OK'
+    return 'Forbidden', 403
 
 
 def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=None):
