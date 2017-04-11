@@ -155,6 +155,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     os.remove('import/' + vp + '.rmsubs')
     p = Path('export')
     uvids = list(p.glob('**/*' + vp + '.subs'))
+    data = []
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
         f.close()
