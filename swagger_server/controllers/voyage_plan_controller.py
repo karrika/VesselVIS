@@ -202,6 +202,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     """
     me = { 'uid': client_mrn(), 'url': callbackEndpoint}
     meacl = client_mrn()
+    allowed=True
     p = Path('import')
     if uvid is None:
         vp = 'all'
@@ -211,8 +212,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         uvids = list(p2.glob('**/' + uvid + '.uvid'))
         if len(uvids) == 0:
             return 'Voyage plan ' + uvid + ' not found', 404
-        #if not check_acl(uvid):
-        #    return 'Forbidden', 403
+        if not check_acl(uvid):
+            allowed = False
     uvids = list(p.glob('**/*' + vp + '.subs'))
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
@@ -221,7 +222,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
             data.append(me)
     else:
         data = [ me ]
-    if check_acl(uvid):
+    if allowed:
         f = open('import/' + vp + '.subs', 'w')
         f.write(json.dumps(data))
         f.close()
@@ -230,7 +231,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
     Also add the client_mrn to the access list.
     """
-    if check_acl(uvid):
+    if allowed:
         f = open('export/' + vp + '.subs', 'w')
         f.write(json.dumps(data))
         f.close()
@@ -249,7 +250,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     f.write(json.dumps(data))
     f.close()
 
-    if check_acl(uvid):
+    if allowed:
         return 'OK'
     return 'Forbidden', 403
 
