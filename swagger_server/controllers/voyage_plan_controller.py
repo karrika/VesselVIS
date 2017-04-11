@@ -127,6 +127,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     :rtype: None
     """
     me = { 'uid': client_mrn(), 'url': callbackEndpoint}
+    meacl = client_mrn()
     p = Path('import')
     if uvid is None:
         vp = 'all'
@@ -149,6 +150,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
 
     """
     Now the vessel will get the request to remove a subscription. As we have no vessel we have to simulate it here.
+    At this time we also remove the client from the acl.
     """
     os.remove('import/' + vp + '.rmsubs')
     p = Path('export')
@@ -165,6 +167,19 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
         f.write(json.dumps(data))
         f.close()
 
+    acls = list(p.glob('**/*' + vp + '.acl'))
+    if len(acls) > 0:
+        with acls[0].open() as f: data = json.loads(f.read())
+        f.close()
+        if meacl in data:
+            data.remove(meacl)
+        if len(data) == 0:
+            os.remove('export/' + vp + '.acl')
+        else:
+            f = open('export/' + vp + '.acl', 'w')
+            f.write(json.dumps(data))
+            f.close()
+
     return 'OK'
 
 
@@ -180,6 +195,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     :rtype: None
     """
     me = { 'uid': client_mrn(), 'url': callbackEndpoint}
+    meacl = client_mrn()
     p = Path('import')
     if uvid is None:
         vp = 'all'
@@ -205,11 +221,24 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     """
     Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
+    Also add the client_mrn to the access list.
     """
     f = open('export/' + vp + '.subs', 'w')
     f.write(json.dumps(data))
     f.close()
     os.remove('import/' + vp + '.subs')
+
+    acls = list(p.glob('**/*' + vp + '.acl'))
+    if len(acls) > 0:
+        with acls[0].open() as f: data = json.loads(f.read())
+        f.close()
+        if not (meacl in data):
+            data.append(meacl)
+    else:
+        data = [ meacl ]
+    f = open('export/' + vp + '.acl', 'w')
+    f.write(json.dumps(data))
+    f.close()
 
     return 'OK'
 

@@ -10,6 +10,7 @@ from six import BytesIO
 from flask import json
 from pathlib import Path
 import os
+import unittest
 
 voyageuvid='urn:mrn:stm:voyage:id:8320767:2017021010'
 vis_uvid='urn:mrn:stm:service:instance:furuno:vis2'
@@ -24,58 +25,7 @@ f.close()
 class TestVoyagePlanController(BaseTestCase):
     """ VoyagePlanController integration test stubs """
 
-    def test_get_subscription_to_voyage_plans(self):
-        """
-        Test case for get_subscription_to_voyage_plans
-
-        
-        """
-        query_string = [('callbackEndpoint', callbackEndpoint)]
-        response = self.client.open('/voyagePlans/subscription',
-                                    method='GET',
-                                    query_string=query_string)
-        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
-
-    def test_get_voyage_plans(self):
-        """
-        Test case for get_voyage_plans
-
-        
-        """
-        query_string = [('uvid', voyageuvid),
-                        ('routeStatus', '7')]
-        response = self.client.open('/voyagePlans',
-                                    method='GET',
-                                    query_string=query_string)
-        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
-
-    def test_remove_voyage_plan_subscription(self):
-        """
-        Test case for remove_voyage_plan_subscription
-
-        
-        """
-        query_string = [('callbackEndpoint', callbackEndpoint),
-                        ('uvid', voyageuvid)]
-        response = self.client.open('/voyagePlans/subscription',
-                                    method='DELETE',
-                                    query_string=query_string)
-        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
-
-    def test_subscribe_to_voyage_plan_found(self):
-        """
-        Test case for subscribe_to_voyage_plan
-        A voyage with this uid exists.
-        
-        """
-        query_string = [('callbackEndpoint', 'http://localhost:8002'),
-                        ('uvid', 'urn:mrn:stm:voyage:id:8320767:2017021010')]
-        response = self.client.open('/voyagePlans/subscription',
-                                    method='POST',
-                                    query_string=query_string)
-        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
-
-    def test_upload_voyage_plan(self):
+    def test_1_upload_voyage_plan(self):
         """
         Test case for upload_voyage_plan
 
@@ -112,6 +62,57 @@ class TestVoyagePlanController(BaseTestCase):
         response = self.client.open('/voyagePlans',
                                     method='POST',
                                     data=voyagePlan,
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_2_subscribe_to_voyage_plan_found(self):
+        """
+        Test case for subscribe_to_voyage_plan
+        A voyage with this uid exists.
+        
+        """
+        query_string = [('callbackEndpoint', 'http://localhost:8002'),
+                        ('uvid', 'urn:mrn:stm:voyage:id:8320767:2017021010')]
+        response = self.client.open('/voyagePlans/subscription',
+                                    method='POST',
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_3_get_subscription_to_voyage_plans(self):
+        """
+        Test case for get_subscription_to_voyage_plans
+
+        
+        """
+        query_string = [('callbackEndpoint', callbackEndpoint)]
+        response = self.client.open('/voyagePlans/subscription',
+                                    method='GET',
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_4_get_voyage_plans(self):
+        """
+        Test case for get_voyage_plans
+
+        
+        """
+        query_string = [('uvid', voyageuvid),
+                        ('routeStatus', '7')]
+        response = self.client.open('/voyagePlans',
+                                    method='GET',
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_5_remove_voyage_plan_subscription(self):
+        """
+        Test case for remove_voyage_plan_subscription
+
+        
+        """
+        query_string = [('callbackEndpoint', callbackEndpoint),
+                        ('uvid', voyageuvid)]
+        response = self.client.open('/voyagePlans/subscription',
+                                    method='DELETE',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
