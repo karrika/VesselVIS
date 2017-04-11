@@ -340,6 +340,19 @@ class TestVIS_001(BaseTestCase):
         hostsettings.rm_uvid(newvoyageuvid)
         hostsettings.rm_acl(vis2_uvid)
         hostsettings.rm_subs(vis2_uvid)
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl,
+            'uvid': newvoyageuvid
+        }
+        payload={}
+        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        parameters={
+            'callbackEndpoint': callbackurl
+        }
+        payload={}
+        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
 
         report='''
 VIS001sheet.write(VIS_001_00_row, VIS_001_00_col, "PASS", boldcenter)

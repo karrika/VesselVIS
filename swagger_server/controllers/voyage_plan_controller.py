@@ -131,7 +131,6 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     p = Path('import')
     if uvid is None:
         vp = 'all'
-        ret.body = 'Generic remove subscription sent'
     else:
         vp = uvid
     uvids = list(p.glob('**/' + vp + '.rmsubs'))
