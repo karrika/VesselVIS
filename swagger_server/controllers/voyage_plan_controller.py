@@ -150,6 +150,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     """
     Now the vessel will get the request to remove a subscription. As we have no vessel we have to simulate it here.
     At this time we also remove the client from the acl.
+    As there is no way to clean up garbage we re-use this method to delete old stuff as well.
     """
     os.remove('import/' + vp + '.rmsubs')
     p = Path('export')
@@ -178,6 +179,11 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
             f = open('export/' + vp + '.acl', 'w')
             f.write(json.dumps(data))
             f.close()
+
+    uvids = list(p.glob('**/*' + vp + '.uvid'))
+    if len(uvids) > 0:
+        os.remove('export/' + vp + '.uvid')
+        os.remove('export/' + vp + '.rtz')
 
     return 'OK'
 
