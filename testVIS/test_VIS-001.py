@@ -502,6 +502,13 @@ VIS001sheet.write(VIS_001_05_row, VIS_001_05_col - 1, "''' + response.reason + '
         
         """
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl,
+            'uvid': newvoyageuvid
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
 
         report='''
 VIS001sheet.write(VIS_001_06_row, VIS_001_06_col, "PASS", boldcenter)
@@ -573,6 +580,13 @@ VIS001sheet.write(VIS_001_08_row, VIS_001_08_col - 1, "''' + response.reason + '
         
         """
         hostsettings.rm_acl(vis2_uvid, newvoyageuvid)
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl,
+            'uvid': newvoyageuvid
+        }
+        payload={}
+        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
 
         report='''
 VIS001sheet.write(VIS_001_09_row, VIS_001_09_col, "PASS", boldcenter)
