@@ -221,18 +221,20 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
             data.append(me)
     else:
         data = [ me ]
-    f = open('import/' + vp + '.subs', 'w')
-    f.write(json.dumps(data))
-    f.close()
+    if check_acl(uvid):
+        f = open('import/' + vp + '.subs', 'w')
+        f.write(json.dumps(data))
+        f.close()
 
     """
     Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
     Also add the client_mrn to the access list.
     """
-    f = open('export/' + vp + '.subs', 'w')
-    f.write(json.dumps(data))
-    f.close()
-    os.remove('import/' + vp + '.subs')
+    if check_acl(uvid):
+        f = open('export/' + vp + '.subs', 'w')
+        f.write(json.dumps(data))
+        f.close()
+        os.remove('import/' + vp + '.subs')
 
     p = Path('export')
     acls = list(p.glob('**/*' + vp + '.acl'))
