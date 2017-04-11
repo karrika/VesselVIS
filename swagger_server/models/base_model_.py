@@ -1,7 +1,7 @@
 from pprint import pformat
 from typing import TypeVar, Type
 from six import iteritems
-from ..util import deserialize_model
+from swagger_server.util import deserialize_model
 
 T = TypeVar('T')
 

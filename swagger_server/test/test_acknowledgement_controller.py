@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from swagger_server.models.delivery_ack import DeliveryAck
-from . import BaseTestCase
+from swagger_server.test import BaseTestCase
 from six import BytesIO
 from flask import json
 

@@ -2,10 +2,10 @@
 
 from __future__ import absolute_import
 from swagger_server.models.voyage_plan import VoyagePlan
-from .base_model_ import Model
+from swagger_server.models.base_model_ import Model
 from datetime import date, datetime
 from typing import List, Dict
-from ..util import deserialize_model
+from swagger_server.util import deserialize_model
 
 
 class GetVoyagePlanResponse(Model):

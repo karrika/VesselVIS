@@ -2,7 +2,7 @@ import connexion
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
-from ..util import deserialize_date, deserialize_datetime
+from swagger_server.util import deserialize_date, deserialize_datetime
 import json
 from pathlib import Path
 import os
