@@ -211,8 +211,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         uvids = list(p2.glob('**/' + uvid + '.uvid'))
         if len(uvids) == 0:
             return 'Voyage plan ' + uvid + ' not found', 404
-        if not check_acl(uvid):
-            return 'Forbidden', 403
+        #if not check_acl(uvid):
+        #    return 'Forbidden', 403
     uvids = list(p.glob('**/*' + vp + '.subs'))
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
@@ -234,6 +234,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     f.close()
     os.remove('import/' + vp + '.subs')
 
+    p = Path('export')
     acls = list(p.glob('**/*' + vp + '.acl'))
     if len(acls) > 0:
         with acls[0].open() as f: data = json.loads(f.read())
