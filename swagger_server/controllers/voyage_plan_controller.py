@@ -321,7 +321,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     f = open('export/' + uvid + '.rtz', 'wb')
     f.write(voyagePlan)
     f.close()
-    vp = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': '1' }
+    vp = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
     f = open('export/' + uvid + '.uvid', 'w')
     f.write(json.dumps(vp))
     f.close()
