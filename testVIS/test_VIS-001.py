@@ -59,7 +59,7 @@ voyageplan_in_the_past='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:002" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2016-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:002" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2016-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -85,7 +85,7 @@ voyageplan_in_the_past_and_future='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -111,7 +111,7 @@ voyageplan_in_the_future10='''<?xml version="1.0"?>
 <route version="1.0" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/0">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -137,7 +137,7 @@ voyageplan_in_the_future11='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -163,7 +163,7 @@ voyageplan_in_the_futurestm20='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -201,7 +201,7 @@ voyageplan_incorrect_xml='\
 voyageplan_incorrect_schema='\
 <?xml version="1.0" encoding="UTF-8"?>\
 <route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
-    <routeInfo routeStatus="1" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
+    <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
         <waypints>\
                 <waypoint id="1">\
                         <position lat="53.5123" lon="8.11998"/>\
@@ -217,7 +217,7 @@ voyageplan_missing_vesselVoyage='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -243,7 +243,7 @@ voyageplan_wrong_syntax_vesselVoyage='''<?xml version="1.0"?>
 <route version="1.1" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="1" vesselVoyage="Free text" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" vesselVoyage="Free text" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -342,17 +342,25 @@ class TestVIS_001(BaseTestCase):
         hostsettings.rm_subs(vis2_uvid)
         sub='/voyagePlans/subscription'
         parameters={
-            'callbackEndpoint': callbackurl,
+            'callbackEndpoint': 'delete',
             'uvid': newvoyageuvid
         }
         payload={}
-        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
 
+        sub='/voyagePlans/subscription'
         parameters={
-            'callbackEndpoint': callbackurl
+            'callbackEndpoint': 'deny',
+            'uvid': newvoyageuvid
         }
         payload={}
-        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+
+        parameters={
+            'callbackEndpoint': 'deny'
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
 
         report='''
 VIS001sheet.write(VIS_001_00_row, VIS_001_00_col, "PASS", boldcenter)
@@ -504,7 +512,7 @@ VIS001sheet.write(VIS_001_05_row, VIS_001_05_col - 1, "''' + response.reason + '
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
         sub='/voyagePlans/subscription'
         parameters={
-            'callbackEndpoint': callbackurl,
+            'callbackEndpoint': 'allow',
             'uvid': newvoyageuvid
         }
         payload={}
@@ -582,11 +590,11 @@ VIS001sheet.write(VIS_001_08_row, VIS_001_08_col - 1, "''' + response.reason + '
         hostsettings.rm_acl(vis2_uvid, newvoyageuvid)
         sub='/voyagePlans/subscription'
         parameters={
-            'callbackEndpoint': callbackurl,
+            'callbackEndpoint': 'deny',
             'uvid': newvoyageuvid
         }
         payload={}
-        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
 
         report='''
 VIS001sheet.write(VIS_001_09_row, VIS_001_09_col, "PASS", boldcenter)
@@ -970,6 +978,27 @@ VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.re
 
         
         """
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': 'delete',
+            'uvid': newvoyageuvid
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': 'delete',
+            'uvid': newvoyageuvid2
+        }
+        payload={}
+        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        sub='/voyagePlans/subscription'
+        parameters={
+            'callbackEndpoint': callbackurl,
+            'uvid': newvoyageuvid
+        }
+        payload={}
+        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))
