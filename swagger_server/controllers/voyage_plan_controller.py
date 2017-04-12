@@ -51,7 +51,7 @@ def check_acl(uvid):
             f.close()
             if client_mrn() in data:
                 return True
-    return True
+    return False
 
 
 def get_subscription_to_voyage_plans(callbackEndpoint):
