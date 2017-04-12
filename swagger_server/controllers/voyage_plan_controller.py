@@ -186,8 +186,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         vp1 = 'all'
     else:
         vp1 = uvid
+    p = Path('export')
     if callbackEndpoint == 'allow':
-        p = Path('export')
         acls = list(p.glob('**/*' + vp1 + '.acl'))
         if len(acls) > 0:
             with acls[0].open() as f: data = json.loads(f.read())
