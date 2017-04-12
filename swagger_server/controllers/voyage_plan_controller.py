@@ -199,6 +199,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         f = open('export/' + vp1 + '.acl', 'w')
         f.write(json.dumps(data))
         f.close()
+        return 'OK'
     elif callbackEndpoint == 'deny':
         acls = list(p.glob('**/*' + vp1 + '.acl'))
         if len(acls) > 0:
@@ -212,11 +213,13 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
                 f = open('export/' + vp1 + '.acl', 'w')
                 f.write(json.dumps(data))
                 f.close()
+        return 'OK'
     elif callbackEndpoint == 'delete':
         uvids = list(p.glob('**/*' + vp1 + '.uvid'))
         if len(uvids) > 0:
             os.remove('export/' + vp1 + '.uvid')
             os.remove('export/' + vp1 + '.rtz')
+        return 'OK'
 
     me = { 'uid': client_mrn(), 'url': callbackEndpoint}
     allowed=True
