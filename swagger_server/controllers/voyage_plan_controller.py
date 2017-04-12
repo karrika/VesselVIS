@@ -167,25 +167,6 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
         f = open('export/' + vp + '.subs', 'w')
         f.write(json.dumps(data))
         f.close()
-
-    acls = list(p.glob('**/*' + vp + '.acl'))
-    if len(acls) > 0:
-        with acls[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if meacl in data:
-            data.remove(meacl)
-        if len(data) == 0:
-            os.remove('export/' + vp + '.acl')
-        else:
-            f = open('export/' + vp + '.acl', 'w')
-            f.write(json.dumps(data))
-            f.close()
-
-    uvids = list(p.glob('**/*' + vp + '.uvid'))
-    if len(uvids) > 0:
-        os.remove('export/' + vp + '.uvid')
-        os.remove('export/' + vp + '.rtz')
-
     return 'OK'
 
 
@@ -200,8 +181,40 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     :rtype: None
     """
-    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
     meacl = client_mrn()
+    if callbackEndpoint == 'allow':
+        p = Path('export')
+        acls = list(p.glob('**/*' + vp + '.acl'))
+        if len(acls) > 0:
+            with acls[0].open() as f: data = json.loads(f.read())
+            f.close()
+            if not (meacl in data):
+                data.append(meacl)
+        else:
+            data = [ meacl ]
+        f = open('export/' + vp + '.acl', 'w')
+        f.write(json.dumps(data))
+        f.close()
+    elif callbackEndpoint == 'deny':
+        acls = list(p.glob('**/*' + vp + '.acl'))
+        if len(acls) > 0:
+            with acls[0].open() as f: data = json.loads(f.read())
+            f.close()
+            if meacl in data:
+                data.remove(meacl)
+            if len(data) == 0:
+                os.remove('export/' + vp + '.acl')
+            else:
+                f = open('export/' + vp + '.acl', 'w')
+                f.write(json.dumps(data))
+                f.close()
+    elif callbackEndpoint == 'delete':
+        uvids = list(p.glob('**/*' + vp + '.uvid'))
+        if len(uvids) > 0:
+            os.remove('export/' + vp + '.uvid')
+            os.remove('export/' + vp + '.rtz')
+
+    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
     allowed=True
     p = Path('import')
     if uvid is None:
@@ -236,19 +249,6 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         f.write(json.dumps(data))
         f.close()
         os.remove('import/' + vp + '.subs')
-
-    p = Path('export')
-    acls = list(p.glob('**/*' + vp + '.acl'))
-    if len(acls) > 0:
-        with acls[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if not (meacl in data):
-            data.append(meacl)
-    else:
-        data = [ meacl ]
-    f = open('export/' + vp + '.acl', 'w')
-    f.write(json.dumps(data))
-    f.close()
 
     if allowed:
         return 'OK'
