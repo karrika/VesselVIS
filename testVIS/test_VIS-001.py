@@ -29,11 +29,29 @@ newvoyageuvid='urn:mrn:stm:voyage:id:001:001'
 newvoyageuvid2='urn:mrn:stm:voyage:id:001:002'
 vis2_uvid=hostsettings.vis2_uvid
 
-voyageplan='''<?xml version="1.0"?>
+voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <route version="1.1" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
+  xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+    <extensions>
+      <extension xsi:type="stm:RouteInfoExtension"
+        manufacturer="STM" name="routeInfoEx" version="1.0.0"
+        routeStatusEnum="7"
+        depPort="FIHAN"
+        arrPort="SEVIS"
+        depPortCallId="urn:mrn:stm:portcdm:port_call:FIHAN:20170421"
+        arrPortCallId="urn:mrn:stm:portcdm:port_call:SEVIS:20170421"
+        startSeaPassage="PILOT_BOARDING_AREA:WP1"
+        endSeaPassage="PILOT_BOARDING_AREA:WP2">
+        <stm:routeChanges>
+            <stm:historyItem dateTime="2016-10-20T11:14:41Z" author="1st mate"
+              reason="initial creation"/>
+        </stm:routeChanges>
+      </extension>
+    </extensions>
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -200,16 +218,16 @@ voyageplan_incorrect_xml='\
 
 voyageplan_incorrect_schema='\
 <?xml version="1.0" encoding="UTF-8"?>\
-<route version="1.0" xmlns="http://www.cirm.org/RTZ/1/0">\
+<route version="1.0" xmlns="http://www.cirm.org/RTZ/3/0">\
     <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="Test-Mini-1" validityPeriodStart="2100-12-22T13:00:00Z" validityPeriodStop="2100-12-23T13:00:00Z"/>\
-        <waypints>\
+        <waypoints>\
                 <waypoint id="1">\
                         <position lat="53.5123" lon="8.11998"/>\
                 </waypoint>\
                 <waypoint id="15">\
                         <position lat="53.0492" lon="8.87731"/>\
                 </waypoint>\
-        </waypints>\
+        </waypoints>\
 </route>\
 '
 
@@ -837,7 +855,7 @@ VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.re
         payload=voyageplan_incorrect_schema
         response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
 
-        if response.status_code == 500:
+        if response.status_code == 400:
             report='''
 VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col, "PASS", boldcenter)
 VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.reason + '", normal)'
@@ -849,7 +867,7 @@ VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.re
         f.write(report)
         f.close()
 
-        self.assert500(response, "Response body is : " + response.text)
+        self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_6_1(self):
         """

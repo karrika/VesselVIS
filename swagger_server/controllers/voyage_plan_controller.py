@@ -289,17 +289,21 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     doc = etree.parse(rtz)
     root = doc.getroot()
     if root.tag == '{http://www.cirm.org/RTZ/1/0}route':
+        '''
         if rtz10.xmlschema.validate(doc) == False:
             rtz.close()
             ret = rtz10.xmlschema.error_log
             return ret, 400
+        '''
         tag='{http://www.cirm.org/RTZ/1/0}'
     else:
         if root.tag == '{http://www.cirm.org/RTZ/1/1}route':
+            '''
             if rtz11.xmlschema.validate(doc) == False:
                 rtz.close()
                 ret = rtz11.xmlschema.error_log
                 return ret, 400
+            '''
             tag='{http://www.cirm.org/RTZ/1/1}'
         else:
             ret = 'Unsupported route format'
@@ -310,9 +314,17 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         return 'Missing vesselVoyage', 404
     if not ('urn:mrn:stm:voyage:id' in uvid):
         return 'Wrong vesselVoyage format', 400
-    routeStatus = routeInfo.get('routeStatus')
-    if routeStatus is None:
-        return 'Missing routeStatus', 404
+    if tag == '{http://www.cirm.org/RTZ/1/1}':
+        routeInfo = doc.find(tag + 'routeInfo')
+        extensions = routeInfo.find(tag + 'extensions')
+        if extensions is None:
+            return 'Missing routeInfo/extensions', 404
+        extension = extensions.find(tag + 'extension')
+        if extension is None:
+            return 'Missing routeInfo/extensions/extension', 404
+        routeStatus = extension.get('routeStatusEnum')
+    else:
+        routeStatus = routeInfo.get('routeStatus')
     if not (routeStatus in '12345678'):
         return 'Wrong routeStatus format', 400
     f = open('import/' + uvid + '.rtz', 'wb')
