@@ -18,6 +18,11 @@ from . import rtz10
 from . import rtz11
 import sys
 
+def log_event():
+    f = open('event.log', 'a')
+    f.write('Log event')
+    f.close()
+
 def client_mrn():
     """
     Get the real DN name of the requestor
@@ -323,6 +328,8 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         if extension is None:
             return 'Missing routeInfo/extensions/extension', 404
         routeStatus = extension.get('routeStatusEnum')
+        if routeStatus is None:
+            return 'Missing routeInfo/extensions/extension/routeStatusEnum', 404
     else:
         routeStatus = routeInfo.get('routeStatus')
     if not (routeStatus in '12345678'):
