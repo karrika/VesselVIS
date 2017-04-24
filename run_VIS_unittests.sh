@@ -114,6 +114,21 @@ nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_1_3 > >(tee -a ../
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_2_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_2_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+
+../sr_client/getopenidtoken VIS-2
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_04 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_05 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_06 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_07 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_08 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_09 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_10 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_11 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_12 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_13 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ..
 python3 close_xlsx_report_sheet.py
 python3 create_worksheet.py
