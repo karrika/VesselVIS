@@ -83,7 +83,7 @@ VIS010sheet.write(VIS_010_01_row, VIS_010_01_col - 1, "''' + response.reason + '
             'Accept' : 'application/json'
         }
         parameters={
-            'query' : 'ROS+SSPA'
+            'query' : '+ROS +SSPA'
         }
         response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
         print(response.text)
@@ -331,7 +331,7 @@ VIS010sheet.write(VIS_010_09_row, VIS_010_09_col - 1, "''' + response.reason + '
             'Accept' : 'application/json'
         }
         parameters={
-            'query' : '+IMO +8719188 +ROS'
+            'query' : '+IMO +8719188 keywords:ROS'
         }
         response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
         print(response.text)

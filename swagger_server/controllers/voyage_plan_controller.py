@@ -49,7 +49,7 @@ def check_acl(uvid):
         if client_mrn() in data:
             return True
 
-    if uvid is not None:
+    if not (uvid is None):
         acl = list(p.glob('**/' + uvid + '.acl'))
         if len(acl) > 0:
             with acl[0].open() as f: data = json.loads(f.read())
@@ -91,6 +91,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVoyagePlanResponse
     """
+    markForbidden = False
     p = Path('export')
     if uvid is None:
         uvids = list(p.glob('**/*.uvid'))
@@ -108,14 +109,18 @@ def get_voyage_plans(uvid=None, routeStatus=None):
         with voyage.open() as f: data = json.loads(f.read())
         if routeStatus == data['routeStatus']:
             if not check_acl(str(voyage).split('/')[1].split('.')[0]):
-                return 'Forbidden', 403
-            vp = VoyagePlan()
-            f = open('export/' + data['route'], 'r')
-            vp.route = f.read()
-            f.close()
-            vps.append(vp)
+                markForbidden = True
+            else:
+                vp = VoyagePlan()
+                f = open('export/' + data['route'], 'r')
+                vp.route = f.read()
+                f.close()
+                vps.append(vp)
     if len(vps) == 0:
-        return 'Voyage plan with routeStatus ' + routeStatus + ' not found', 404
+        if markForbidden:
+            return 'Forbidden', 403
+        else:
+            return 'Voyage plan with routeStatus ' + routeStatus + ' not found', 404
     timestamp = '2017-02-15T10:35:00Z'
     return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
 
@@ -166,12 +171,12 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
         f.close()
         if me in data:
             data.remove(me)
-    if len(data) == 0:
-        os.remove('export/' + vp + '.subs')
-    else:
-        f = open('export/' + vp + '.subs', 'w')
-        f.write(json.dumps(data))
-        f.close()
+        if len(data) == 0:
+            os.remove('export/' + vp + '.subs')
+        else:
+            f = open('export/' + vp + '.subs', 'w')
+            f.write(json.dumps(data))
+            f.close()
     return 'OK'
 
 
