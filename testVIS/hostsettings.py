@@ -43,6 +43,20 @@ vis1_uvid='urn:mrn:stm:service:instance:furuno:vis1'
 vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 vis3_uvid='urn:mrn:stm:service:instance:furuno:vis3'
 
+def log_event(name, callback, uvid = None):
+    data = { }
+    if not (client_mrn() is None):
+        data['client'] = client_mrn()
+    if not (name is None):
+        data['event'] = name
+    if not (callback is None):
+        data['callback'] = callback
+    if not (uvid is None):
+        data['uvid'] = uvid
+    with open('event.log', 'a') as f:
+        json.dump(data, f, ensure_ascii=True)
+        f.write('\n')
+
 def set_acl(id, uvid=None):
     if uvid is None: 
         f = open('export/all.acl', 'w')

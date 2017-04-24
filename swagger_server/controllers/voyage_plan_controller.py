@@ -18,10 +18,19 @@ from . import rtz10
 from . import rtz11
 import sys
 
-def log_event():
-    f = open('event.log', 'a')
-    f.write('Log event')
-    f.close()
+def log_event(name, callback, uvid = None):
+    data = { }
+    if not (client_mrn() is None):
+        data['client'] = client_mrn()
+    if not (name is None):
+        data['event'] = name
+    if not (callback is None):
+        data['callback'] = callback
+    if not (uvid is None):
+        data['uvid'] = uvid
+    with open('event.log', 'a') as f:
+        json.dump(data, f, ensure_ascii=True)
+        f.write('\n')
 
 def client_mrn():
     """
@@ -78,6 +87,7 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
         if me in data:
             sr = GetSubscriptionResponse(str(uvids[0]))
             subsl.append(sr)
+    log_event('get_subscriptions', callbackEndpoint)
     return subsl
 
 def get_voyage_plans(uvid=None, routeStatus=None):
@@ -122,6 +132,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
         else:
             return 'Voyage plan with routeStatus ' + routeStatus + ' not found', 404
     timestamp = '2017-02-15T10:35:00Z'
+    log_event('get_voyage', None)
     return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
 
 
@@ -156,6 +167,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     f = open('import/' + vp + '.rmsubs', 'w')
     f.write(json.dumps(data))
     f.close()
+    log_event('remove_subscription', callbackEndpoint, uvid)
 
     """
     Now the vessel will get the request to remove a subscription. As we have no vessel we have to simulate it here.
@@ -256,6 +268,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         f = open('import/' + vp + '.subs', 'w')
         f.write(json.dumps(data))
         f.close()
+        log_event('subscribe', callbackEndpoint, uvid)
 
     """
     Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
@@ -350,6 +363,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         f = open('import/' + uvid + '.ack', 'w')
         f.write(deliveryAckEndPoint)
         f.close()
+    log_event('upload', callbackEndpoint, uvid)
 
     """
     Now the vessel will need to process the uploaded voyagePlan and send an ack.
