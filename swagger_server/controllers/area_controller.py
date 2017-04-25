@@ -18,7 +18,7 @@ def log_event(name ,areaname, ackendpoint = None):
     data['time'] = time.strftime("%Y-%m-%d %H:%M")
     data['client'] = client_mrn()
     data['event'] = name
-    data['uvid'] = areaname
+    data['name'] = areaname
     if not (ackendpoint is None):
         data['ack'] = ackendpoint
     with open('event.log', 'a') as f:
@@ -51,12 +51,19 @@ def upload_area(area, deliveryAckEndPoint=None):
     :rtype: None
     """
     areaname = client_mrn() + ':2'
-    f = open('import/' + areaname + '.S124', 'wb')
-    f.write(area)
-    f.close()
+    with open('import/' + areaname + '.S124', 'wb') as f:
+        f.write(area)
     if deliveryAckEndPoint is not None:
-        f = open('import/' + areaname + '.ack', 'w')
-        f.write(deliveryAckEndPoint)
-        f.close()
+        with open('import/' + areaname + '.ack', 'w') as f:
+            f.write(deliveryAckEndPoint)
     log_event('area', areaname, deliveryAckEndPoint)
+    """
+    Now the vessel will get the request to process the area. As we have no vessel we have to simulate it here.
+    You still need to  process the ack request later as we do not want to process it in the middle of this call.
+    """
+    os.remove('import/' + areaname + '.S124')
+    if not (deliveryAckEndPoint is None):
+        os.remove('import/' + areaname + '.ack')
+        with open('export/' + areaname + '.ack', 'w') as f:
+            f.write(deliveryAckEndPoint)
     return 'OK'
