@@ -17,17 +17,20 @@ import re
 from . import rtz10
 from . import rtz11
 import sys
+import time
+import collections
 
 def log_event(name, callback, uvid = None):
-    data = { }
+    data = collections.OrderedDict()
+    data['time'] = time.strftime("%Y-%m-%d %H:%M")
     if not (client_mrn() is None):
         data['client'] = client_mrn()
     if not (name is None):
         data['event'] = name
-    if not (callback is None):
-        data['callback'] = callback
     if not (uvid is None):
         data['uvid'] = uvid
+    if not (callback is None):
+        data['callback'] = callback
     with open('event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')

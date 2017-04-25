@@ -53,7 +53,7 @@ paths:
         \ service as an informational message"
       operationId: "upload_area"
       consumes:
-      - "application/json"
+      - "text/xml"
       produces:
       - "application/json"
       parameters:

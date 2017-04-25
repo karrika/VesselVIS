@@ -2445,7 +2445,6 @@ VIS006sheet.write(row, 1, "", boldbld)
 VIS006sheet.write(row, 2, "", boldbld)
 VIS006sheet.write(row, 3, "STM Module receives the uplodaded txt message. VIS-1 sends ACK to VIS-2", boldbld)
 VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS006sheet.write(row, 6, "There is no ack request so it should not send anything at all", normal)
 
 row = 13
 VIS_006_03_row = row
@@ -2456,7 +2455,6 @@ VIS006sheet.write(row, 1, "", boldbl)
 VIS006sheet.write(row, 2, "", boldbl)
 VIS006sheet.write(row, 3, "VIS-2 receives ACK. VIS-2 logs ACK event", boldbl)
 VIS006sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS006sheet.write(row, 6, "There is no ack request so it should not receive anything at all", normal)
 
 row = 14
 
@@ -2912,7 +2910,7 @@ VIS009sheet.write(row, 0, "10", boldbld)
 VIS009sheet.write(row, 1, "findServices", boldbld)
 VIS009sheet.write(row, 2, "", boldbld)
 VIS009sheet.write(row, 3, "", boldbld)
-VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS009sheet.write(row, 5, "NOT APPLICABLE", bold)
 VIS009sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
 
 row = 21
@@ -2923,7 +2921,7 @@ VIS009sheet.write(row, 0, "11", boldbl)
 VIS009sheet.write(row, 1, "callService", boldbl)
 VIS009sheet.write(row, 2, "", boldbl)
 VIS009sheet.write(row, 3, "", boldbl)
-VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS009sheet.write(row, 5, "NOT APPLICABLE", bold)
 VIS009sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
 
 row = 22
@@ -2934,7 +2932,7 @@ VIS009sheet.write(row, 0, "12", boldbld)
 VIS009sheet.write(row, 1, "findIdentities", boldbld)
 VIS009sheet.write(row, 2, "", boldbld)
 VIS009sheet.write(row, 3, "", boldbld)
-VIS009sheet.write(row, 5, "NOT EXECUTED", bold)
+VIS009sheet.write(row, 5, "NOT APPLICABLE", bold)
 VIS009sheet.write(row, 6, "Not applicable as we do not use the SSC private API.", normal)
 
 row = 23

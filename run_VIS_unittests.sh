@@ -118,6 +118,37 @@ cd ../VIS-2
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_2_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_2_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 
+cd ../VIS-2
+nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_1_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_1_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_2_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_2_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+
+cd ../VIS-2
+nosetests -v testVIS/test_VIS-007.py:TestVIS_007.test_VIS_007_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-007.py:TestVIS_007.test_VIS_007_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-007.py:TestVIS_007.test_VIS_007_1_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-007.py:TestVIS_007.test_VIS_007_1_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+
+cd ../VIS-2
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_04 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_05 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_06 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_07 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_08 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_09 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_10 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_11 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_12 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_13 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+
+cd ../VIS-2
 ../sr_client/getopenidtoken VIS-2
 nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
@@ -132,6 +163,7 @@ nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_10 > >(tee -a ..
 nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_11 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_12 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_13 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+
 cd ..
 python3 close_xlsx_report_sheet.py
 python3 create_worksheet.py

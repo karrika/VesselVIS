@@ -56,7 +56,7 @@ def upload_area(area, deliveryAckEndPoint=None):
 
     :rtype: None
     """
-    f = open('import/' + client_mrn() + ':2' + '.S124', 'w')
+    f = open('import/' + client_mrn() + ':2' + '.S124', 'wb')
     f.write(area)
     f.close()
     if deliveryAckEndPoint is not None:
