@@ -11,12 +11,11 @@ import requests
 from lxml import etree
 import io
 import re
-import time
 import collections
 
 def log_event(name ,areaname, ackendpoint = None):
     data = collections.OrderedDict()
-    data['time'] = time.strftime("%Y-%m-%d %H:%M")
+    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     data['client'] = client_mrn()
     data['event'] = name
     data['name'] = areaname
@@ -58,7 +57,7 @@ def upload_area(area, deliveryAckEndPoint=None):
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
         data['client'] = client_mrn()
-        data['time'] = time.strftime("%Y-%m-%d %H:%M")
+        data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         with open('import/' + areaname + '.ack', 'w') as f:
             f.write(json.dumps(data))
     log_event('area', areaname, deliveryAckEndPoint)

@@ -11,7 +11,16 @@ import requests
 from lxml import etree
 import io
 import re
+import collections
 
+def log_event(name):
+    data = collections.OrderedDict()
+    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    data['client'] = client_mrn()
+    data['event'] = name
+    with open('event.log', 'a') as f:
+        json.dump(data, f, ensure_ascii=True)
+        f.write('\n')
 
 def client_mrn():
     """
@@ -23,27 +32,6 @@ def client_mrn():
     else:
         print('Great! Authorized')
     return 'urn:mrn:stm:service:instance:furuno:vis2'
-
-def check_acl(uvid):
-    """
-    Check if client is authorized in the access list of the voyage
-    """
-    p = Path('export')
-    acl = list(p.glob('**/all.acl'))
-    if len(acl) > 0:
-        with acl[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if client_mrn() in data:
-            return True
-
-    if uvid is not None:
-        acl = list(p.glob('**/' + uvid + '.acl'))
-        if len(acl) > 0:
-            with acl[0].open() as f: data = json.loads(f.read())
-            f.close()
-            if client_mrn() in data:
-                return True
-    return False
 
 def acknowledgement(deliveryAck):
     """
@@ -69,5 +57,6 @@ def acknowledgement(deliveryAck):
             'ack_result': str
         }
     """
+    log_event('ack')
     return 'Thank you for sending the acknowlegement'
 

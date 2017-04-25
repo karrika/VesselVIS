@@ -19,8 +19,8 @@ import json
 from pathlib import Path
 import requests
 from swagger_server.models.delivery_ack import DeliveryAck
-import time
 import collections
+from datetime import datetime
 
 
 p = Path('.')
@@ -210,11 +210,11 @@ def vessel_connects():
             payload = collections.OrderedDict()
             payload['id'] = 'urn:mrn:'
             payload['referenceId'] = 'urn:mrn:'
-            payload['timeOfDelivery'] = data['time']
+            payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
             payload['fromId'] = 'urn:mrn:'
             payload['fromName'] = 'Who cares'
             payload['toId'] = 'urn:mrn:'
             payload['toName'] = 'Who cares'
             payload['ackResult'] = 'Who cares'
-            sub='/acknowledge'
+            sub='/acknowledgement'
             response=requests.post(data['endpoint'] + sub, json=payload, cert=vis_cert, verify=trustchain)
