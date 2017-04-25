@@ -17,6 +17,10 @@ import shutil
 import sys
 import json
 from pathlib import Path
+import requests
+from swagger_server.models.delivery_ack import DeliveryAck
+import time
+import collections
 
 
 p = Path('.')
@@ -143,9 +147,8 @@ def vessel_connects():
                 for subscriber in old_subs:
                     if not ( subscriber in new_subs ):
                         new_subs.append(subscriber)
-            f = open(str(q), 'w')
-            f.write(json.dumps(new_subs))
-            f.close()
+            with open(str(q), 'w') as f:
+                f.write(json.dumps(new_subs))
     '''
     Check the possible new subsciption removals and take care of them.
     '''
@@ -168,9 +171,8 @@ def vessel_connects():
                 if len(old_subs) == 0:
                     os.remove(str(q))
                 else:
-                    f = open(str(q), 'w')
-                    f.write(json.dumps(old_subs))
-                    f.close()
+                    with open(str(q), 'w') as f:
+                        f.write(json.dumps(old_subs))
     '''
     Check for new voyage plans being uploaded and send ack if required.
     Also send the plans further is an active subscription exists.
@@ -185,9 +187,34 @@ def vessel_connects():
         shutil.copyfile(str(item), 'export/' + item.parts[1])
         os.remove(str(item)) 
     '''
-    Check for new areas being uploaded and send ack if required.
+    Check for new areas being uploaded.
+    '''
+    p = Path('import')
+    areas = list(p.glob('**/*.S124'))
+    if len(areas) > 0:
+        for area in areas:
+            os.remove(str(area))
+    '''
+    Check for new text messages being uploaded.
     '''
     '''
-    Check for new text messages being uploaded and send ack if required.
+    Check for ack requests.
     '''
-
+    p = Path('import')
+    acks = list(p.glob('**/*.ack'))
+    if len(acks) > 0:
+        for ack in acks:
+            with open(str(ack)) as f:
+                data = json.loads(f.read())
+            os.remove(str(ack))
+            payload = collections.OrderedDict()
+            payload['id'] = 'urn:mrn:'
+            payload['referenceId'] = 'urn:mrn:'
+            payload['timeOfDelivery'] = data['time']
+            payload['fromId'] = 'urn:mrn:'
+            payload['fromName'] = 'Who cares'
+            payload['toId'] = 'urn:mrn:'
+            payload['toName'] = 'Who cares'
+            payload['ackResult'] = 'Who cares'
+            sub='/acknowledge'
+            response=requests.post(data['endpoint'] + sub, json=payload, cert=vis_cert, verify=trustchain)

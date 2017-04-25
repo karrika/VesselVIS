@@ -1,3 +1,4 @@
+from swagger_server.models.delivery_ack import DeliveryAck
 import connexion
 from datetime import date, datetime
 from typing import List, Dict
@@ -54,16 +55,11 @@ def upload_area(area, deliveryAckEndPoint=None):
     with open('import/' + areaname + '.S124', 'wb') as f:
         f.write(area)
     if deliveryAckEndPoint is not None:
+        data = collections.OrderedDict()
+        data['endpoint'] = deliveryAckEndPoint
+        data['client'] = client_mrn()
+        data['time'] = time.strftime("%Y-%m-%d %H:%M")
         with open('import/' + areaname + '.ack', 'w') as f:
-            f.write(deliveryAckEndPoint)
+            f.write(json.dumps(data))
     log_event('area', areaname, deliveryAckEndPoint)
-    """
-    Now the vessel will get the request to process the area. As we have no vessel we have to simulate it here.
-    You still need to  process the ack request later as we do not want to process it in the middle of this call.
-    """
-    os.remove('import/' + areaname + '.S124')
-    if not (deliveryAckEndPoint is None):
-        os.remove('import/' + areaname + '.ack')
-        with open('export/' + areaname + '.ack', 'w') as f:
-            f.write(deliveryAckEndPoint)
     return 'OK'
