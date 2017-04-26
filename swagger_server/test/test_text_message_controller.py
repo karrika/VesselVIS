@@ -18,12 +18,22 @@ class TestTextMessageController(BaseTestCase):
 
         
         """
-        textMessageObject = 'Hello World!'
+        textMessageObject = '''<?xml version="1.0" encoding="utf-8"?>
+<textMessage xmlns="http://tempuri.org/textMessageSchema.xsd">
+  <textMessageId>urn:mrn:stm:txt:sma:20161222104700-1</textMessageId>
+  <informationObjectReferenceId>urn:mrn:stm:voyage:id:sma:test-1</informationObjectReferenceId>
+  <author>Mikael</author>
+  <from>urn:mrn:stm:org:sma</from>
+  <createdAt>2016-12-22T11:09:47</createdAt>
+  <subject>Subject</subject>
+  <body>Body</body>
+</textMessage>
+'''
+
         query_string = [('deliveryAckEndPoint', 'https://localhost:8002')]
         response = self.client.open('/textMessage',
                                     method='POST',
-                                    data=json.dumps(textMessageObject),
-                                    content_type='application/json',
+                                    data=textMessageObject,
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 

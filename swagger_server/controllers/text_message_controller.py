@@ -10,39 +10,32 @@ import requests
 from lxml import etree
 import io
 import re
+import collections
+
+def log_event(name, ackendpoint = None):
+    data = collections.OrderedDict()
+    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    data['client'] = client_mrn()
+    data['event'] = name
+    if not (ackendpoint is None):
+        data['ack'] = ackendpoint
+    with open('event.log', 'a') as f:
+        json.dump(data, f, ensure_ascii=True)
+        f.write('\n')
 
 def client_mrn():
     """
-    Placeholder for real client mrn service from certificate context
-    print(connexion.request.getpeercert(True))
+    Get the real DN name of the requestor
+    or return the testing requestor
     """
-    if not connexion.request.authorization:
-        print('Not authorized')
-    else:
-        print('Great! Authorized')
+    for hdr in connexion.request.headers:
+        if hdr[0] == 'Ssl-Dn':
+            for field in hdr[1].split('/'):
+                if len(field) > 5:
+                    if field[0:4] == 'UID=':
+                        print(field[4:])
+                        return field[4:]
     return 'urn:mrn:stm:service:instance:furuno:vis2'
-
-def check_acl(uvid):
-    """
-    Check if client is authorized in the access list of the voyage
-    """
-    p = Path('export')
-    acl = list(p.glob('**/all.acl'))
-    if len(acl) > 0:
-        with acl[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if client_mrn() in data:
-            return True
-
-    if uvid is not None:
-        acl = list(p.glob('**/' + uvid + '.acl'))
-        if len(acl) > 0:
-            with acl[0].open() as f: data = json.loads(f.read())
-            f.close()
-            if client_mrn() in data:
-                return True
-    return False
-
 
 def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     """
@@ -55,12 +48,11 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
     :rtype: None
     """
-    f = open('import/' + client_mrn() + ':1' + '.txt', 'w')
-    f.write(textMessageObject)
-    f.close()
+    with open('import/' + client_mrn() + ':1' + '.txt', 'wb') as f:
+        f.write(textMessageObject)
     if deliveryAckEndPoint is not None:
-        f = open('import/' + client_mrn() + ':1' + '.ack', 'w')
-        f.write(deliveryAckEndPoint)
-        f.close()
+        with open('import/' + client_mrn() + ':1' + '.ack', 'w') as f:
+            f.write(deliveryAckEndPoint)
+    log_event('txt', deliveryAckEndPoint)
     return 'OK'
 

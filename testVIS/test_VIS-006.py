@@ -72,6 +72,18 @@ voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 </route>
 '''
 
+textmessage='''<?xml version="1.0" encoding="utf-8"?>
+<textMessage xmlns="http://tempuri.org/textMessageSchema.xsd">
+  <textMessageId>urn:mrn:stm:txt:sma:20161222104700-1</textMessageId>
+  <informationObjectReferenceId>urn:mrn:stm:voyage:id:sma:test-1</informationObjectReferenceId>
+  <author>Mikael</author>
+  <from>urn:mrn:stm:org:sma</from>
+  <createdAt>2016-12-22T11:09:47</createdAt>
+  <subject>Subject</subject>
+  <body>Body</body>
+</textMessage>
+'''
+
 class TestVIS_006(BaseTestCase):
     """ VIS-006 tests """
 

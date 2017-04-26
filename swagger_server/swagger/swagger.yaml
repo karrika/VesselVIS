@@ -94,7 +94,7 @@ paths:
         \ service."
       operationId: "upload_text_message"
       consumes:
-      - "application/json"
+      - "text/xml"
       produces:
       - "application/json"
       parameters:
