@@ -48,11 +48,16 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
     :rtype: None
     """
-    with open('import/' + client_mrn() + ':1' + '.txt', 'wb') as f:
+    textname = client_mrn() + ':2'
+    with open('import/' + textname + ':1' + '.txt', 'wb') as f:
         f.write(textMessageObject)
     if deliveryAckEndPoint is not None:
-        with open('import/' + client_mrn() + ':1' + '.ack', 'w') as f:
-            f.write(deliveryAckEndPoint)
+        data = collections.OrderedDict()
+        data['endpoint'] = deliveryAckEndPoint
+        data['client'] = client_mrn()
+        data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+        with open('import/' + textname + '.ack', 'w') as f:
+            f.write(json.dumps(data))
     log_event('txt', deliveryAckEndPoint)
     return 'OK'
 
