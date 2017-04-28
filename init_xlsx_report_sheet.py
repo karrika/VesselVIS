@@ -77,6 +77,30 @@ VIS010sheet.set_column(3, 3, 40)
 VIS010sheet.set_column(4, 4, 10)
 VIS010sheet.set_column(5, 5, 15)
 VIS010sheet.set_column(6, 4, 20)
+SPIS001sheet = workbook.add_worksheet("SPIS001")
+SPIS001sheet.set_column(0, 0, 10)
+SPIS001sheet.set_column(1, 1, 40)
+SPIS001sheet.set_column(2, 2, 10)
+SPIS001sheet.set_column(3, 3, 40)
+SPIS001sheet.set_column(4, 4, 10)
+SPIS001sheet.set_column(5, 5, 15)
+SPIS001sheet.set_column(6, 4, 20)
+SPIS002sheet = workbook.add_worksheet("SPIS002")
+SPIS002sheet.set_column(0, 0, 10)
+SPIS002sheet.set_column(1, 1, 40)
+SPIS002sheet.set_column(2, 2, 10)
+SPIS002sheet.set_column(3, 3, 40)
+SPIS002sheet.set_column(4, 4, 10)
+SPIS002sheet.set_column(5, 5, 15)
+SPIS002sheet.set_column(6, 4, 20)
+SPIS003sheet = workbook.add_worksheet("SPIS003")
+SPIS003sheet.set_column(0, 0, 10)
+SPIS003sheet.set_column(1, 1, 40)
+SPIS003sheet.set_column(2, 2, 10)
+SPIS003sheet.set_column(3, 3, 40)
+SPIS003sheet.set_column(4, 4, 10)
+SPIS003sheet.set_column(5, 5, 15)
+SPIS003sheet.set_column(6, 4, 20)
 
 
 normal = workbook.add_format()
@@ -569,6 +593,51 @@ worksheet.write(row, 2, "Find Voyage Information Services", mainbold)
 worksheet.write(row, 3, "Test search for voyage information services to consume", mainbold)
 worksheet.write(row, 4, "VIS", mainbold)
 worksheet.write(row, 5, "VIS-010", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
+
+row = 34
+SPIS_001_row = row
+SPIS_001_col = 9
+worksheet.set_row(row, 30)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Publish Port Call Message", mainbold)
+worksheet.write(row, 3, "Test publish voyage plan and give authorization (access) to chosen identities. Authorized identities (organisations) can request (GET) and subscribe to voyage plans", mainbold)
+worksheet.write(row, 4, "SPIS", mainbold)
+worksheet.write(row, 5, "SPIS-001", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
+
+row = 35
+SPIS_002_row = row
+SPIS_002_col = 9
+worksheet.set_row(row, 30)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Receive Port Call Message", mainbold)
+worksheet.write(row, 3, "Receive PCM from PortCDM", mainbold)
+worksheet.write(row, 4, "SPIS", mainbold)
+worksheet.write(row, 5, "SPIS-002", mainbold)
+worksheet.write(row, 6, "Main", mainbold)
+worksheet.write(row, 7, "", mainbold)
+worksheet.write(row, 8, "", mainbold)
+worksheet.write(row, 9, "NOT EXECUTED", mainbold)
+
+row = 36
+SPIS_003_row = row
+SPIS_003_col = 9
+worksheet.set_row(row, 30)
+worksheet.write(row, 0, "MO", mainboldcenter)
+worksheet.write(row, 1, "", mainbold)
+worksheet.write(row, 2, "Logging in SPIS", mainbold)
+worksheet.write(row, 3, "Check log in SPIS", mainbold)
+worksheet.write(row, 4, "SPIS", mainbold)
+worksheet.write(row, 5, "SPIS-003", mainbold)
 worksheet.write(row, 6, "Main", mainbold)
 worksheet.write(row, 7, "", mainbold)
 worksheet.write(row, 8, "", mainbold)
@@ -3136,6 +3205,148 @@ VIS010sheet.write(row, 1, "Find Enhanced Monitoring Service to consume", boldbl)
 VIS010sheet.write(row, 2, "", boldbl)
 VIS010sheet.write(row, 3, "", boldbl)
 VIS010sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 0
+col = 0
+SPIS001sheet.write(row, 1, "Test Protocol", bold)
+
+row = 1
+SPIS001sheet.write(row, 1, "Executed by", bold)
+SPIS001sheet.merge_range(row, 2, row, 3, "Karri Kaksonen", bold)
+
+row = 2
+SPIS001sheet.write(row, 1, "Executed date", bold)
+SPIS001sheet.merge_range(row, 2, row, 3, time.strftime("%Y-%m-%d %H:%M"), bold)
+
+row = 3
+
+row = 4
+SPIS001sheet.write(row, 0, "", boldblue)
+SPIS001sheet.write(row, 1, "Test ID", boldblue)
+SPIS001sheet.merge_range(row, 2, row, 3, "TEST-SPIS-001", boldblue)
+SPIS001sheet.write(row, 3, "", boldblue)
+SPIS001sheet.write(row, 4, "", boldblue)
+SPIS001sheet.write(row, 5, "", boldblue)
+SPIS001sheet.write(row, 6, "", boldblue)
+
+row = 5
+SPIS001sheet.write(row, 1, "Title", bold)
+SPIS001sheet.merge_range(row, 2, row, 3, "Publish Port Call Message", normal)
+
+row = 6
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 1, "Description", bold)
+SPIS001sheet.merge_range(row, 2, row, 3, "Nominate port and publish PortCall Messages to PortCDM@Port", normal)
+VIS010sheet.write(row, 4, "Total:", normalright)
+VIS010sheet.write(row, 5, '=IF(F10>0,"NOT EXECUTED",IF(F9>0,"FAIL","PASS"))', normalright)
+
+row = 7
+SPIS001sheet.write(row, 1, "Preconditions", bold)
+SPIS001sheet.write(row, 2, "PortCDM service registered in SR for SEGOT", normal)
+SPIS001sheet.write(row, 4, "Pass:", normalright)
+SPIS001sheet.write(row, 5, '=COUNTIF(F12:F25, "PASS")', normalright)
+
+row = 8
+SPIS001sheet.write(row, 1, "Dependencies", bold)
+SPIS001sheet.write(row, 2, "SPIS for IMO 7505346, YMER, PortCDM, SSC, Service and Identity Registry", normal)
+SPIS001sheet.write(row, 4, "Fail:", normalright)
+SPIS001sheet.write(row, 5, '=COUNTIF(F12:F25, "FAIL")', normalright)
+
+row = 9
+SPIS001sheet.write(row, 4, "Not executed:", normalright)
+SPIS001sheet.write(row, 5, '=COUNTIF(F12:F25, "NOT EXECUTED")', normalright)
+
+worksheet.write(SPIS_001_row, SPIS_001_col, '=$SPIS001.F7', mainbold)
+
+SPIS001sheet.add_table('A11:G25')
+row = 10
+SPIS001sheet.write(row, 0, "Step#", boldcenterwhite)
+SPIS001sheet.write(row, 1, "Test Step", boldcenterwhite)
+SPIS001sheet.write(row, 2, "Test Data", boldcenterwhite)
+SPIS001sheet.write(row, 3, "Expected Result", boldcenterwhite)
+SPIS001sheet.write(row, 4, "Actual", boldcenterwhite)
+SPIS001sheet.write(row, 5, "Pass Fail", boldcenterwhite)
+SPIS001sheet.write(row, 6, "Findings & Comments", boldcenterwhite)
+
+row = 11
+SPIS_001_01_row = row
+SPIS_001_01_col = 5
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 0, "0", boldbl)
+SPIS001sheet.write(row, 1, "Preparation: No active distribution of PCM to PortCDM", boldbl)
+SPIS001sheet.write(row, 2, "", boldbl)
+SPIS001sheet.write(row, 3, "", boldbl)
+SPIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 12
+SPIS_001_02_row = row
+SPIS_001_02_col = 5
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 0, "1", boldbld)
+SPIS001sheet.write(row, 1, "STM Module->SPIS-1: Nominate PortCDM@Port SEGOT to data (local or global port call id)", boldbld)
+SPIS001sheet.write(row, 2, "", boldbld)
+SPIS001sheet.write(row, 3, "", boldbld)
+SPIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 13
+SPIS_001_03_row = row
+SPIS_001_03_col = 5
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 0, "2", boldbld)
+SPIS001sheet.write(row, 1, "STM Module->SPIS-1: Publish TTA to nominated port", boldbld)
+SPIS001sheet.write(row, 2, "PCM-001", boldbld)
+SPIS001sheet.write(row, 3, "PortCDM-1 received the published PCM", boldbld)
+SPIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 14
+SPIS_001_04_row = row
+SPIS_001_04_col = 5
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 0, "3", boldbld)
+SPIS001sheet.write(row, 1, "STM Module->SPIS-1: Publish ETA to nominated port", boldbld)
+SPIS001sheet.write(row, 2, "PCM-002", boldbld)
+SPIS001sheet.write(row, 3, "PortCDM-1 received the published PCM", boldbld)
+SPIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 15
+SPIS_001_05_row = row
+SPIS_001_05_col = 5
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 0, "3", boldbld)
+SPIS001sheet.write(row, 1, "STM Module->SPIS-1: Publish ATA to nominated port", boldbld)
+SPIS001sheet.write(row, 2, "PCM-003", boldbld)
+SPIS001sheet.write(row, 3, "PortCDM-1 received the published PCM", boldbld)
+SPIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 16
+SPIS_001_06_row = row
+SPIS_001_06_col = 5
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 0, "4", boldbld)
+SPIS001sheet.write(row, 1, "STM Module->SPIS-1: Publish TTD to nominated port", boldbld)
+SPIS001sheet.write(row, 2, "PCM-004", boldbld)
+SPIS001sheet.write(row, 3, "PortCDM-1 received the published PCM", boldbld)
+SPIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 17
+SPIS_001_07_row = row
+SPIS_001_07_col = 5
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 0, "4", boldbld)
+SPIS001sheet.write(row, 1, "STM Module->SPIS-1: Publish ETD to nominated port", boldbld)
+SPIS001sheet.write(row, 2, "PCM-005", boldbld)
+SPIS001sheet.write(row, 3, "PortCDM-1 received the published PCM", boldbld)
+SPIS001sheet.write(row, 5, "NOT EXECUTED", bold)
+
+row = 18
+SPIS_001_08_row = row
+SPIS_001_08_col = 5
+SPIS001sheet.set_row(row, 30)
+SPIS001sheet.write(row, 0, "5", boldbld)
+SPIS001sheet.write(row, 1, "STM Module->SPIS-1: Publish ATD to nominated port", boldbld)
+SPIS001sheet.write(row, 2, "PCM-006", boldbld)
+SPIS001sheet.write(row, 3, "PortCDM-1 received the published PCM", boldbld)
+SPIS001sheet.write(row, 5, "NOT EXECUTED", bold)
 
 '''
 

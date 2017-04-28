@@ -61,6 +61,22 @@ def log_event(name, callback, uvid = None):
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
 
+def check_event(name, callback, uvid = None):
+    with open('event.log', 'r') as f:
+        log = f.readlines()
+    length = len(log)
+    if length > 0:
+        data = json.loads(log[length-1])
+        if data['event'] != name:
+            return False
+        if data['callback'] != callback:
+            return False
+        if not (uvid is None):
+            if data['uvid'] != uvid:
+                return False
+        return True
+    return False
+
 def set_acl(id, uvid=None):
     if uvid is None: 
         f = open('export/all.acl', 'w')

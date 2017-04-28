@@ -50,11 +50,14 @@ class TestVIS_003(BaseTestCase):
     """ VIS-003 tests """
 
     def setUp(self):
-        hostsettings.set_acl(vis_uvid, voyageuvid)
-        hostsettings.set_acl(vis_uvid, None)
         pass
 
     def tearDown(self):
+        pass
+
+    def test_VIS_003_00(self):
+        hostsettings.set_acl(vis_uvid, voyageuvid)
+        hostsettings.set_acl(vis_uvid, None)
         pass
 
     def test_VIS_003_01(self):
@@ -65,8 +68,7 @@ class TestVIS_003(BaseTestCase):
         """
         sub='/voyagePlans/subscription'
         parameters={
-            'callbackEndpoint': callbackurl,
-            'uvid': voyageuvid
+            'callbackEndpoint': callbackurl
         }
         payload={}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
@@ -85,14 +87,25 @@ VIS003sheet.write(VIS_003_01_row, VIS_003_01_col - 1, "''' + response.reason + '
 
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Sender logging is not implemented yet')
     def test_VIS_003_02(self):
         """
         VIS-003-2 - VIS-2 logs event
 
         
         """
-        pass
+        logged = hostsettings.check_event('subscribe', callbackurl)
+        if logged:
+            report='''
+VIS003sheet.write(VIS_003_02_row, VIS_003_02_col, "PASS", boldcenter)
+'''
+        else:
+            report='''
+VIS003sheet.write(VIS_003_02_row, VIS_003_02_col, "FAIL", boldcenter)
+VIS003sheet.write(VIS_003_02_row, VIS_003_02_col - 1, "''' + '", normal)'
+        f = open('../create_worksheet.py', 'a')
+        f.write(report)
+        f.close()
+        self.assertTrue(logged)
 
     def test_VIS_003_03(self):
         """
