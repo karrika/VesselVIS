@@ -91,22 +91,9 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        sub='/voyagePlans'
-        payload=voyageplan
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS005sheet.write(VIS_005_01_row, VIS_005_01_col, "PASS", boldcenter)
-VIS005sheet.write(VIS_005_01_row, VIS_005_01_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS005sheet.write(VIS_005_01_row, VIS_005_01_col, "FAIL", boldcenter)
-VIS005sheet.write(VIS_005_01_row, VIS_005_01_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan)
+        hostsettings.reportrow('VIS005sheet', 'VIS_005_01_row', 'VIS_005_01_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_005_0_2(self):
@@ -116,22 +103,9 @@ VIS005sheet.write(VIS_005_01_row, VIS_005_01_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/voyagePlans'
-        payload=voyageplan
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS005sheet.write(VIS_005_02_row, VIS_005_02_col, "PASS", boldcenter)
-VIS005sheet.write(VIS_005_02_row, VIS_005_02_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS005sheet.write(VIS_005_02_row, VIS_005_02_col, "FAIL", boldcenter)
-VIS005sheet.write(VIS_005_02_row, VIS_005_02_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan)
+        hostsettings.reportrow('VIS005sheet', 'VIS_005_02_row', 'VIS_005_02_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_005_0_3(self):
@@ -142,13 +116,16 @@ VIS005sheet.write(VIS_005_02_row, VIS_005_02_col - 1, "''' + response.reason + '
         """
         self.assertTrue(hostsettings.uvid_exists(newvoyageuvid))
 
-    @unittest.skip('The service registry search is not implemented yet.')
     def test_VIS_005_1_1(self):
         """
         VIS-005-1-1 - In VIS-2, search for VIS with MMSI=12345678
 
         
         """
+        response = hostsettings.search('mmsi:12345678')
+        hostsettings.reportrow('VIS005sheet', 'VIS_005_1_1_row', 'VIS_005_1_1_col',
+            response.status_code == 200, response.reason)
+        self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_005_1_2(self):
         """
@@ -156,25 +133,9 @@ VIS005sheet.write(VIS_005_02_row, VIS_005_02_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/voyagePlans'
-        parameters={
-            'deliveryAckEndPoint': 'https://localhost:8002'
-        }
-        payload=voyageplan
-        response=requests.post(url + sub, params=parameters, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS005sheet.write(VIS_005_1_2_row, VIS_005_1_2_col, "PASS", boldcenter)
-VIS005sheet.write(VIS_005_1_2_row, VIS_005_1_2_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS005sheet.write(VIS_005_1_2_row, VIS_005_1_2_col, "FAIL", boldcenter)
-VIS005sheet.write(VIS_005_1_2_row, VIS_005_1_2_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan, ack = 'https://localhost:8002')
+        hostsettings.reportrow('VIS005sheet', 'VIS_005_1_2_row', 'VIS_005_1_2_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_005_1_3(self):
