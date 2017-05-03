@@ -515,34 +515,12 @@ class TestVIS_001(BaseTestCase):
         hostsettings.rm_uvid(newvoyageuvid)
         hostsettings.rm_acl(vis2_uvid)
         hostsettings.rm_subs(vis2_uvid)
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': 'delete',
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, 'deny', newvoyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, 'deny')
 
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': 'deny',
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        parameters={
-            'callbackEndpoint': 'deny'
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        report='''
-VIS001sheet.write(VIS_001_00_row, VIS_001_00_col, "PASS", boldcenter)
-'''
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_00_row', 'VIS_001_00_col',
+            True, '')
         pass
 
     def test_VIS_001_01(self):
@@ -551,24 +529,9 @@ VIS001sheet.write(VIS_001_00_row, VIS_001_00_col, "PASS", boldcenter)
 
         
         """
-        sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 404:
-            report='''
-VIS001sheet.write(VIS_001_01_row, VIS_001_01_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_01_row, VIS_001_01_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_01_row, VIS_001_01_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_01_row, VIS_001_01_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.get_voyageplan(url, newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_01_row', 'VIS_001_01_col',
+            response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_02(self):
@@ -577,26 +540,9 @@ VIS001sheet.write(VIS_001_01_row, VIS_001_01_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl,
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 404:
-            report='''
-VIS001sheet.write(VIS_001_02_row, VIS_001_02_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_02_row, VIS_001_02_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_02_row, VIS_001_02_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_02_row, VIS_001_02_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_02_row', 'VIS_001_02_col',
+            response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_03(self):
@@ -605,23 +551,9 @@ VIS001sheet.write(VIS_001_02_row, VIS_001_02_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/voyagePlans'
-        payload=voyageplan
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_03_row, VIS_001_03_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_03_row, VIS_001_03_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_03_row, VIS_001_03_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_03_row, VIS_001_03_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-        print(response.text)
-
+        response=hostsettings.post_voyageplan(url, voyageplan)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_03_row', 'VIS_001_03_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_04(self):
@@ -630,24 +562,9 @@ VIS001sheet.write(VIS_001_03_row, VIS_001_03_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 403:
-            report='''
-VIS001sheet.write(VIS_001_04_row, VIS_001_04_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_04_row, VIS_001_04_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_04_row, VIS_001_04_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_04_row, VIS_001_04_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.get_voyageplan(url, newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_04_row', 'VIS_001_04_col',
+            response.status_code == 403, response.reason)
         self.assert403(response, "Response body is : " + response.text)
 
     def test_VIS_001_05(self):
@@ -656,26 +573,9 @@ VIS001sheet.write(VIS_001_04_row, VIS_001_04_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl,
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 403:
-            report='''
-VIS001sheet.write(VIS_001_05_row, VIS_001_05_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_05_row, VIS_001_05_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_05_row, VIS_001_05_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_05_row, VIS_001_05_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_05_row', 'VIS_001_05_col',
+            response.status_code == 403, response.reason)
         self.assert403(response, "Response body is : " + response.text)
 
     def test_VIS_001_06(self):
@@ -685,21 +585,9 @@ VIS001sheet.write(VIS_001_05_row, VIS_001_05_col - 1, "''' + response.reason + '
         
         """
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': 'allow',
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        report='''
-VIS001sheet.write(VIS_001_06_row, VIS_001_06_col, "PASS", boldcenter)
-'''
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.subscribe_voyageplan(url, 'allow', newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_06_row', 'VIS_001_06_col',
+            True, '')
         pass
 
     def test_VIS_001_07(self):
@@ -708,24 +596,9 @@ VIS001sheet.write(VIS_001_06_row, VIS_001_06_col, "PASS", boldcenter)
 
         
         """
-        sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_07_row, VIS_001_07_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_07_row, VIS_001_07_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_07_row, VIS_001_07_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_07_row, VIS_001_07_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.get_voyageplan(url, newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_07_row', 'VIS_001_07_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_08(self):
@@ -734,26 +607,9 @@ VIS001sheet.write(VIS_001_07_row, VIS_001_07_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl,
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_08_row, VIS_001_08_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_08_row, VIS_001_08_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_08_row, VIS_001_08_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_08_row, VIS_001_08_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_08_row', 'VIS_001_08_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_09(self):
@@ -763,21 +619,9 @@ VIS001sheet.write(VIS_001_08_row, VIS_001_08_col - 1, "''' + response.reason + '
         
         """
         hostsettings.rm_acl(vis2_uvid, newvoyageuvid)
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': 'deny',
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        report='''
-VIS001sheet.write(VIS_001_09_row, VIS_001_09_col, "PASS", boldcenter)
-'''
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.subscribe_voyageplan(url, 'deny', newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_09_row', 'VIS_001_09_col',
+            True, '')
         pass
 
     def test_VIS_001_10(self):
@@ -786,24 +630,9 @@ VIS001sheet.write(VIS_001_09_row, VIS_001_09_col, "PASS", boldcenter)
 
         
         """
-        sub='/voyagePlans'
-        parameters={
-            'uvid': newvoyageuvid
-        }
-        response=requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 403:
-            report='''
-VIS001sheet.write(VIS_001_10_row, VIS_001_10_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_10_row, VIS_001_10_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_10_row, VIS_001_10_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_10_row, VIS_001_10_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.get_voyageplan(url, newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_10_row', 'VIS_001_10_col',
+            response.status_code == 403, response.reason)
         self.assert403(response, "Response body is : " + response.text)
 
     def test_VIS_001_11(self):
@@ -812,26 +641,9 @@ VIS001sheet.write(VIS_001_10_row, VIS_001_10_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl,
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 403:
-            report='''
-VIS001sheet.write(VIS_001_11_row, VIS_001_11_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_11_row, VIS_001_11_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_11_row, VIS_001_11_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_11_row, VIS_001_11_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_11_row', 'VIS_001_11_col',
+            response.status_code == 403, response.reason)
         self.assert403(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_3_1(self):
@@ -840,22 +652,9 @@ VIS001sheet.write(VIS_001_11_row, VIS_001_11_col - 1, "''' + response.reason + '
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_in_the_past
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_in_the_past)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_3_1_row', 'VIS_001_12_3_1_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_3_2(self):
@@ -864,22 +663,9 @@ VIS001sheet.write(VIS_001_12_3_1_row, VIS_001_12_3_1_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_in_the_past_and_future
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_in_the_past_and_future)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_3_2_row', 'VIS_001_12_3_2_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_3_3(self):
@@ -888,22 +674,9 @@ VIS001sheet.write(VIS_001_12_3_2_row, VIS_001_12_3_2_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_in_the_future
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_in_the_future)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_3_3_row', 'VIS_001_12_3_3_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_4_1(self):
@@ -912,22 +685,9 @@ VIS001sheet.write(VIS_001_12_3_3_row, VIS_001_12_3_3_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_rtz10
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_rtz10)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_4_1_row', 'VIS_001_12_4_1_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_4_2(self):
@@ -936,22 +696,9 @@ VIS001sheet.write(VIS_001_12_4_1_row, VIS_001_12_4_1_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_in_the_future
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_in_the_future)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_4_2_row', 'VIS_001_12_4_2_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_4_3(self):
@@ -960,22 +707,9 @@ VIS001sheet.write(VIS_001_12_4_2_row, VIS_001_12_4_2_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_in_the_future
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_in_the_future)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_4_3_row', 'VIS_001_12_4_3_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_5_1(self):
@@ -984,22 +718,9 @@ VIS001sheet.write(VIS_001_12_4_3_row, VIS_001_12_4_3_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_incorrect_xml
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 500:
-            report='''
-VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_incorrect_xml)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_5_1_row', 'VIS_001_12_5_1_col',
+            response.status_code == 500, response.reason)
         self.assert500(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_5_2(self):
@@ -1008,22 +729,9 @@ VIS001sheet.write(VIS_001_12_5_1_row, VIS_001_12_5_1_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_incorrect_schema
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 400:
-            report='''
-VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_incorrect_schema)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_5_2_row', 'VIS_001_12_5_2_col',
+            response.status_code == 400, response.reason)
         self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_6_1(self):
@@ -1032,22 +740,9 @@ VIS001sheet.write(VIS_001_12_5_2_row, VIS_001_12_5_2_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_6_1_row', 'VIS_001_12_6_1_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_1(self):
@@ -1056,22 +751,9 @@ VIS001sheet.write(VIS_001_12_6_1_row, VIS_001_12_6_1_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_missing_vesselVoyage
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 404:
-            report='''
-VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_missing_vesselVoyage)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_1_row', 'VIS_001_12_7_1_col',
+            response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_2(self):
@@ -1080,22 +762,9 @@ VIS001sheet.write(VIS_001_12_7_1_row, VIS_001_12_7_1_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_wrong_syntax_vesselVoyage
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 400:
-            report='''
-VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_wrong_syntax_vesselVoyage)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_2_row', 'VIS_001_12_7_2_col',
+            response.status_code == 400, response.reason)
         self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_3(self):
@@ -1104,22 +773,9 @@ VIS001sheet.write(VIS_001_12_7_2_row, VIS_001_12_7_2_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_missing_routeStatusEnum
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 404:
-            report='''
-VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_missing_routeStatusEnum)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_3_row', 'VIS_001_12_7_3_col',
+            response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_4(self):
@@ -1128,22 +784,9 @@ VIS001sheet.write(VIS_001_12_7_3_row, VIS_001_12_7_3_col - 1, "''' + response.re
 
 
         """
-        sub='/voyagePlans'
-        payload=voyageplan_wrong_syntax_routeStatusEnum
-        response=requests.post(url + sub, data=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 400:
-            report='''
-VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col, "PASS", boldcenter)
-VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col, "FAIL", boldcenter)
-VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_voyageplan(url, voyageplan_wrong_syntax_routeStatusEnum)
+        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_4_row', 'VIS_001_12_7_4_col',
+            response.status_code == 400, response.reason)
         self.assert400(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_5(self):
@@ -1153,27 +796,9 @@ VIS001sheet.write(VIS_001_12_7_4_row, VIS_001_12_7_4_col - 1, "''' + response.re
 
         
         """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': 'delete',
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': 'delete',
-            'uvid': newvoyageuvid2
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl,
-            'uvid': newvoyageuvid
-        }
-        payload={}
-        response=requests.delete(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid2)
+        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))

@@ -47,10 +47,20 @@ vis1_uvid='urn:mrn:stm:service:instance:furuno:vis1'
 vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 vis3_uvid='urn:mrn:stm:service:instance:furuno:vis3'
 
+def reportrow(sheet, row, col, state, reason):
+    if state:
+        report=sheet + '.write(' + row + ', ' + col + ''', "PASS", boldcenter)
+''' + sheet + '.write(' + row + ', ' + col + ' - 1, "' + reason + '''", normal)
+'''
+    else:
+        report=sheet + '.write(' + row + ', ' + col + ''', "FAIL", boldcenter)
+''' + sheet + '.write(' + row + ', ' + col + ' - 1, "' + reason + '''", normal)
+'''
+    with open('../create_worksheet.py', 'a') as f:
+        f.write(report)
+
 def log_event(name, callback, uvid = None):
     data = { }
-    if not (client_mrn() is None):
-        data['client'] = client_mrn()
     if not (name is None):
         data['event'] = name
     if not (callback is None):
@@ -120,6 +130,16 @@ def rm_acl(id, uvid=None):
         if acl_exists(uvid):
             os.remove('export/' + uvid + '.acl') 
 
+def acl_allowed(uvid):
+    p = Path('export')
+    all = list(p.glob('**/all.acl'))
+    if len(all) > 0:
+        with open('all[0]', 'r') as f:
+            data = json.loads(f.read())
+        if uvid in data:
+            return True
+    return False
+
 def rm_subs(id, uvid=None):
     if uvid is None:
         if subs_exists(None):
@@ -144,6 +164,75 @@ def rm_uvid(uvid):
         if acl_exists(uvid):
             os.remove('export/' + uvid + '.acl') 
 
+def get_voyageplan(url, uvid = None):
+        sub='/voyagePlans'
+        if uvid is None:
+            log_event('get_voyage', None)
+            return requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        log_event('get_voyage', None, uvid)
+        parameters = {
+            'uvid' : uvid
+        }
+        return requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+def subscribe_voyageplan(url, callback, uvid = None):
+        sub='/voyagePlans/subscription'
+        if uvid is None:
+            parameters={
+                'callbackEndpoint': callback
+            }
+            return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        parameters={
+            'callbackEndpoint': callback,
+            'uvid': uvid
+        }
+        return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+def unsubscribe_voyageplan(url, callback, uvid = None):
+        sub='/voyagePlans/subscription'
+        if uvid is None:
+            parameters={
+                'callbackEndpoint': callback
+            }
+            return requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        parameters={
+            'callbackEndpoint': callback,
+            'uvid': uvid
+        }
+        return requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+
+def post_voyageplan(url, voyageplan):
+        sub='/voyagePlans'
+        log_event('post_voyage', None)
+        return requests.post(url + sub, data=voyageplan, cert=vis_cert, verify=trustchain)
+
+def upload_monitored(subscriber):
+    '''
+    Upload monitored route to subscriber
+    '''
+    p = Path('export')
+    uvids = list(p.glob('**/*.uvid'))
+    for uvid in uvids:
+        with open(str(uvid), 'r') as f:
+            data = json.loads(f.read())
+        if data['routeStatus'] == '7':
+            '''
+            Send this uvid to subscriber
+            '''
+
+def send_ack(endpoint):
+    payload = collections.OrderedDict()
+    payload['id'] = 'urn:mrn:'
+    payload['referenceId'] = 'urn:mrn:'
+    payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    payload['fromId'] = 'urn:mrn:'
+    payload['fromName'] = 'Who cares'
+    payload['toId'] = 'urn:mrn:'
+    payload['toName'] = 'Who cares'
+    payload['ackResult'] = 'Who cares'
+    sub='/acknowledgement'
+    response=requests.post(endpoint + sub, json=payload, cert=vis_cert, verify=trustchain)
+
 def vessel_connects():
     '''
     Check the possible new subsciptions and merge them with existing ones.
@@ -154,6 +243,7 @@ def vessel_connects():
         for sub in subs:
             with sub.open() as f:
                 new_subs = json.loads(f.read())
+                send_uvid_to = new_subs
             os.remove(str(sub))
             q = Path('export')
             q = q / sub.parts[1]
@@ -165,6 +255,11 @@ def vessel_connects():
                         new_subs.append(subscriber)
             with open(str(q), 'w') as f:
                 f.write(json.dumps(new_subs))
+            for subscriber in send_uvid_to:
+                '''
+                Send monitored voyage to new subscribers
+                '''
+                upload_monitored(subscriber)
     '''
     Check the possible new subsciption removals and take care of them.
     '''
@@ -191,7 +286,7 @@ def vessel_connects():
                         f.write(json.dumps(old_subs))
     '''
     Check for new voyage plans being uploaded and send ack if required.
-    Also send the plans further is an active subscription exists.
+    Also send the plans further if an active subscription exists.
     '''
     p = Path('import')
     uvids = list(p.glob('**/*.uvid'))
@@ -201,7 +296,8 @@ def vessel_connects():
     rtzs = list(p.glob('**/*.rtz'))
     for item in rtzs:
         shutil.copyfile(str(item), 'export/' + item.parts[1])
-        os.remove(str(item)) 
+        os.remove(str(item))
+        
     '''
     Check for new areas being uploaded.
     '''
@@ -223,14 +319,5 @@ def vessel_connects():
             with open(str(ack)) as f:
                 data = json.loads(f.read())
             os.remove(str(ack))
-            payload = collections.OrderedDict()
-            payload['id'] = 'urn:mrn:'
-            payload['referenceId'] = 'urn:mrn:'
-            payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-            payload['fromId'] = 'urn:mrn:'
-            payload['fromName'] = 'Who cares'
-            payload['toId'] = 'urn:mrn:'
-            payload['toName'] = 'Who cares'
-            payload['ackResult'] = 'Who cares'
-            sub='/acknowledgement'
-            response=requests.post(data['endpoint'] + sub, json=payload, cert=vis_cert, verify=trustchain)
+            send_ack(data['endpoint'])
+
