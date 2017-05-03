@@ -1564,7 +1564,6 @@ VIS003sheet.write(row, 1, "VIS-2 logs event", boldbld)
 VIS003sheet.write(row, 2, "", boldbld)
 VIS003sheet.write(row, 3, "event logged", boldbld)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS003sheet.write(row, 6, "There is a separate test suite for logging. Why should VIS003 micro-manage logging?", normal)
 
 row = 13
 VIS_003_03_row = row
@@ -1575,7 +1574,6 @@ VIS003sheet.write(row, 1, "VIS-1 gets a POST subscription request", boldbl)
 VIS003sheet.write(row, 2, "", boldbl)
 VIS003sheet.write(row, 3, "event logged", boldbl)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS003sheet.write(row, 6, "Completely redundant. If you already received 200 as a response to your POST.", normal)
 
 row = 14
 VIS_003_04_row = row
@@ -1586,7 +1584,6 @@ VIS003sheet.write(row, 1, "VIS-1 logs event", boldbld)
 VIS003sheet.write(row, 2, "", boldbld)
 VIS003sheet.write(row, 3, "event logged", boldbld)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS003sheet.write(row, 6, "There is a separate test suite for logging. Why should VIS003 micro-manage logging?", normal)
 
 row = 15
 VIS_003_05_row = row
@@ -1597,7 +1594,6 @@ VIS003sheet.write(row, 1, "VIS-1 checks against ACL and get OK", boldbl)
 VIS003sheet.write(row, 2, "", boldbl)
 VIS003sheet.write(row, 3, "check", boldbl)
 VIS003sheet.write(row, 5, "NOT EXECUTED", bold)
-VIS003sheet.write(row, 6, "Completely redundant. You already received 200 instead of 403 as a response to your POST.", normal)
 
 row = 16
 VIS_003_06_row = row
