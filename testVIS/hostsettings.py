@@ -38,7 +38,7 @@ vis_cert=(str(vis_cert[0]), str(vis_key[0]))
 trustchain=str(vis_trust[0])
 
 url="https://localhost:8001"
-callbackurl="https://localhost:8001"
+callbackurl="https://localhost:8002"
 voyageuvid='urn:mrn:stm:voyage:id:8320767:2017021010'
 newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'
@@ -59,10 +59,12 @@ def reportrow(sheet, row, col, state = True, reason = ''):
     with open('../create_worksheet.py', 'a') as f:
         f.write(report)
 
-def log_event(name, callback = None, uvid = None, routeStatus = None):
+def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None):
     data = { }
     if not (name is None):
         data['event'] = name
+    if not (ack is None):
+        data['ack'] = ack
     if not (callback is None):
         data['callback'] = callback
     if not (uvid is None):
@@ -217,6 +219,17 @@ def post_area(url, area, deliveryAckEndPoint = None):
             parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
         log_event('post_area', None)
         return requests.post(url + sub, data=area, cert=vis_cert, verify=trustchain)
+
+def post_text(url, text, deliveryAckEndPoint = None):
+        sub='/textMessage'
+        parameters = {
+        }
+        if not (deliveryAckEndPoint is None):
+            parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+            log_event('post_text', ack=deliveryAckEndPoint)
+        else:
+            log_event('post_text', None)
+        return requests.post(url + sub, data=text, params=parameters, cert=vis_cert, verify=trustchain)
 
 def upload_monitored(subscriber):
     '''

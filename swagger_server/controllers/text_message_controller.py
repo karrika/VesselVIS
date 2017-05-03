@@ -58,6 +58,6 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         with open('import/' + textname + '.ack', 'w') as f:
             f.write(json.dumps(data))
-    log_event('txt', deliveryAckEndPoint)
+    log_event('text', deliveryAckEndPoint)
     return 'OK'
 
