@@ -142,8 +142,7 @@ class TestVIS_002(BaseTestCase):
         hostsettings.set_acl(vis2_uvid, voyageuvid)
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
         hostsettings.set_acl(vis2_uvid, newvoyageuvid2)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_00_row', 'VIS_002_00_col',
-            True, '')
+        hostsettings.reportrow('VIS002sheet', 'VIS_002_00_row', 'VIS_002_00_col')
         pass
 
     def test_VIS_002_01(self):
@@ -243,8 +242,7 @@ class TestVIS_002(BaseTestCase):
         hostsettings.rm_uvid(newvoyageuvid)
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
         hostsettings.set_acl(vis2_uvid, newvoyageuvid2)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_0_row', 'VIS_002_1_0_col',
-            True, '')
+        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_0_row', 'VIS_002_1_0_col')
         pass
 
     def test_VIS_002_9_1(self):

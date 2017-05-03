@@ -47,7 +47,7 @@ vis1_uvid='urn:mrn:stm:service:instance:furuno:vis1'
 vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 vis3_uvid='urn:mrn:stm:service:instance:furuno:vis3'
 
-def reportrow(sheet, row, col, state, reason):
+def reportrow(sheet, row, col, state = True, reason = ''):
     if state:
         report=sheet + '.write(' + row + ', ' + col + ''', "PASS", boldcenter)
 ''' + sheet + '.write(' + row + ', ' + col + ' - 1, "' + reason + '''", normal)
@@ -73,7 +73,7 @@ def log_event(name, callback = None, uvid = None, routeStatus = None):
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
 
-def check_event(name, callback, uvid = None):
+def check_event(name, callback = None, uvid = None):
     with open('event.log', 'r') as f:
         log = f.readlines()
     length = len(log)
@@ -81,8 +81,9 @@ def check_event(name, callback, uvid = None):
         data = json.loads(log[length-1])
         if data['event'] != name:
             return False
-        if data['callback'] != callback:
-            return False
+        if not (callback is None):
+            if data['callback'] != callback:
+                return False
         if not (uvid is None):
             if data['uvid'] != uvid:
                 return False
@@ -207,6 +208,15 @@ def post_voyageplan(url, voyageplan):
         sub='/voyagePlans'
         log_event('post_voyage', None)
         return requests.post(url + sub, data=voyageplan, cert=vis_cert, verify=trustchain)
+
+def post_area(url, area, deliveryAckEndPoint = None):
+        sub='/area'
+        parameters = {
+        }
+        if not (deliveryAckEndPoint is None):
+            parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+        log_event('post_area', None)
+        return requests.post(url + sub, data=area, cert=vis_cert, verify=trustchain)
 
 def upload_monitored(subscriber):
     '''

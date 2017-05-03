@@ -148,111 +148,43 @@ class TestVIS_007(BaseTestCase):
 
         
         """
-        sub='/area'
-        parameters={
-            'deliveryAckEndPoint': ackurl
-        }
-        response=requests.post(url + sub, params=parameters, data=area, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS007sheet.write(VIS_007_01_row, VIS_007_01_col, "PASS", boldcenter)
-VIS007sheet.write(VIS_007_01_row, VIS_007_01_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS007sheet.write(VIS_007_01_row, VIS_007_01_col, "FAIL", boldcenter)
-VIS007sheet.write(VIS_007_01_row, VIS_007_01_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_area(url, area, ackurl)
+        hostsettings.reportrow('VIS007sheet', 'VIS_007_01_row', 'VIS_007_01_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Not written yet')
     def test_VIS_007_02(self):
         """
         VIS-007-2 - STM Module retrieves messages from VIS-1
 
         
         """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
+        logged = hostsettings.check_event('area')
+        hostsettings.reportrow('VIS007sheet', 'VIS_007_02_row', 'VIS_007_02_col',
+            logged, '')
+        self.assertTrue(logged)
 
-        if response.status_code == 200:
-            report='''
-VIS007sheet.write(VIS_007_02_row, VIS_007_02_col, "PASS", boldcenter)
-VIS007sheet.write(VIS_007_02_row, VIS_007_02_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS007sheet.write(VIS_007_02_row, VIS_007_02_col, "FAIL", boldcenter)
-VIS007sheet.write(VIS_007_02_row, VIS_007_02_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
-        self.assert200(response, "Response body is : " + response.text)
-
-
-    @unittest.skip('Not written yet')
     def test_VIS_007_1_1(self):
         """
         VIS-007-1-1 - In VIS-2, select S124 message and send (upload) to VIS-1 with ACKendpoint
 
         
         """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS007sheet.write(VIS_007_1_1_row, VIS_007_1_1_col, "PASS", boldcenter)
-VIS007sheet.write(VIS_007_1_1_row, VIS_007_1_1_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS007sheet.write(VIS_007_1_1_row, VIS_007_1_1_col, "FAIL", boldcenter)
-VIS007sheet.write(VIS_007_1_1_row, VIS_007_1_1_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response=hostsettings.post_area(url, area, ackurl)
+        hostsettings.reportrow('VIS007sheet', 'VIS_007_1_1_row', 'VIS_007_1_1_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-
-    @unittest.skip('Not written yet')
     def test_VIS_007_1_2(self):
         """
         VIS-007-1-2 - No private application retrieves the message
 
         
         """
-        sub='/voyagePlans/subscription'
-        parameters={
-            'callbackEndpoint': callbackurl
-        }
-        payload={}
-        response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS007sheet.write(VIS_007_1_2_row, VIS_007_1_2_col, "PASS", boldcenter)
-VIS007sheet.write(VIS_007_1_2_row, VIS_007_1_2_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS007sheet.write(VIS_007_1_2_row, VIS_007_1_2_col, "FAIL", boldcenter)
-VIS007sheet.write(VIS_007_1_2_row, VIS_007_1_2_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
-        self.assert200(response, "Response body is : " + response.text)
+        logged = hostsettings.check_event('area')
+        hostsettings.reportrow('VIS007sheet', 'VIS_007_1_2_row', 'VIS_007_1_2_col',
+            not logged, '')
+        self.assertFalse(logged)
 
 if __name__ == '__main__':
     unittest.main()
