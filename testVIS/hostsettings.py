@@ -59,7 +59,7 @@ def reportrow(sheet, row, col, state, reason):
     with open('../create_worksheet.py', 'a') as f:
         f.write(report)
 
-def log_event(name, callback, uvid = None):
+def log_event(name, callback = None, uvid = None, routeStatus = None):
     data = { }
     if not (name is None):
         data['event'] = name
@@ -67,6 +67,8 @@ def log_event(name, callback, uvid = None):
         data['callback'] = callback
     if not (uvid is None):
         data['uvid'] = uvid
+    if not (routeStatus is None):
+        data['routeStatus'] = routeStatus
     with open('event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
@@ -164,16 +166,16 @@ def rm_uvid(uvid):
         if acl_exists(uvid):
             os.remove('export/' + uvid + '.acl') 
 
-def get_voyageplan(url, uvid = None):
-        sub='/voyagePlans'
-        if uvid is None:
-            log_event('get_voyage', None)
-            return requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-        log_event('get_voyage', None, uvid)
-        parameters = {
-            'uvid' : uvid
-        }
-        return requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+def get_voyageplan(url, uvid = None, routeStatus = None):
+    parameters = {
+    }
+    sub='/voyagePlans'
+    if not (uvid is None):
+        parameters['uvid'] = uvid
+    if not (routeStatus is None):
+        parameters['routeStatus'] = routeStatus
+    log_event('get_voyage', uvid=uvid, routeStatus=routeStatus)
+    return requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
 
 def subscribe_voyageplan(url, callback, uvid = None):
         sub='/voyagePlans/subscription'
