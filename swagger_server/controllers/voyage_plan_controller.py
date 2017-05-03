@@ -20,6 +20,8 @@ import sys
 from datetime import datetime
 import collections
 
+simulate_vessel = False
+
 def log_event(name, callback, uvid = None):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
@@ -172,26 +174,26 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     f.close()
     log_event('remove_subscription', callbackEndpoint, uvid)
 
-    """
-    Now the vessel will get the request to remove a subscription. As we have no vessel we have to simulate it here.
-    At this time we also remove the client from the acl.
-    As there is no way to clean up garbage we re-use this method to delete old stuff as well.
-    """
-    os.remove('import/' + vp + '.rmsubs')
-    p = Path('export')
-    uvids = list(p.glob('**/*' + vp + '.subs'))
-    data = []
-    if len(uvids) > 0:
-        with uvids[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if me in data:
-            data.remove(me)
-        if len(data) == 0:
-            os.remove('export/' + vp + '.subs')
-        else:
-            f = open('export/' + vp + '.subs', 'w')
-            f.write(json.dumps(data))
+    if simulate_vessel:
+        """
+        Now the vessel will get the request to remove a subscription. As we have no vessel we have to simulate it here.
+        At this time we also remove the client from the acl.
+        As there is no way to clean up garbage we re-use this method to delete old stuff as well.
+        """
+        os.remove('import/' + vp + '.rmsubs')
+        p = Path('export')
+        uvids = list(p.glob('**/*' + vp + '.subs'))
+        data = []
+        if len(uvids) > 0:
+            with uvids[0].open() as f: data = json.loads(f.read())
             f.close()
+            if me in data:
+                data.remove(me)
+            if len(data) == 0:
+                os.remove('export/' + vp + '.subs')
+            else:
+                with open('export/' + vp + '.subs', 'w') as f:
+                    f.write(json.dumps(data))
     return 'OK'
 
 
@@ -273,14 +275,14 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         f.close()
         log_event('subscribe', callbackEndpoint, uvid)
 
-    """
-    Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
-    Also add the client_mrn to the access list.
-    """
-    if allowed:
-        f = open('export/' + vp + '.subs', 'w')
-        f.write(json.dumps(data))
-        f.close()
+    if simulate_vessel:
+        """
+        Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
+        Also add the client_mrn to the access list.
+        """
+        if allowed:
+            with open('export/' + vp + '.subs', 'w') as f:
+                f.write(json.dumps(data))
         os.remove('import/' + vp + '.subs')
 
     if allowed:
@@ -368,21 +370,19 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         f.close()
     log_event('upload', callbackEndpoint, uvid)
 
-    """
-    Now the vessel will need to process the uploaded voyagePlan and send an ack.
-    """
-    os.remove('import/' + uvid + '.rtz')
-    f = open('export/' + uvid + '.rtz', 'wb')
-    f.write(voyagePlan)
-    f.close()
-    vp = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
-    f = open('export/' + uvid + '.uvid', 'w')
-    f.write(json.dumps(vp))
-    f.close()
-    """
-    if deliveryAckEndPoint is not None:
-        os.remove('import/' + uvid + '.ack')
-        send_ack(deliveryAckEndPoint)
-    """
+    if simulate_vessel:
+        """
+        Now the vessel will need to process the uploaded voyagePlan and send an ack.
+        """
+        os.remove('import/' + uvid + '.rtz')
+        with open('export/' + uvid + '.rtz', 'wb') as f:
+            f.write(voyagePlan)
+        vp = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
+        with open('export/' + uvid + '.uvid', 'w') as f:
+            f.write(json.dumps(vp))
+        if deliveryAckEndPoint is not None:
+            os.remove('import/' + uvid + '.ack')
+            send_ack(deliveryAckEndPoint)
+
     return 'OK'
 
