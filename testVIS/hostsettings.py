@@ -258,6 +258,24 @@ def send_ack(endpoint):
     sub='/acknowledgement'
     response=requests.post(endpoint + sub, json=payload, cert=vis_cert, verify=trustchain)
 
+def read_accesstoken():
+    with open('accesstoken', 'r') as f:
+        ACCESSTOKEN = f.read()
+    return ACCESSTOKEN
+
+def search(query):
+    url="https://sr-test.maritimecloud.net"
+    sub='/api/_search/serviceInstance'
+    ACCESSTOKEN = read_accesstoken()
+    headers={
+        'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
+        'Accept' : 'application/json'
+    }
+    parameters={
+        'query' : query
+    }
+    return requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
+
 def vessel_connects():
     '''
     Check the possible new subsciptions and merge them with existing ones.

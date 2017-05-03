@@ -20,17 +20,6 @@ from pathlib import Path
 from . import hostsettings
 import logging
 
-vis_cert=hostsettings.vis_cert
-trustchain=hostsettings.trustchain
-
-url="https://sr-test.maritimecloud.net"
-callbackurl=hostsettings.callbackurl
-vis_uvid=hostsettings.vis_uvid
-vis1_uvid=hostsettings.vis1_uvid
-vis2_uvid=hostsettings.vis2_uvid
-with open('accesstoken', 'r') as f:
-    ACCESSTOKEN = f.read()
-
 class TestVIS_010(BaseTestCase):
     """ VIS-010 tests """
 
@@ -46,29 +35,9 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        sub='/api/_searchKeywords/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : 'ROS'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_01_row, VIS_010_01_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_01_row, VIS_010_01_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_01_row, VIS_010_01_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_01_row, VIS_010_01_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('keywords:ROS')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_01_row', 'VIS_010_01_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_02(self):
@@ -77,29 +46,9 @@ VIS010sheet.write(VIS_010_01_row, VIS_010_01_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_searchKeywords/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : '+ROS +SSPA'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_02_row, VIS_010_02_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_02_row, VIS_010_02_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_02_row, VIS_010_02_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_02_row, VIS_010_02_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('keywords:ROS AND keywords:SSPA')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_02_row', 'VIS_010_02_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_03(self):
@@ -108,29 +57,9 @@ VIS010sheet.write(VIS_010_02_row, VIS_010_02_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_searchKeywords/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : 'RO'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_03_row, VIS_010_03_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_03_row, VIS_010_03_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_03_row, VIS_010_03_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_03_row, VIS_010_03_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('keywords:RO')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_03_row', 'VIS_010_03_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_04(self):
@@ -139,29 +68,9 @@ VIS010sheet.write(VIS_010_03_row, VIS_010_03_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_searchKeywords/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : 'ros'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_04_row, VIS_010_04_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_04_row, VIS_010_04_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_04_row, VIS_010_04_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_04_row, VIS_010_04_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('keywords:ros')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_04_row', 'VIS_010_04_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_05(self):
@@ -170,29 +79,9 @@ VIS010sheet.write(VIS_010_04_row, VIS_010_04_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_searchKeywords/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : 'voyage'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_05_row, VIS_010_05_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_05_row, VIS_010_05_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_05_row, VIS_010_05_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_05_row, VIS_010_05_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('keywords:voyage')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_05_row', 'VIS_010_05_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_06(self):
@@ -201,29 +90,9 @@ VIS010sheet.write(VIS_010_05_row, VIS_010_05_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_searchKeywords/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : 'service'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_06_row, VIS_010_06_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_06_row, VIS_010_06_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_06_row, VIS_010_06_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_06_row, VIS_010_06_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('keywords:service')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_06_row', 'VIS_010_06_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_07(self):
@@ -232,29 +101,9 @@ VIS010sheet.write(VIS_010_06_row, VIS_010_06_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_search/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : '+IMO +8719188'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_07_row, VIS_010_07_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_07_row, VIS_010_07_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_07_row, VIS_010_07_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_07_row, VIS_010_07_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('imo:8719188')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_07_row', 'VIS_010_07_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_08(self):
@@ -263,29 +112,9 @@ VIS010sheet.write(VIS_010_07_row, VIS_010_07_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_search/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : '+MMSI'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_08_row, VIS_010_08_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_08_row, VIS_010_08_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_08_row, VIS_010_08_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_08_row, VIS_010_08_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('mmsi')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_08_row', 'VIS_010_08_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_09(self):
@@ -294,29 +123,9 @@ VIS010sheet.write(VIS_010_08_row, VIS_010_08_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_search/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : '+serviceType'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_09_row, VIS_010_09_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_09_row, VIS_010_09_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_09_row, VIS_010_09_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_09_row, VIS_010_09_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('serviceType')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_09_row', 'VIS_010_09_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_10(self):
@@ -325,29 +134,9 @@ VIS010sheet.write(VIS_010_09_row, VIS_010_09_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_search/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : '+IMO +8719188 keywords:ROS'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_10_row, VIS_010_10_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_10_row, VIS_010_10_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_08_row, VIS_010_08_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_08_row, VIS_010_08_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('imo:8719188 AND keywords:ROS')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_10_row', 'VIS_010_10_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_11(self):
@@ -356,29 +145,9 @@ VIS010sheet.write(VIS_010_08_row, VIS_010_08_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_search/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : '+serviceType +ROS'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_11_row, VIS_010_11_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_11_row, VIS_010_11_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_11_row, VIS_010_11_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_11_row, VIS_010_11_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('serviceType AND ROS')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_11_row', 'VIS_010_11_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_12(self):
@@ -387,29 +156,9 @@ VIS010sheet.write(VIS_010_11_row, VIS_010_11_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_search/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : '+serviceType +RCS'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_12_row, VIS_010_12_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_12_row, VIS_010_12_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_12_row, VIS_010_12_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_12_row, VIS_010_12_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('serviceType AND RCS')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_12_row', 'VIS_010_12_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_010_0_13(self):
@@ -418,29 +167,9 @@ VIS010sheet.write(VIS_010_12_row, VIS_010_12_col - 1, "''' + response.reason + '
 
         
         """
-        sub='/api/_search/serviceInstance'
-        headers={
-            'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
-            'Accept' : 'application/json'
-        }
-        parameters={
-            'query' : '+serviceType +EMS'
-        }
-        response=requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
-        print(response.text)
-
-        if response.status_code == 200:
-            report='''
-VIS010sheet.write(VIS_010_13_row, VIS_010_13_col, "PASS", boldcenter)
-VIS010sheet.write(VIS_010_13_row, VIS_010_13_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS010sheet.write(VIS_010_13_row, VIS_010_13_col, "FAIL", boldcenter)
-VIS010sheet.write(VIS_010_13_row, VIS_010_13_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        response = hostsettings.search('serviceType AND EMS')
+        hostsettings.reportrow('VIS010sheet', 'VIS_010_13_row', 'VIS_010_13_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
 
