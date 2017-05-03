@@ -90,6 +90,13 @@ nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_7 > >(tee -a ../
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_8 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-1
+nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_9 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-2
+nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_9 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-1
+nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_00 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)

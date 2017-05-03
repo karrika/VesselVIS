@@ -25,6 +25,7 @@ trustchain=hostsettings.trustchain
 
 url=hostsettings.url
 callbackurl=hostsettings.callbackurl
+ackurl=hostsettings.callbackurl
 voyageuvid='urn:mrn:stm:voyage:id:004:001'
 vis2_uvid=hostsettings.vis2_uvid
 

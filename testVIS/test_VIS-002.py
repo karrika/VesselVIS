@@ -20,14 +20,10 @@ from pathlib import Path
 from . import hostsettings
 import logging
 
-vis_cert=hostsettings.vis_cert
-trustchain=hostsettings.trustchain
-
 url=hostsettings.url
 callbackurl=hostsettings.callbackurl
 voyageuvid=hostsettings.voyageuvid
 newvoyageuvid='urn:mrn:stm:voyage:id:002:001'
-newvoyageuvid2='urn:mrn:stm:voyage:id:002:002'
 vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
@@ -141,7 +137,6 @@ class TestVIS_002(BaseTestCase):
         """
         hostsettings.set_acl(vis2_uvid, voyageuvid)
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
-        hostsettings.set_acl(vis2_uvid, newvoyageuvid2)
         hostsettings.reportrow('VIS002sheet', 'VIS_002_00_row', 'VIS_002_00_col')
         pass
 
@@ -241,7 +236,6 @@ class TestVIS_002(BaseTestCase):
         """
         hostsettings.rm_uvid(newvoyageuvid)
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
-        hostsettings.set_acl(vis2_uvid, newvoyageuvid2)
         hostsettings.reportrow('VIS002sheet', 'VIS_002_1_0_row', 'VIS_002_1_0_col')
         pass
 
@@ -332,6 +326,38 @@ class TestVIS_002(BaseTestCase):
         hostsettings.reportrow('VIS002sheet', 'VIS_002_1_8_row', 'VIS_002_1_8_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_002_9_9(self):
+        """
+        VIS-001-1-9 - Test cleanup
+
+
+        
+        """
+        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
+        hostsettings.rm_acl(vis2_uvid, voyageuvid)
+        p = Path('import')
+        files = list(p.glob('**/' + newvoyageuvid + '.*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/' + vis2_uvid + '*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/parse*'))
+        for item in files:
+            os.remove(str(item))
+
+        p = Path('export')
+        files = list(p.glob('**/' + newvoyageuvid + '.*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/' + vis2_uvid + '*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/parse*'))
+        for item in files:
+            os.remove(str(item))
+        pass
 
 
 if __name__ == '__main__':

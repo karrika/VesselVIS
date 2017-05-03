@@ -20,13 +20,9 @@ from pathlib import Path
 from . import hostsettings
 import logging
 
-vis_cert=hostsettings.vis_cert
-trustchain=hostsettings.trustchain
-
 url=hostsettings.url
 callbackurl=hostsettings.callbackurl
 newvoyageuvid='urn:mrn:stm:voyage:id:001:001'
-newvoyageuvid2='urn:mrn:stm:voyage:id:001:002'
 vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
@@ -794,14 +790,10 @@ class TestVIS_001(BaseTestCase):
         
         """
         response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
-        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid2)
         response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/' + newvoyageuvid2 + '.*'))
         for item in files:
             os.remove(str(item))
         files = list(p.glob('**/' + vis2_uvid + '*'))
@@ -813,9 +805,6 @@ class TestVIS_001(BaseTestCase):
 
         p = Path('export')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/' + newvoyageuvid2 + '.*'))
         for item in files:
             os.remove(str(item))
         files = list(p.glob('**/' + vis2_uvid + '*'))

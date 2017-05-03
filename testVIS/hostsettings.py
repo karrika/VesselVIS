@@ -139,7 +139,7 @@ def acl_allowed(uvid):
     p = Path('export')
     all = list(p.glob('**/all.acl'))
     if len(all) > 0:
-        with open('all[0]', 'r') as f:
+        with open(str(all[0]), 'r') as f:
             data = json.loads(f.read())
         if uvid in data:
             return True
@@ -360,7 +360,11 @@ def vessel_connects():
     if len(acks) > 0:
         for ack in acks:
             with open(str(ack)) as f:
-                data = json.loads(f.read())
+                content = f.read()
+                try:
+                    data = json.loads(content)
+                except ValueError:
+                    data = { 'endpoint' : content }
             os.remove(str(ack))
-            send_ack(data['endpoint'])
-
+            if 'endpoint' in data:
+                send_ack(data['endpoint'])

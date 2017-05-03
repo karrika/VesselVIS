@@ -114,7 +114,7 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        self.assertTrue(hostsettings.uvid_exists(newvoyageuvid))
+        self.assertTrue(hostsettings.uvid_exists(voyageuvid))
 
     def test_VIS_005_1_1(self):
         """
@@ -151,7 +151,7 @@ class TestVIS_005(BaseTestCase):
             'fromId': vis1_uvid,
             'fromName': 'VIS-1',
             'id': newvoyageuvid + ':ack',
-            'referenceId': newvoyageuvid,
+            'referenceId': voyageuvid,
             'timeOfDelivery': '2017-01-27T12:00:00Z',
             'toId': vis2_uvid,
             'toName': 'VIS-2'
