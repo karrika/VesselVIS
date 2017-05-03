@@ -23,6 +23,7 @@ import logging
 url=hostsettings.url
 callbackurl=hostsettings.callbackurl
 voyageuvid=hostsettings.voyageuvid
+newvoyageuvid='urn:mrn:stm:voyage:id:003:001'
 vis_uvid=hostsettings.vis_uvid
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
@@ -31,7 +32,7 @@ voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:003:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -172,7 +173,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, 'https://localhost:99', voyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, 'https://localhost:99', newvoyageuvid)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_1_1_row', 'VIS_003_1_1_col',
             response.status_code == 400, response.reason)
         self.assert400(response, "Response body is : " + response.text)

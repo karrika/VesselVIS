@@ -244,6 +244,9 @@ def upload_monitored(subscriber):
             '''
             Send this uvid to subscriber
             '''
+            with open(data['route'], 'r') as f:
+                route = f.read()
+            post_voyageplan(data['endpoint'], route)
 
 def send_ack(endpoint):
     payload = collections.OrderedDict()
