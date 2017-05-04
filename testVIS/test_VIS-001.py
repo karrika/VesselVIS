@@ -790,7 +790,6 @@ class TestVIS_001(BaseTestCase):
         
         """
         response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))

@@ -84,8 +84,9 @@ class TestVIS_003(BaseTestCase):
         pass
 
     def test_VIS_003_00(self):
-        hostsettings.set_acl(vis2_uvid, voyageuvid)
+        hostsettings.set_acl(vis2_uvid, newvoyageuvid)
         hostsettings.set_acl(vis2_uvid, None)
+        response=hostsettings.post_voyageplan(url, voyageplan)
         pass
 
     def test_VIS_003_01(self):
@@ -172,7 +173,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, 'https://localhost:99', newvoyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, 'https://localhost:8001', newvoyageuvid)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_1_1_row', 'VIS_003_1_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
@@ -237,7 +238,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, voyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_3_3_row', 'VIS_003_3_3_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
@@ -248,12 +249,47 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, voyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_3_4_row', 'VIS_003_3_4_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
+    def test_VIS_003_3_5(self):
+        """
+        VIS-003-3-5 - Test cleanup
 
+
+        
+        """
+        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
+        hostsettings.rm_acl(vis2_uvid, newvoyageuvid)
+        hostsettings.rm_acl(vis2_uvid)
+        hostsettings.rm_subs(vis2_uvid)
+        p = Path('import')
+        files = list(p.glob('**/' + voyageuvid + '.*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/' + newvoyageuvid + '.*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/' + vis2_uvid + '*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/parse*'))
+        for item in files:
+            os.remove(str(item))
+
+        p = Path('export')
+        files = list(p.glob('**/' + newvoyageuvid + '.*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/' + vis2_uvid + '*'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/parse*'))
+        for item in files:
+            os.remove(str(item))
+        pass
 
 if __name__ == '__main__':
     unittest.main()
