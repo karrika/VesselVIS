@@ -329,7 +329,7 @@ class TestVIS_002(BaseTestCase):
 
     def test_VIS_002_9_9(self):
         """
-        VIS-001-1-9 - Test cleanup
+        VIS-002-1-9 - Test cleanup
 
 
         
