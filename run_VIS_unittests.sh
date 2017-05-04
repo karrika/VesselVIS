@@ -104,12 +104,23 @@ cd ../VIS-2
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
-nosetests -v testVIS/test_VIS-003.py:TestVIS_003.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_04 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_05 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_06 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_07 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-2
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_1_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-1
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_1_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+cd ../VIS-2
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_2_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_2_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_3 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_4 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_00 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)

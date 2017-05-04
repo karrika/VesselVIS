@@ -42,7 +42,6 @@ callbackurl="https://localhost:8002"
 voyageuvid='urn:mrn:stm:voyage:id:8320767:2017021010'
 newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'
-vis_uvid='urn:mrn:stm:service:instance:furuno:imo8320767'
 vis1_uvid='urn:mrn:stm:service:instance:furuno:vis1'
 vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 vis3_uvid='urn:mrn:stm:service:instance:furuno:vis3'
@@ -186,11 +185,13 @@ def subscribe_voyageplan(url, callback, uvid = None):
             parameters={
                 'callbackEndpoint': callback
             }
+            log_event('post_subscription', callback = callback)
             return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
         parameters={
             'callbackEndpoint': callback,
             'uvid': uvid
         }
+        log_event('post_subscription', callback = callback, uvid = uvid)
         return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
 
 def unsubscribe_voyageplan(url, callback, uvid = None):
@@ -244,9 +245,11 @@ def upload_monitored(subscriber):
             '''
             Send this uvid to subscriber
             '''
-            with open(data['route'], 'r') as f:
-                route = f.read()
-            post_voyageplan(data['endpoint'], route)
+            rtzs = list(p.glob('**/' + str(data['route'])))
+            for rtz in rtzs:
+                with rtz.open() as f:
+                    route = f.read()
+                post_voyageplan(subscriber, route)
 
 def send_ack(endpoint):
     payload = collections.OrderedDict()
@@ -305,7 +308,7 @@ def vessel_connects():
                 '''
                 Send monitored voyage to new subscribers
                 '''
-                upload_monitored(subscriber)
+                upload_monitored(subscriber['url'])
     '''
     Check the possible new subsciption removals and take care of them.
     '''

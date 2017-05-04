@@ -24,7 +24,7 @@ url=hostsettings.url
 callbackurl=hostsettings.callbackurl
 voyageuvid=hostsettings.voyageuvid
 newvoyageuvid='urn:mrn:stm:voyage:id:003:001'
-vis_uvid=hostsettings.vis_uvid
+vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <route version="1.1" 
@@ -84,8 +84,8 @@ class TestVIS_003(BaseTestCase):
         pass
 
     def test_VIS_003_00(self):
-        hostsettings.set_acl(vis_uvid, voyageuvid)
-        hostsettings.set_acl(vis_uvid, None)
+        hostsettings.set_acl(vis2_uvid, voyageuvid)
+        hostsettings.set_acl(vis2_uvid, None)
         pass
 
     def test_VIS_003_01(self):
@@ -105,8 +105,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        hostsettings.log_event('subscribe', callbackurl)
-        logged = hostsettings.check_event('subscribe', callbackurl)
+        logged = hostsettings.check_event('post_subscription', callbackurl)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_02_row', 'VIS_003_02_col',
             logged, '')
         self.assertTrue(logged)
@@ -139,7 +138,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        allowed = hostsettings.acl_allowed(vis_uvid)
+        allowed = hostsettings.acl_allowed(vis2_uvid)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_05_row', 'VIS_003_05_col',
             allowed, '')
         self.assertTrue(allowed)
@@ -150,7 +149,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('post_voyage', callbackurl)
+        logged = hostsettings.check_event('post_voyage')
         hostsettings.reportrow('VIS003sheet', 'VIS_003_06_row', 'VIS_003_06_col',
             logged, '')
         self.assertTrue(logged)
@@ -175,8 +174,19 @@ class TestVIS_003(BaseTestCase):
         """
         response=hostsettings.subscribe_voyageplan(url, 'https://localhost:99', newvoyageuvid)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_1_1_row', 'VIS_003_1_1_col',
-            response.status_code == 400, response.reason)
-        self.assert400(response, "Response body is : " + response.text)
+            response.status_code == 200, response.reason)
+        self.assert200(response, "Response body is : " + response.text)
+
+    def test_VIS_003_1_2(self):
+        """
+        VIS-003-1-2 - Publish voyage plan to VIS-1
+
+        
+        """
+        response=hostsettings.post_voyageplan(url, voyageplan)
+        hostsettings.reportrow('VIS003sheet', 'VIS_003_1_2_row', 'VIS_003_1_2_col',
+            response.status_code == 200, response.reason)
+        self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_003_2_1(self):
         """
