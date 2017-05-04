@@ -26,9 +26,6 @@ trustchain=hostsettings.trustchain
 url=hostsettings.url
 callbackurl=hostsettings.callbackurl
 voyageuvid='urn:mrn:stm:voyage:id:005:001'
-newvoyageuvid=hostsettings.newvoyageuvid
-newvoyageuvid2=hostsettings.newvoyageuvid2
-vis_uvid=hostsettings.vis_uvid
 vis1_uvid=hostsettings.vis1_uvid
 vis2_uvid=hostsettings.vis2_uvid
 
@@ -85,7 +82,11 @@ class TestVIS_005(BaseTestCase):
     def tearDown(self):
         pass
 
-    def test_VIS_005_0_01(self):
+    def vessel_connects(self):
+        hostsettings.vessel_connects()
+        pass
+
+    def test_VIS_005_01(self):
         """
         VIS-005-1 - VIS-2: Select voyage plan and send (upload) the voyage plan to VIS-1, no ACK requested, no callback expected
 
@@ -96,7 +97,7 @@ class TestVIS_005(BaseTestCase):
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_VIS_005_0_2(self):
+    def test_VIS_005_02(self):
         """
         VIS-005-2 - Select voyage plan in VIS-2 and send (upload) the voyage plan to VIS-1,
                     no ACK requested, no callback expected
@@ -108,7 +109,7 @@ class TestVIS_005(BaseTestCase):
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_VIS_005_0_3(self):
+    def test_VIS_005_03(self):
         """
         VIS-005-3 - STM Module retrieves messages from VIS-1
 
@@ -133,7 +134,7 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        response=hostsettings.post_voyageplan(url, voyageplan, ack = 'https://localhost:8002')
+        response=hostsettings.post_voyageplan(url, voyageplan, deliveryAckEndPoint = 'https://localhost:8002')
         hostsettings.reportrow('VIS005sheet', 'VIS_005_1_2_row', 'VIS_005_1_2_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
@@ -144,22 +145,10 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        sub='/acknowledgement'
-        deliveryAckEndPoint = 'https://localhost:8002'
-        payload={
-            'ackResult': 'Ok',
-            'fromId': vis1_uvid,
-            'fromName': 'VIS-1',
-            'id': newvoyageuvid + ':ack',
-            'referenceId': voyageuvid,
-            'timeOfDelivery': '2017-01-27T12:00:00Z',
-            'toId': vis2_uvid,
-            'toName': 'VIS-2'
-        }
-        response=requests.post(deliveryAckEndPoint + sub, json=payload, cert=vis_cert, verify=trustchain)
+        logged = hostsettings.check_event('upload')
         hostsettings.reportrow('VIS005sheet', 'VIS_005_1_3_row', 'VIS_005_1_3_col',
-            response.status_code == 200, response.reason)
-        self.assert200(response, "Response body is : " + response.text)
+            logged, '')
+        self.assertTrue(logged)
 
     def test_VIS_005_2_1(self):
         """
@@ -167,22 +156,19 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        sub='/voyagePlans'
-        parameters={
-            'deliveryAckEndPoint': 'https://localhost'
-        }
-        payload=voyageplan
-        response=requests.post(url + sub, params=parameters, data=payload, cert=vis_cert, verify=trustchain)
+        response=hostsettings.post_voyageplan(url, voyageplan, deliveryAckEndPoint = 'https://localhost:8001')
         self.assert200(response, "Response body is : " + response.text)
 
-    @unittest.skip('Implement user timeout nagging feature when ack is missing')
     def test_VIS_005_2_2(self):
         """
         VIS-005-1-3 - STM Module retrieves messages from VIS-1
 
         
         """
-        pass
+        logged = hostsettings.check_event('upload')
+        hostsettings.reportrow('VIS005sheet', 'VIS_005_2_2_row', 'VIS_005_2_2_col',
+            logged, '')
+        self.assertTrue(logged)
 
 
 

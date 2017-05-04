@@ -180,57 +180,63 @@ def get_voyageplan(url, uvid = None, routeStatus = None):
     return requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
 
 def subscribe_voyageplan(url, callback, uvid = None):
-        sub='/voyagePlans/subscription'
-        if uvid is None:
-            parameters={
-                'callbackEndpoint': callback
-            }
-            log_event('post_subscription', callback = callback)
-            return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    sub='/voyagePlans/subscription'
+    if uvid is None:
         parameters={
-            'callbackEndpoint': callback,
-            'uvid': uvid
+            'callbackEndpoint': callback
         }
-        log_event('post_subscription', callback = callback, uvid = uvid)
+        log_event('post_subscription', callback = callback)
         return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    parameters={
+        'callbackEndpoint': callback,
+        'uvid': uvid
+    }
+    log_event('post_subscription', callback = callback, uvid = uvid)
+    return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
 
 def unsubscribe_voyageplan(url, callback, uvid = None):
-        sub='/voyagePlans/subscription'
-        if uvid is None:
-            parameters={
-                'callbackEndpoint': callback
-            }
-            return requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    sub='/voyagePlans/subscription'
+    if uvid is None:
         parameters={
-            'callbackEndpoint': callback,
-            'uvid': uvid
+            'callbackEndpoint': callback
         }
         return requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    parameters={
+        'callbackEndpoint': callback,
+        'uvid': uvid
+    }
+    return requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
 
-def post_voyageplan(url, voyageplan):
-        sub='/voyagePlans'
-        log_event('post_voyage', None)
-        return requests.post(url + sub, data=voyageplan, cert=vis_cert, verify=trustchain)
+def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndPoint = None):
+    parameters = {
+    }
+    if not (deliveryAckEndPoint is None):
+        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+    if not (callbackEndPoint is None):
+        parameters['callbackEndPoint'] = callbackEndPoint
+    sub='/voyagePlans'
+    log_event('post_voyage', None)
+    return requests.post(url + sub, data=voyageplan, params = parameters, cert=vis_cert, verify=trustchain)
 
 def post_area(url, area, deliveryAckEndPoint = None):
-        sub='/area'
-        parameters = {
-        }
-        if not (deliveryAckEndPoint is None):
-            parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-        log_event('post_area', None)
-        return requests.post(url + sub, data=area, cert=vis_cert, verify=trustchain)
+    sub='/area'
+    parameters = {
+    }
+    if not (deliveryAckEndPoint is None):
+        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+    log_event('post_area', None)
+    return requests.post(url + sub, data=area, cert=vis_cert, verify=trustchain)
 
 def post_text(url, text, deliveryAckEndPoint = None):
-        sub='/textMessage'
-        parameters = {
-        }
-        if not (deliveryAckEndPoint is None):
-            parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-            log_event('post_text', ack=deliveryAckEndPoint)
-        else:
-            log_event('post_text', None)
-        return requests.post(url + sub, data=text, params=parameters, cert=vis_cert, verify=trustchain)
+    sub='/textMessage'
+    parameters = {
+    }
+    if not (deliveryAckEndPoint is None):
+        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+        log_event('post_text', ack=deliveryAckEndPoint)
+    else:
+        log_event('post_text', None)
+    return requests.post(url + sub, data=text, params=parameters, cert=vis_cert, verify=trustchain)
 
 def upload_monitored(subscriber):
     '''
@@ -251,7 +257,7 @@ def upload_monitored(subscriber):
                     route = f.read()
                 post_voyageplan(subscriber, route)
 
-def send_ack(endpoint):
+def send_ack(endpoint, id = 'urn:mrn:'):
     payload = collections.OrderedDict()
     payload['id'] = 'urn:mrn:'
     payload['referenceId'] = 'urn:mrn:'
