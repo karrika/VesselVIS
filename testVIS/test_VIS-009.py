@@ -286,19 +286,8 @@ class TestVIS_009(BaseTestCase):
         }
         payload={}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS009sheet.write(VIS_009_08_row, VIS_009_08_col, "PASS", boldcenter)
-VIS009sheet.write(VIS_009_08_row, VIS_009_08_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS009sheet.write(VIS_009_08_row, VIS_009_08_col, "FAIL", boldcenter)
-VIS009sheet.write(VIS_009_08_row, VIS_009_08_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        hostsettings.reportrow('VIS009sheet', 'VIS_009_08_row', 'VIS_009_08_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_009_09(self):
@@ -313,19 +302,8 @@ VIS009sheet.write(VIS_009_08_row, VIS_009_08_col - 1, "''' + response.reason + '
         }
         payload={}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS009sheet.write(VIS_009_09_row, VIS_009_09_col, "PASS", boldcenter)
-VIS009sheet.write(VIS_009_09_row, VIS_009_09_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS009sheet.write(VIS_009_09_row, VIS_009_09_col, "FAIL", boldcenter)
-VIS009sheet.write(VIS_009_09_row, VIS_009_09_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        hostsettings.reportrow('VIS009sheet', 'VIS_009_09_row', 'VIS_009_09_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
     @unittest.skip('Not applicable as we have no SSC')
@@ -367,19 +345,8 @@ VIS009sheet.write(VIS_009_09_row, VIS_009_09_col - 1, "''' + response.reason + '
         }
         payload={}
         response=requests.post(url + sub, params=parameters, json=payload, cert=vis_cert, verify=trustchain)
-
-        if response.status_code == 200:
-            report='''
-VIS009sheet.write(VIS_009_13_row, VIS_009_13_col, "PASS", boldcenter)
-VIS009sheet.write(VIS_009_13_row, VIS_009_13_col - 1, "''' + response.reason + '", normal)'
-        else:
-            report='''
-VIS009sheet.write(VIS_009_13_row, VIS_009_13_col, "FAIL", boldcenter)
-VIS009sheet.write(VIS_009_13_row, VIS_009_13_col - 1, "''' + response.reason + '", normal)'
-        f = open('../create_worksheet.py', 'a')
-        f.write(report)
-        f.close()
-
+        hostsettings.reportrow('VIS009sheet', 'VIS_009_13_row', 'VIS_009_13_col',
+            response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
 if __name__ == '__main__':
