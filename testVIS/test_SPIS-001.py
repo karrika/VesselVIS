@@ -22,8 +22,8 @@ import logging
 
 pcmdata='''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <portCallMessage xmlns="urn:x-mrn:stm:schema:port-call-message:0.0.16">
-   <vesselId>urn:x-mrn:stm:vessel:IMO:8016550</vesselId>
-   <messageId>urn:x-mrn:stm:portcdm:message:medea-1</messageId>
+   <vesselId>urn:mrn:stm:service:instance:furuno:vis2</vesselId>
+   <messageId>urn:mrn:stm:service:instance:furuno:vis2:1</messageId>
    <locationState>
         <referenceObject>VESSEL</referenceObject>
         <time>2017-05-07T16:00:00Z</time>
@@ -47,7 +47,7 @@ class TestSPIS_001(BaseTestCase):
     def tearDown(self):
         pass
 
-    def test_SPIS_001_0_01(self):
+    def test_SPIS_001_01(self):
         """
         SPIS-001-1 - Find keyword ROS
 
@@ -58,7 +58,7 @@ class TestSPIS_001(BaseTestCase):
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_SPIS_001_0_02(self):
+    def test_SPIS_001_02(self):
         """
         SPIS-001-2 - Find keyword ROS+SSPA
 
@@ -69,7 +69,7 @@ class TestSPIS_001(BaseTestCase):
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_SPIS_001_0_03(self):
+    def test_SPIS_001_03(self):
         """
         SPIS-001-3 - Find keyword RO
 
@@ -80,7 +80,7 @@ class TestSPIS_001(BaseTestCase):
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_SPIS_001_0_04(self):
+    def test_SPIS_001_04(self):
         """
         SPIS-001-4 - Find keyword ros
 
@@ -91,7 +91,7 @@ class TestSPIS_001(BaseTestCase):
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_SPIS_001_0_05(self):
+    def test_SPIS_001_05(self):
         """
         SPIS-001-5 - Find keyword voyage
 
@@ -102,7 +102,7 @@ class TestSPIS_001(BaseTestCase):
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_SPIS_001_0_06(self):
+    def test_SPIS_001_06(self):
         """
         SPIS-001-6 - Find keyword service
 
@@ -113,7 +113,7 @@ class TestSPIS_001(BaseTestCase):
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
-    def test_SPIS_001_0_07(self):
+    def test_SPIS_001_07(self):
         """
         SPIS-001-7 - Find IMO 8719188
 

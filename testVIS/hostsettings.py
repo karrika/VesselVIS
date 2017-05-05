@@ -288,6 +288,14 @@ def search(query):
     }
     return requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
 
+def sendpcm(body):
+    url="https://sandbox-2.portcdm.eu:8443"
+    sub='/amss/state-update'
+    headers={
+        'Content-Type' : 'application/xml'
+    }
+    return requests.post(url + sub, headers=headers, data=body, cert=vis_cert, verify=trustchain)
+
 def vessel_connects():
     '''
     Check the possible new subsciptions and merge them with existing ones.
