@@ -20,6 +20,7 @@ import requests
 from swagger_server.models.delivery_ack import DeliveryAck
 import collections
 from datetime import datetime
+import time
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -392,7 +393,6 @@ def vessel_connects():
 
 def service():
     while True:
-        eprint("Connecting...\n")
         vessel_connects()
         time.sleep(20)
 

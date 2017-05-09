@@ -24,7 +24,7 @@ app.app.json_encoder = JSONEncoder
 app.add_api('swagger.yaml', arguments={'title': 'Voyage Information Service API facing SeaSWIM through SSC exposing interfaces to SeaSWIM stakeholders'})
 
 if __name__ == '__main__':
-    thread = Thread(target = service.vessel_connects, args = ())
+    thread = Thread(target = service.service, args = ())
     thread.start()
     app.run(host='localhost', port=8000, ssl_context=context)
     thread.join()
