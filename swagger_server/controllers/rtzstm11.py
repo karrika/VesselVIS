@@ -15,7 +15,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
   Source: STM Developer Forum
 -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:stm="http://stmvalidation.eu/STM/1/0/0" targetNamespace="http://stmvalidation.eu/STM/1/0/0" xmlns:rtz="http://www.cirm.org/RTZ/1/1" elementFormDefault="qualified">
-	<xsd:import namespace="http://www.cirm.org/RTZ/1/1" schemaLocation="rtz_format_1_1_29032017.xsd"/>
+	<xsd:import namespace="http://www.cirm.org/RTZ/1/1" schemaLocation="swagger_server/controllers/rtz_format_1_1_29032017.xsd"/>
 	<!--                                         -->
 	<!-- STM routeInfo extension type definition -->
 	<!--                                         -->
