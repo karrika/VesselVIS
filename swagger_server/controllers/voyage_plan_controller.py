@@ -329,7 +329,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         if root.tag == '{http://www.cirm.org/RTZ/1/1}route':
             if rtzstm11.xmlschema.validate(doc) == False:
                 rtz.close()
-                ret = rtz11.xmlschema.error_log
+                ret = rtzstm11.xmlschema.error_log
                 return ret, 400
             tag='{http://www.cirm.org/RTZ/1/1}'
         else:
