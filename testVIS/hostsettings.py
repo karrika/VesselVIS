@@ -91,14 +91,23 @@ def check_event(name, callback = None, uvid = None):
         return True
     return False
 
+def islocal():
+    return (vis2_uvid == 'urn:mrn:stm:service:instance:furuno:vis2')
+
 def set_acl(id, uvid=None):
-    if uvid is None: 
-        f = open('export/all.acl', 'w')
+    if islocal():
+        if uvid is None: 
+            f = open('export/all.acl', 'w')
+        else:
+            f = open('export/' + uvid + '.acl', 'w')
+        data=[ id ]
+        f.write(json.dumps(data))
+        f.close()
     else:
-        f = open('export/' + uvid + '.acl', 'w')
-    data=[ id ]
-    f.write(json.dumps(data))
-    f.close()
+        if uvid is None: 
+            response=subscribe_voyageplan(url, 'allow')
+        else:
+            response=subscribe_voyageplan(url, 'allow', uvid)
 
 def uvid_exists(uvid):
     p = Path('export')
@@ -127,12 +136,18 @@ def acl_exists(uvid):
     return len(uvids) > 0
 
 def rm_acl(id, uvid=None):
-    if uvid is None:
-        if acl_exists(None):
-            os.remove('export/all.acl') 
+    if islocal():
+        if uvid is None:
+            if acl_exists(None):
+                os.remove('export/all.acl') 
+        else:
+            if acl_exists(uvid):
+                os.remove('export/' + uvid + '.acl') 
     else:
-        if acl_exists(uvid):
-            os.remove('export/' + uvid + '.acl') 
+        if uvid is None: 
+            response=subscribe_voyageplan(url, 'deny')
+        else:
+            response=subscribe_voyageplan(url, 'deny', uvid)
 
 def acl_allowed(uvid):
     p = Path('export')

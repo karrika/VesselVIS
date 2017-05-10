@@ -27,7 +27,7 @@ nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_01 > >(tee -a ../s
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
-nosetests -v testVIS/test_VIS-001.py:TestVIS_001.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_04 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_05 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
@@ -72,35 +72,35 @@ nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_08 > >(tee -a ../s
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_0 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_3 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_4 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_5 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_6 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_7 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_8 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_9 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-002.py:TestVIS_002.test_VIS_002_9_9 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-1
-nosetests -v testVIS/test_VIS-002.py:TestVIS_002.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_00 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-003.py:TestVIS_003.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
@@ -108,7 +108,7 @@ cd ../VIS-1
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_04 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_05 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-003.py:TestVIS_003.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_06 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_07 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-2
@@ -122,9 +122,9 @@ nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_1 > >(tee -a ../
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_3 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_4 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-003.py:TestVIS_003.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-1
-nosetests -v testVIS/test_VIS-003.py:TestVIS_003.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-003.py:TestVIS_003.test_VIS_003_3_5 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
@@ -135,7 +135,7 @@ nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_00 > >(tee -a ../s
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
-nosetests -v testVIS/test_VIS-004.py:TestVIS_004.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
@@ -143,7 +143,7 @@ nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_04 > >(tee -a ../s
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_1_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
-nosetests -v testVIS/test_VIS-004.py:TestVIS_004.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_1_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-004.py:TestVIS_004.test_VIS_004_1_3 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
@@ -154,7 +154,7 @@ cd ../VIS-2
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
-nosetests -v testVIS/test_VIS-005.py:TestVIS_005.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-2
 ../sr_client/getopenidtoken VIS-2
@@ -176,7 +176,7 @@ cd ../VIS-2
 nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-006.py:TestVIS_006.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-006.py:TestVIS_006.test_VIS_006_1_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
@@ -191,7 +191,7 @@ cd ../VIS-2
 nosetests -v testVIS/test_VIS-007.py:TestVIS_007.test_VIS_007_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-007.py:TestVIS_007.test_VIS_007_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-nosetests -v testVIS/test_VIS-007.py:TestVIS_007.vessel_connects > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 cd ../VIS-2
 nosetests -v testVIS/test_VIS-007.py:TestVIS_007.test_VIS_007_1_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-007.py:TestVIS_007.test_VIS_007_1_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)

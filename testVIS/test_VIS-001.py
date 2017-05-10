@@ -512,8 +512,6 @@ class TestVIS_001(BaseTestCase):
         hostsettings.rm_acl(vis2_uvid)
         hostsettings.rm_subs(vis2_uvid)
         response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
-        response=hostsettings.subscribe_voyageplan(url, 'deny', newvoyageuvid)
-        response=hostsettings.subscribe_voyageplan(url, 'deny')
 
         hostsettings.reportrow('VIS001sheet', 'VIS_001_00_row', 'VIS_001_00_col')
         pass
@@ -580,7 +578,6 @@ class TestVIS_001(BaseTestCase):
         
         """
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
-        response=hostsettings.subscribe_voyageplan(url, 'allow', newvoyageuvid)
         hostsettings.reportrow('VIS001sheet', 'VIS_001_06_row', 'VIS_001_06_col')
         pass
 
@@ -613,7 +610,6 @@ class TestVIS_001(BaseTestCase):
         
         """
         hostsettings.rm_acl(vis2_uvid, newvoyageuvid)
-        response=hostsettings.subscribe_voyageplan(url, 'deny', newvoyageuvid)
         hostsettings.reportrow('VIS001sheet', 'VIS_001_09_row', 'VIS_001_09_col')
         pass
 

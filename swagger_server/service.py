@@ -393,7 +393,7 @@ def vessel_connects():
 
 def service():
     while True:
-        vessel_connects()
         time.sleep(20)
+        vessel_connects()
 
 
