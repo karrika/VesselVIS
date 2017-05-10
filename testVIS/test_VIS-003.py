@@ -261,7 +261,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
+        hostsettings.rm_uvid(newvoyageuvid)
         hostsettings.rm_acl(vis2_uvid, newvoyageuvid)
         hostsettings.rm_acl(vis2_uvid)
         hostsettings.rm_subs(vis2_uvid)

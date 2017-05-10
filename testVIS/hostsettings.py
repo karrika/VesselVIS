@@ -168,20 +168,23 @@ def rm_subs(id, uvid=None):
             os.remove('export/' + uvid + '.subs') 
 
 def rm_uvid(uvid):
-    if uvid is None:
-        if subs_exists(None):
-            os.remove('export/all.subs') 
-        if acl_exists(uvid):
-            os.remove('export/all.acl') 
+    if islocal():
+        if uvid is None:
+            if subs_exists(None):
+                os.remove('export/all.subs') 
+            if acl_exists(uvid):
+                os.remove('export/all.acl') 
+        else:
+            if uvid_exists(uvid):
+                os.remove('export/' + uvid + '.uvid') 
+            if rtz_exists(uvid):
+                os.remove('export/' + uvid + '.rtz') 
+            if subs_exists(uvid):
+                os.remove('export/' + uvid + '.subs') 
+            if acl_exists(uvid):
+                os.remove('export/' + uvid + '.acl') 
     else:
-        if uvid_exists(uvid):
-            os.remove('export/' + uvid + '.uvid') 
-        if rtz_exists(uvid):
-            os.remove('export/' + uvid + '.rtz') 
-        if subs_exists(uvid):
-            os.remove('export/' + uvid + '.subs') 
-        if acl_exists(uvid):
-            os.remove('export/' + uvid + '.acl') 
+        response=hostsettings.subscribe_voyageplan(url, 'delete', uvid)
 
 def get_voyageplan(url, uvid = None, routeStatus = None):
     parameters = {

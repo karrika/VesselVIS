@@ -334,7 +334,7 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
+        hostsettings.rm_uvid(voyageuvid)
         hostsettings.rm_acl(vis2_uvid, voyageuvid)
         p = Path('import')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))

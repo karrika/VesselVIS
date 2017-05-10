@@ -511,7 +511,6 @@ class TestVIS_001(BaseTestCase):
         hostsettings.rm_uvid(newvoyageuvid)
         hostsettings.rm_acl(vis2_uvid)
         hostsettings.rm_subs(vis2_uvid)
-        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
 
         hostsettings.reportrow('VIS001sheet', 'VIS_001_00_row', 'VIS_001_00_col')
         pass
@@ -785,7 +784,7 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, 'delete', newvoyageuvid)
+        hostsettings.rm_uvid(newvoyageuvid)
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))
