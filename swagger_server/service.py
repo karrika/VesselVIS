@@ -21,6 +21,7 @@ from swagger_server.models.delivery_ack import DeliveryAck
 import collections
 from datetime import datetime
 import time
+from subprocess import call
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -273,6 +274,10 @@ def send_ack(endpoint, id = 'urn:mrn:'):
     response=requests.post(endpoint + sub, json=payload, cert=vis_cert, verify=trustchain)
 
 def read_accesstoken():
+    if not os.path.isfile('accesstoken'):
+        call(['./getaccesstoken.sh','VIS-Medea'])        
+    if time.time() - os.stat('accesstoken').st_mtime > 4 * 60 + 30:
+        call(['./getaccesstoken.sh','VIS-Medea'])        
     with open('accesstoken', 'r') as f:
         ACCESSTOKEN = f.read()
     return ACCESSTOKEN
