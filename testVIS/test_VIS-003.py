@@ -79,10 +79,6 @@ class TestVIS_003(BaseTestCase):
     def tearDown(self):
         pass
 
-    def vessel_connects(self):
-        hostsettings.vessel_connects()
-        pass
-
     def test_VIS_003_00(self):
         hostsettings.set_acl(vis2_uvid, newvoyageuvid)
         hostsettings.set_acl(vis2_uvid, None)

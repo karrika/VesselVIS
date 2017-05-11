@@ -498,10 +498,6 @@ class TestVIS_001(BaseTestCase):
     def tearDown(self):
         pass
 
-    def vessel_connects(self):
-        hostsettings.vessel_connects()
-        pass
-
     def test_VIS_001_00(self):
         """
         VIS-001-0 - Preparation: No voyage plan published with chosen UVID in VIS-1
