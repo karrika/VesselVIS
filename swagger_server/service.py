@@ -291,7 +291,8 @@ def search(query):
         'Accept' : 'application/json'
     }
     parameters={
-        'query' : query
+        'query' : query,
+        'size' : 1000
     }
     return requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
 
