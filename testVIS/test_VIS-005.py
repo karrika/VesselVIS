@@ -82,10 +82,6 @@ class TestVIS_005(BaseTestCase):
     def tearDown(self):
         pass
 
-    def vessel_connects(self):
-        hostsettings.vessel_connects()
-        pass
-
     def test_VIS_005_01(self):
         """
         VIS-005-1 - VIS-2: Select voyage plan and send (upload) the voyage plan to VIS-1, no ACK requested, no callback expected

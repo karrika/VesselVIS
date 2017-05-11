@@ -129,10 +129,6 @@ class TestVIS_007(BaseTestCase):
     def tearDown(self):
         pass
 
-    def vessel_connects(self):
-        hostsettings.vessel_connects()
-        pass
-
     def test_VIS_007_00(self):
         """
         VIS-007-0 - VIS-1:0 allow access
