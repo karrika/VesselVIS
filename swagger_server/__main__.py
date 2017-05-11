@@ -26,6 +26,6 @@ app.add_api('swagger.yaml', arguments={'title': 'Voyage Information Service API 
 if __name__ == '__main__':
     thread = Thread(target = service.service, args = ())
     thread.start()
-    app.run(host='localhost', port=8000, ssl_context=context)
+    app.run(host='localhost', port=8101)
     thread.join()
 

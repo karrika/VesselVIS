@@ -1,7 +1,3 @@
 #!/bin/bash
 VESSEL=$1
 curl -v -L --key PrivateKey_${VESSEL}.pem --cert Certificate_${VESSEL}.pem 'https://test-maritimeid.maritimecloud.net/auth/realms/MaritimeCloud/protocol/openid-connect/auth?client_id=cert2oidc&redirect_uri=http%3A%2F%2Flocalhost%3A99&response_type=code&kc_idp_hint=certificates&scope=openid' &> token
-TOKEN=`grep "http://localhost:99/?code" token | cut -b45-`
-curl --data "grant_type=authorization_code&client_id=cert2oidc&code=${TOKEN}&redirect_uri=http%3A%2F%2Flocalhost%3A99" https://test-maritimeid.maritimecloud.net/auth/realms/MaritimeCloud/protocol/openid-connect/token > accesstoken
-ACCESSTOKEN=`cat accesstoken | cut -f4 -d'"' | tr -d '\n'`
-echo $ACCESSTOKEN > accesstoken
