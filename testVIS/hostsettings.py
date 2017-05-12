@@ -37,13 +37,13 @@ if len(vis_trust) == 0:
 vis_cert=(str(vis_cert[0]), str(vis_key[0]))
 trustchain=str(vis_trust[0])
 
-url="https://localhost:8001"
-callbackurl="https://localhost:8002"
+url="https://stm.furuno.fi:8000"
+callbackurl="https://stm.furuno.fi:8001"
 voyageuvid='urn:mrn:stm:voyage:id:8320767:2017021010'
 newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'
 vis1_uvid='urn:mrn:stm:service:instance:furuno:vis1'
-vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
+vis2_uvid='urn:mrn:stm:service:instance:furuno:imo8016550'
 vis3_uvid='urn:mrn:stm:service:instance:furuno:vis3'
 
 def reportrow(sheet, row, col, state = True, reason = ''):
@@ -184,7 +184,7 @@ def rm_uvid(uvid):
             if acl_exists(uvid):
                 os.remove('export/' + uvid + '.acl') 
     else:
-        response=hostsettings.subscribe_voyageplan(url, 'delete', uvid)
+        response=subscribe_voyageplan(url, 'delete', uvid)
 
 def get_voyageplan(url, uvid = None, routeStatus = None):
     parameters = {
