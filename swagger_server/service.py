@@ -30,6 +30,9 @@ p = Path('.')
 vis_cert = list(p.glob('**/Certificate_VIS*.pem'))
 if len(vis_cert) == 0:
     print('Error: no Certificate_VIS*.pem found')
+else:
+    vesselName = str(vis_cert[0])
+    vesselName = vesselName[12:len(vesselName)-4]
 vis_key = list(p.glob('**/PrivateKey_VIS*.pem'))
 if len(vis_key) == 0:
     print('Error: no PrivateKey_VIS*.pem found')
@@ -277,9 +280,9 @@ def send_ack(endpoint, id = 'urn:mrn:'):
 
 def read_accesstoken():
     if not os.path.isfile('accesstoken'):
-        call(['./getaccesstoken.sh','VIS-Medea'])        
+        call(['./getaccesstoken.sh', vesselName])        
     if time.time() - os.stat('accesstoken').st_mtime > 4 * 60 + 30:
-        call(['./getaccesstoken.sh','VIS-Medea'])        
+        call(['./getaccesstoken.sh', vesselName])        
     with open('accesstoken', 'r') as f:
         ACCESSTOKEN = f.read()
     return ACCESSTOKEN
