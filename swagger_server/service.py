@@ -26,7 +26,14 @@ from subprocess import call
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+conf={}
 p = Path('.')
+conffile = list(p.glob('**/vessel.conf'))
+if len(conffile) > 0:
+    with conffile[0].open() as f:
+        data = json.loads(f.read())
+        conf['host'] = data['host']
+        conf['port'] = data['port']
 vis_cert = list(p.glob('**/Certificate_VIS*.pem'))
 if len(vis_cert) == 0:
     print('Error: no Certificate_VIS*.pem found')
@@ -44,7 +51,7 @@ vis_cert=(str(vis_cert[0]), str(vis_key[0]))
 trustchain=str(vis_trust[0])
 
 url="https://localhost:8001"
-callbackurl="https://localhost:8002"
+callbackurl="https://stm.furuno.fi:8000"
 voyageuvid='urn:mrn:stm:voyage:id:8320767:2017021010'
 newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
 newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'

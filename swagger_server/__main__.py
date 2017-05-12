@@ -11,6 +11,7 @@ from threading import Thread
 from . import service
 
 p = Path('.')
+print(service.conf)
 vis_cert = list(p.glob('**/Certificate_VIS*.pem'))
 if len(vis_cert) == 0:
     print('Error: no Certificate_VIS*.pem found')
@@ -26,6 +27,9 @@ app.add_api('swagger.yaml', arguments={'title': 'Voyage Information Service API 
 if __name__ == '__main__':
     thread = Thread(target = service.service, args = ())
     thread.start()
-    app.run(host='localhost', port=8000, ssl_context=context)
+    if service.conf is None:
+        app.run(port=8000, host='127.0.0.1')
+    else:
+        app.run(port=service.conf['port'], host=service.conf['host'])
     thread.join()
 
