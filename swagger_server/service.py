@@ -271,7 +271,9 @@ def send_ack(endpoint, id = 'urn:mrn:'):
     payload['toName'] = 'Who cares'
     payload['ackResult'] = 'Who cares'
     sub='/acknowledgement'
+    '''
     response=requests.post(endpoint + sub, json=payload, cert=vis_cert, verify=trustchain)
+    '''
 
 def read_accesstoken():
     if not os.path.isfile('accesstoken'):

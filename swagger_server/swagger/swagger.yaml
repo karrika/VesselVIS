@@ -5,7 +5,7 @@ info:
     \ VoyagePlan"
   version: "1.1.0"
   title: "STM Voyage Information Service SeaSWIM API"
-host: "localhost"
+host: "stm.furuno.fi"
 basePath: "/"
 schemes:
 - "http"
