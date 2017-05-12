@@ -247,6 +247,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         if len(uvids) > 0:
             os.remove('export/' + vp1 + '.uvid')
             os.remove('export/' + vp1 + '.rtz')
+        uvids = list(p.glob('**/*' + vp1 + '.subs'))
+        if len(uvids) > 0:
             os.remove('export/' + vp1 + '.subs')
         return 'OK'
 
