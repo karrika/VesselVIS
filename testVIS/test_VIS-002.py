@@ -329,7 +329,7 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        hostsettings.rm_uvid(voyageuvid)
+        hostsettings.rm_uvid(newvoyageuvid)
         hostsettings.rm_acl(vis2_uvid, voyageuvid)
         p = Path('import')
         files = list(p.glob('**/' + newvoyageuvid + '.*'))
