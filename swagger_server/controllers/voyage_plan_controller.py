@@ -250,6 +250,9 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         uvids = list(p.glob('**/*' + vp1 + '.subs'))
         if len(uvids) > 0:
             os.remove('export/' + vp1 + '.subs')
+        uvids = list(p.glob('**/*' + vp1 + '.acl'))
+        if len(uvids) > 0:
+            os.remove('export/' + vp1 + '.acl')
         return 'OK'
 
     me = { 'uid': client_mrn(), 'url': callbackEndpoint}
