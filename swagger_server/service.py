@@ -287,7 +287,7 @@ def read_accesstoken():
         ACCESSTOKEN = f.read()
     return ACCESSTOKEN
 
-def search(query):
+def search(query, params = None):
     url="https://sr-test.maritimecloud.net"
     sub='/api/_search/serviceInstance'
     ACCESSTOKEN = read_accesstoken()
@@ -299,7 +299,13 @@ def search(query):
         'query' : query,
         'size' : 1000
     }
-    return requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
+    if params is None:
+        return requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
+    else:
+        if not (query is None):
+            params['query'] = query;
+        return requests.get(url + sub, headers=headers, params=params, cert=vis_cert)
+
 
 def sendpcm(body):
     url="https://sandbox-2.portcdm.eu:8443"
