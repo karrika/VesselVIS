@@ -60,6 +60,12 @@ Your Swagger definition lives here:
 https://stm.furuno.fi:8002/swagger.json
 ```
 
+Point your web browser here to try out the services:
+
+```
+https://stm.furuno.fi:8002/ui/
+```
+
 To set up the env environment for testing, launch tox:
 ```
 sudo pip3 install tox
@@ -72,3 +78,18 @@ To run the integration test suite we need to launch two vessel service instances
 ```
 
 By peeking inside the previous script you have examples of how to run single tests.
+
+To set the parameters up for each vessel there is now a new script:
+```
+python3 vesselconf.py
+```
+
+It builds a new file called vessel.conf that contains the port and host of the new service.
+```
+{"host": "127.0.0.1", "port": 8103}
+```
+
+You can of course just edit this file by hand also.
+
+For security we are using a nginx front end that takes care of certificates. The content is served by this flask server. Setting up the nginx server is a separate project. If you want help in setting up nginx drop me a line.
+
