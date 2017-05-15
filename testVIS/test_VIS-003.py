@@ -169,7 +169,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, 'https://localhost:8001', newvoyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, hostsettings.callback, newvoyageuvid)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_1_1_row', 'VIS_003_1_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
