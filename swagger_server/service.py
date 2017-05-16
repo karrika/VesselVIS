@@ -270,7 +270,7 @@ def upload_monitored(subscriber):
                     route = f.read()
                 post_voyageplan(subscriber, route)
 
-def send_ack(endpoint, id = 'urn:mrn:'):
+def send_ack(url, id = 'urn:mrn:'):
     payload = collections.OrderedDict()
     payload['id'] = 'urn:mrn:'
     payload['referenceId'] = 'urn:mrn:'
@@ -281,9 +281,10 @@ def send_ack(endpoint, id = 'urn:mrn:'):
     payload['toName'] = 'Who cares'
     payload['ackResult'] = 'Who cares'
     sub='/acknowledgement'
-    '''
-    response=requests.post(endpoint + sub, json=payload, cert=vis_cert, verify=trustchain)
-    '''
+    try:
+        response=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
+    except ValueError:
+        printf('Fail')
 
 def read_accesstoken():
     if not os.path.isfile('accesstoken'):
