@@ -11,6 +11,7 @@ from lxml import etree
 import io
 import re
 import collections
+from . import txt13
 
 def log_event(name, ackendpoint = None):
     data = collections.OrderedDict()
@@ -48,16 +49,36 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
     :rtype: None
     """
-    textname = client_mrn() + ':2'
-    with open('import/' + textname + ':1' + '.txt', 'wb') as f:
+    with open('import/parse.txt', 'wb') as f:
+        f.write(textMessageObject)
+    with open('import/parse.txt', 'r') as f:
+        txtmsg = f.read()
+    RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
+    txt = io.StringIO()
+    txt.write(RE_XML_ENCODING.sub("", txtmsg, count=1))
+    txt.seek(0)
+    doc = etree.parse(txt)
+    root = doc.getroot()
+    if txt13.xmlschema.validate(doc) == False:
+        txt.close()
+        ret = txt13.xmlschema.error_log
+        return ret, 400
+    tag='{http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd}'
+    messageId = root.find(tag + 'textMessageId').text
+    referenceId = root.find(tag + 'informationObjectReferenceId').text
+    with open('import/' + messageId + '.txt', 'wb') as f:
         f.write(textMessageObject)
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
+        data['textMessageId'] = 'placeholder'
         data['client'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-        with open('import/' + textname + '.ack', 'w') as f:
+        if not (referenceId is None):
+            data['referenceId'] = referenceId
+        with open('import/' + messageId + '.ack', 'w') as f:
             f.write(json.dumps(data))
+    
     log_event('text', deliveryAckEndPoint)
     return 'OK'
 
