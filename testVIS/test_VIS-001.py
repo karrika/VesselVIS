@@ -770,8 +770,8 @@ class TestVIS_001(BaseTestCase):
         """
         response=hostsettings.post_voyageplan(url, voyageplan_wrong_syntax_routeStatusEnum)
         hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_4_row', 'VIS_001_12_7_4_col',
-            response.status_code == 400, response.reason)
-        self.assert400(response, "Response body is : " + response.text)
+            response.status_code == 500, response.reason)
+        self.assert500(response, "Response body is : " + response.text)
 
     def test_VIS_001_12_7_5(self):
         """

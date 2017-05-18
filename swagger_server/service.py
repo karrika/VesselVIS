@@ -23,6 +23,8 @@ from datetime import datetime
 import time
 from subprocess import call
 
+simulate_vessel = True
+
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
@@ -90,18 +92,15 @@ def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None
 def check_event(name, callback = None, uvid = None):
     with open('event.log', 'r') as f:
         log = f.readlines()
-    length = len(log)
-    if length > 0:
-        data = json.loads(log[length-1])
-        if data['event'] != name:
-            return False
-        if not (callback is None):
-            if data['callback'] != callback:
-                return False
-        if not (uvid is None):
-            if data['uvid'] != uvid:
-                return False
-        return True
+        length = len(log)
+        if length > 0:
+            data = json.loads(log[length-1])
+            if data['event'] == name:
+                if not (callback is None):
+                    if data['callback'] == callback:
+                        if not (uvid is None):
+                            if data['uvid'] == uvid:
+                                return True
     return False
 
 def set_acl(id, uvid=None):
@@ -337,7 +336,7 @@ def sendpcm(body):
 
 def vessel_connects():
     '''
-    Check the possible new subsciptions and merge them with existing ones.
+    Check the possible new subsciptions and handle it if is allowed in acl.
     '''
     p = Path('import')
     subs = list(p.glob('**/*.subs'))
@@ -345,23 +344,34 @@ def vessel_connects():
         for sub in subs:
             with sub.open() as f:
                 new_subs = json.loads(f.read())
-                send_uvid_to = new_subs
-            os.remove(str(sub))
-            q = Path('export')
-            q = q / sub.parts[1]
-            if q.exists():
-                with q.open() as f:
-                    old_subs = json.loads(f.read())
-                for subscriber in old_subs:
-                    if not ( subscriber in new_subs ):
-                        new_subs.append(subscriber)
-            with open(str(q), 'w') as f:
-                f.write(json.dumps(new_subs))
-            for subscriber in send_uvid_to:
-                '''
-                Send monitored voyage to new subscribers
-                '''
-                upload_monitored(subscriber['url'])
+                if acl_allowed(new_subs[0]['uid']):
+                    send_uvid_to = new_subs
+                    q = Path('export')
+                    q = q / sub.parts[1]
+                    if q.exists():
+                        with q.open() as f:
+                            old_subs = json.loads(f.read())
+                        for subscriber in old_subs:
+                            if not ( subscriber in new_subs ):
+                                new_subs.append(subscriber)
+                    with open(str(q), 'w') as f:
+                        f.write(json.dumps(new_subs))
+                    for subscriber in send_uvid_to:
+                        '''
+                        Send monitored voyage to new subscribers
+                        '''
+                        upload_monitored(subscriber['url'])
+                    os.remove(str(sub))
+    '''
+    Check the remaining non-allowed subscriptions and send them to the vessel
+    '''
+    if simulate_vessel:
+        p = Path('import')
+        subs = list(p.glob('**/*.subs'))
+        if len(subs) > 0:
+            for sub in subs:
+                shutil.copyfile(str(sub), 'stm/' + sub.parts[1])
+                os.remove(str(sub))
     '''
     Check the possible new subsciption removals and take care of them.
     '''
@@ -390,27 +400,38 @@ def vessel_connects():
     Check for new voyage plans being uploaded and send ack if required.
     Also send the plans further if an active subscription exists.
     '''
-    p = Path('import')
-    uvids = list(p.glob('**/*.uvid'))
-    for item in uvids:
-        shutil.copyfile(str(item), 'export/' + item.parts[1])
-        os.remove(str(item)) 
-    rtzs = list(p.glob('**/*.rtz'))
-    for item in rtzs:
-        shutil.copyfile(str(item), 'export/' + item.parts[1])
-        os.remove(str(item))
+    if simulate_vessel:
+        p = Path('import')
+        uvids = list(p.glob('**/*.uvid'))
+        for item in uvids:
+            shutil.copyfile(str(item), 'stm/' + item.parts[1])
+            shutil.copyfile(str(item), 'export/' + item.parts[1])
+            os.remove(str(item)) 
+        rtzs = list(p.glob('**/*.rtz'))
+        for item in rtzs:
+            shutil.copyfile(str(item), 'stm/' + item.parts[1])
+            shutil.copyfile(str(item), 'export/' + item.parts[1])
+            os.remove(str(item))
         
     '''
     Check for new areas being uploaded.
     '''
-    p = Path('import')
-    areas = list(p.glob('**/*.S124'))
-    if len(areas) > 0:
-        for area in areas:
-            os.remove(str(area))
+    if simulate_vessel:
+        p = Path('import')
+        areas = list(p.glob('**/*.S124'))
+        if len(areas) > 0:
+            for area in areas:
+                shutil.copyfile(str(area), 'stm/' + area.parts[1])
+                os.remove(str(area))
     '''
     Check for new text messages being uploaded.
     '''
+    if simulate_vessel:
+        p = Path('import')
+        texts = list(p.glob('**/*.xml'))
+        for text in texts:
+            shutil.copyfile(str(text), 'stm/' + text.parts[1])
+            os.remove(str(text)) 
     '''
     Check for ack requests.
     '''

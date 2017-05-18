@@ -16,6 +16,8 @@ else
     cd VIS-1
 fi
 rm -f ../stdout.log ../stderr.log
+rm -f ../VIS-1/event.log
+rm -f ../VIS-2/event.log
 #while true; do
 #    IFS= read -n1 -r key
 #    [[ $key == ' ' ]] && break

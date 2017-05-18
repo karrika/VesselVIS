@@ -75,20 +75,21 @@ def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None
         f.write('\n')
 
 def check_event(name, callback = None, uvid = None):
-    with open('event.log', 'r') as f:
-        log = f.readlines()
-    length = len(log)
-    if length > 0:
-        data = json.loads(log[length-1])
-        if data['event'] != name:
-            return False
-        if not (callback is None):
-            if data['callback'] != callback:
-                return False
-        if not (uvid is None):
-            if data['uvid'] != uvid:
-                return False
-        return True
+    for log in open('event.log', 'r'):
+        match = True
+        length = len(log)
+        if length > 0:
+            data = json.loads(log)
+            if ('event' in data) and (data['event'] != name):
+                match = False
+            if not (callback is None):
+                if ('callback' in data) and (data['callback'] != callback):
+                    match = False
+            if not (uvid is None):
+                if ('uvid' in data) and (data['uvid'] != uvid):
+                    match = False
+            if match:
+                return True
     return False
 
 def islocal():

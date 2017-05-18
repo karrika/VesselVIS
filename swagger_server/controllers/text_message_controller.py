@@ -16,13 +16,17 @@ import collections
 from . import txt13
 import codecs
 
-def log_event(name, ackendpoint = None):
+def log_event(name, ackendpoint = None, textId = None, refId = None):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     data['client'] = client_mrn()
     data['event'] = name
     if not (ackendpoint is None):
         data['ack'] = ackendpoint
+    if not (textId is None):
+        data['id'] = textId
+    if not (refId is None):
+        data['refid'] = refId
     with open('event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
@@ -78,7 +82,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     tag='{http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd}'
     messageId = root.find(tag + 'textMessageId').text
     referenceId = root.find(tag + 'informationObjectReferenceId').text
-    with open('import/' + messageId + '.txt', 'w', encoding='utf-8') as f:
+    with open('import/' + messageId + '.xml', 'w', encoding='utf-8') as f:
         f.write(txtmsg)
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
@@ -91,6 +95,6 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         with open('import/' + messageId + '.ack', 'w') as f:
             f.write(json.dumps(data))
     
-    log_event('text', deliveryAckEndPoint)
+    log_event('text', ackendpoint = deliveryAckEndPoint, textId = messageId, refId = referenceId)
     return 'OK'
 

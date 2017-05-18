@@ -102,7 +102,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('post_subscription', callbackurl)
+        logged = hostsettings.check_event('post_subscription')
         hostsettings.reportrow('VIS003sheet', 'VIS_003_02_row', 'VIS_003_02_col',
             logged, '')
         self.assertTrue(logged)
@@ -113,7 +113,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('subscribe', callbackurl)
+        logged = hostsettings.check_event('subscribe')
         hostsettings.reportrow('VIS003sheet', 'VIS_003_03_row', 'VIS_003_03_col',
             logged, '')
         self.assertTrue(logged)
@@ -124,7 +124,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('subscribe', callbackurl)
+        logged = hostsettings.check_event('subscribe')
         hostsettings.reportrow('VIS003sheet', 'VIS_003_04_row', 'VIS_003_04_col',
             logged, '')
         self.assertTrue(logged)
@@ -169,7 +169,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, hostsettings.callback, newvoyageuvid)
+        response=hostsettings.subscribe_voyageplan(url, hostsettings.callbackurl, newvoyageuvid)
         hostsettings.reportrow('VIS003sheet', 'VIS_003_1_1_row', 'VIS_003_1_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
