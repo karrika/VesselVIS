@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import connexion
 from swagger_server.models.get_subscription_response import GetSubscriptionResponse
 from swagger_server.models.get_voyage_plan_response import GetVoyagePlanResponse

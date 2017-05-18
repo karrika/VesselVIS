@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import connexion
 from swagger_server.models.delivery_ack import DeliveryAck
 from datetime import date, datetime

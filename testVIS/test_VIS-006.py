@@ -30,14 +30,30 @@ voyageuvid='urn:mrn:stm:voyage:id:004:001'
 vis2_uvid=hostsettings.vis2_uvid
 
 textmessage='''<?xml version="1.0" encoding="utf-8"?>
-<textMessage xmlns="http://tempuri.org/textMessageSchema.xsd">
-  <textMessageId>urn:mrn:stm:txt:sma:20161222104700-1</textMessageId>
-  <informationObjectReferenceId>urn:mrn:stm:voyage:id:sma:test-1</informationObjectReferenceId>
-  <author>Mikael</author>
+<textMessage
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd">
+  <textMessageId>urn:mrn:stm:txt:sma:20170510104400-1</textMessageId>
+  <informationObjectReferenceId>urn:mrn:stm:voyage:id:test:100</informationObjectReferenceId>
+  <informationObjectReferenceType>RTZ</informationObjectReferenceType>
+  <validityPeriodStart>2017-05-01T01:00:00Z</validityPeriodStart>
+  <validityPeriodStop>2017-06-10T01:00:00Z</validityPeriodStop>
+  <author>urn:mrn:stm:user:sma:mikolo</author>
   <from>urn:mrn:stm:org:sma</from>
-  <createdAt>2016-12-22T11:09:47</createdAt>
-  <subject>Subject</subject>
-  <body>Body</body>
+  <serviceType>SHIP-VIS</serviceType>
+  <createdAt>2017-05-10T01:00:00Z</createdAt>
+  <subject>Test message</subject>
+  <body>Test message Hanöbukten</body>
+  <position lat="55.50668" lon="14.29825"/>
+  <area>
+    <Polygon>
+      <posList>55.452 14.405 55.465 14.151 56.006 14.301 55.563 14.437 55.452 14.405</posList>
+    </Polygon>
+    <Circle>
+      <position lat="55.50668" lon="14.29825"/>
+      <radius>1</radius>
+    </Circle>
+  </area>
 </textMessage>
 '''
 

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import connexion
 from datetime import date, datetime
 from typing import List, Dict
@@ -12,6 +14,7 @@ import io
 import re
 import collections
 from . import txt13
+import codecs
 
 def log_event(name, ackendpoint = None):
     data = collections.OrderedDict()
@@ -51,8 +54,17 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     """
     with open('import/parse.txt', 'wb') as f:
         f.write(textMessageObject)
-    with open('import/parse.txt', 'r') as f:
-        txtmsg = f.read()
+    try:
+        with codecs.open('import/parse.txt', 'r', encoding = 'utf-8') as f:
+            txtmsg = f.read()
+    except ValueError:
+        print('Not utf-8')
+        try:
+            with codecs.open('import/parse.txt', 'r', encoding = 'windows-1252') as f:
+                txtmsg = f.read()
+        except ValueError:
+            print('Not windows-1252 either')
+
     RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
     txt = io.StringIO()
     txt.write(RE_XML_ENCODING.sub("", txtmsg, count=1))
@@ -66,8 +78,8 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     tag='{http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd}'
     messageId = root.find(tag + 'textMessageId').text
     referenceId = root.find(tag + 'informationObjectReferenceId').text
-    with open('import/' + messageId + '.txt', 'wb') as f:
-        f.write(textMessageObject)
+    with open('import/' + messageId + '.txt', 'w', encoding='utf-8') as f:
+        f.write(txtmsg)
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint

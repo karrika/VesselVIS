@@ -270,16 +270,28 @@ def upload_monitored(subscriber):
                     route = f.read()
                 post_voyageplan(subscriber, route)
 
-def send_ack(url, id = 'urn:mrn:'):
+def send_ack(url, \
+    id = 'urn:mrn:stm:id:missing', \
+    timeOfDelivery = None, \
+    referenceId = 'urn:mrn:stm:referenceid:missing', \
+    fromId = 'urn:mrn:stm:fromid:missing', \
+    fromName = 'Unknown sender', \
+    toId = 'urn:mrn:stm:toid:missing', \
+    toName = 'Unknown receiver', \
+    ackResult = 'Ok'):
+
     payload = collections.OrderedDict()
-    payload['id'] = 'urn:mrn:'
-    payload['referenceId'] = 'urn:mrn:'
-    payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    payload['fromId'] = 'urn:mrn:'
-    payload['fromName'] = 'Who cares'
-    payload['toId'] = 'urn:mrn:'
-    payload['toName'] = 'Who cares'
-    payload['ackResult'] = 'Who cares'
+    payload['id'] = id
+    payload['referenceId'] = referenceId
+    if timeOfDelivery is None:
+        payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    else:
+        payload['timeOfDelivery'] = timeOfDelivery
+    payload['fromId'] = fromId
+    payload['fromName'] = fromName
+    payload['toId'] = toId
+    payload['toName'] = toName
+    payload['ackResult'] = ackResult
     sub='/acknowledgement'
     try:
         response=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)

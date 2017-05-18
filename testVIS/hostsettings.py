@@ -254,7 +254,10 @@ def post_text(url, text, deliveryAckEndPoint = None):
         log_event('post_text', ack=deliveryAckEndPoint)
     else:
         log_event('post_text', None)
-    return requests.post(url + sub, data=text, params=parameters, cert=vis_cert, verify=trustchain)
+    headers = {
+        'Content-Type' : 'charset=utf-8'
+    }
+    return requests.post(url + sub, data=text, params=parameters, headers=headers, cert=vis_cert, verify=trustchain)
 
 def upload_monitored(subscriber):
     '''
