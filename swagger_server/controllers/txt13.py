@@ -12,6 +12,8 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 
   Revision 1.3
     Edition 2   Removed mininclusive in pattern for dateTimeUTC
+	Edition 3   Adjusted pattern textMessageURN for textMessageId
+	Edition 4	Adjusted minExclusive for radius and type positiveDouble
   Source: STM
 -->
 <xs:schema xmlns="http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd" elementFormDefault="qualified" id="textMessageSchema">
@@ -101,7 +103,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:maxLength value="120"/>
-			<xs:pattern value="urn:mrn:[a-z0-9]+:txt:[a-zA-Z0-9/:\-]+" />
+			<xs:pattern value="urn:mrn:stm:txt:[0-9a-zA-Z:+_-]+"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="informationObjectTypeEnum">
@@ -113,7 +115,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 	</xs:simpleType>
 	<xs:simpleType name="DateTimeUTC">
 		<xs:annotation>
-			<xs:documentation>UTC time with MIN restriction.</xs:documentation>
+			<xs:documentation>UTC time.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:dateTime">
 			<xs:pattern value=".*Z"/>
@@ -162,7 +164,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 	</xs:simpleType>
 	<xs:simpleType name="positiveDouble">
 		<xs:restriction base="xs:double">
-			<xs:minExclusive value="0.0"/>
+			<xs:minExclusive value="0"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="S100_CircleByCenterPointType">
@@ -171,19 +173,17 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="position" type="GM_Point"/>
-			<xs:element name="radius" type="positiveDouble">
-					<xs:annotation>
-						<xs:documentation>The radius is a double greater than zero and its unit is assumed to be nautical miles (nm).</xs:documentation>
-					</xs:annotation>
+			<xs:element name="radius" type="positiveDouble" >
+				<xs:annotation>
+					<xs:documentation>The radius is a double greater than zero and its unit is assumed to be nautical miles (nm).</xs:documentation>
+				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string">
 			<xs:annotation>
 				<xs:documentation>
           The attribute gml:id supports provision of a handle for the XML element
-          representing a GML Object. Its use is mandatory for all GML objects. It is of XML
-          type ID, so is constrained to be unique in the XML document within which it
-          occurs.
+          representing a GML Object. Its use is optional for all GML objects.
         </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
@@ -214,9 +214,7 @@ schema_str = '''<?xml version="1.0" encoding="utf-8"?>
 						<xs:annotation>
 							<xs:documentation>
                 The attribute gml:id supports provision of a handle for the XML element
-                representing a GML Object. Its use is mandatory for all GML objects. It is of XML
-                type ID, so is constrained to be unique in the XML document within which it
-                occurs.
+                representing a GML Object. Its use is optional for all GML objects.
               </xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
