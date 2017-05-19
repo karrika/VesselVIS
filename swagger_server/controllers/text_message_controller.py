@@ -77,7 +77,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     root = doc.getroot()
     try:
         result = txt13.xmlschema.validate(doc)
-    except ValueError:
+    except TypeError:
         result = False
     if not result:
         txt.close()
