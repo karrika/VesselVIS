@@ -93,7 +93,9 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
         with sub.open() as f:
             data = json.loads(f.read())
             if me in data:
-                sr = GetSubscriptionResponse(str(sub)[7:])
+                uvid = str(sub)[7:]
+                length = len(uvid)
+                sr = GetSubscriptionResponse(uvid[:length-5])
                 subsl.append(sr)
     log_event('get_subscriptions', callbackEndpoint)
     return subsl
