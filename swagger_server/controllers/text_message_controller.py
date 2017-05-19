@@ -75,7 +75,11 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     txt.seek(0)
     doc = etree.parse(txt)
     root = doc.getroot()
-    if txt13.xmlschema.validate(doc) == False:
+    try:
+        result = txt13.xmlschema.validate(doc)
+    except ValueError:
+        result = False
+    if not result:
         txt.close()
         ret = txt13.xmlschema.error_log
         return ret, 400
