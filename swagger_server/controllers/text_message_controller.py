@@ -77,11 +77,14 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     root = doc.getroot()
     try:
         result = txt13.xmlschema.validate(doc)
+        if not result:
+            txt.close()
+            ret = str(txt13.xmlschema.error_log)
+            return ret, 400
     except:
         result = False
     if not result:
         txt.close()
-        ret = txt13.xmlschema.error_log
         return ret, 400
     tag='{http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd}'
     messageId = root.find(tag + 'textMessageId').text
