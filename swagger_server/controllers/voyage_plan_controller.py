@@ -332,17 +332,26 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
             ret = rtz10.xmlschema.error_log
             return ret, 400
         '''
+        result = True
         tag='{http://www.cirm.org/RTZ/1/0}'
     else:
         if root.tag == '{http://www.cirm.org/RTZ/1/1}route':
-            if rtzstm11.xmlschema.validate(doc) == False:
-                rtz.close()
-                ret = rtzstm11.xmlschema.error_log
-                return ret, 400
+            try:
+                result = rtzstm11.xmlschema.validate(doc)
+                if result == False:
+                    rtz.close()
+                    ret = str(rtzstm11.xmlschema.error_log)
+                    return ret, 400
+            except:
+                result = False
             tag='{http://www.cirm.org/RTZ/1/1}'
         else:
+            rtz.close()
             ret = 'Unsupported route format'
             return ret, 400
+    if result == False:
+        rtz.close()
+        return ret, 400
     routeInfo = doc.find(tag + 'routeInfo')
     uvid = routeInfo.get('vesselVoyage')
     if uvid is None:
