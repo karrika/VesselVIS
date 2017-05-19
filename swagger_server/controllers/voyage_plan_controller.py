@@ -88,13 +88,13 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
     me = { 'uid': client_mrn(), 'url': callbackEndpoint}
     p = Path('export')
     subsl = [] 
-    uvids = list(p.glob('**/*.subs'))
-    if len(uvids) > 0:
-        with uvids[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if me in data:
-            sr = GetSubscriptionResponse(str(uvids[0]))
-            subsl.append(sr)
+    subs = list(p.glob('**/*.subs'))
+    for sub in subs:
+        with sub.open() as f:
+            data = json.loads(f.read())
+            if me in data:
+                sr = GetSubscriptionResponse(str(sub)[7:])
+                subsl.append(sr)
     log_event('get_subscriptions', callbackEndpoint)
     return subsl
 
