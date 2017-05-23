@@ -14,6 +14,8 @@ from lxml import etree
 import io
 import re
 import collections
+from . import S124
+import codecs
 
 def log_event(name ,areaname, ackendpoint = None):
     data = collections.OrderedDict()
@@ -52,9 +54,39 @@ def upload_area(area, deliveryAckEndPoint=None):
 
     :rtype: None
     """
-    areaname = client_mrn() + ':2'
-    with open('import/' + areaname + '.S124', 'wb') as f:
+    with open('import/parse_area.txt', 'wb') as f:
         f.write(area)
+    try:
+        with codecs.open('import/parse_area.txt', 'r', encoding = 'utf-8') as f:
+            areamsg = f.read()
+    except ValueError:
+        print('Not utf-8')
+        try:
+            with codecs.open('import/parse_area.txt', 'r', encoding = 'windows-1252') as f:
+                areamsg = f.read()
+        except ValueError:
+            print('Not windows-1252 either')
+            pass
+
+    RE_XML_ENCODING = re.compile("encoding=\"UTF-8\"", re.IGNORECASE)
+    areastr = io.StringIO()
+    areastr.write(RE_XML_ENCODING.sub("", areamsg, count=1))
+    areastr.seek(0)
+    doc = etree.parse(areastr)
+    root = doc.getroot()
+    try:
+        result = S124.xmlschema.validate(doc)
+        if not result:
+            areastr.close()
+            ret = str(S124.xmlschema.error_log)
+            return ret, 400
+    except:
+        result = False
+    if not result:
+        areastr.close()
+        return ret, 400
+    tag='{http://www.iho.int/S124/gml/1.0}'
+    areaname = 'karri'
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
