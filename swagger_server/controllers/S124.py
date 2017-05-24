@@ -58,9 +58,9 @@ Revision date: 2017-01-16
 		<xs:documentation>Application schema for Navigational warnings sample dataset</xs:documentation>
 	</xs:annotation>
 
-	<xs:import namespace="http://www.iho.int/s100gml/1.0" schemaLocation="/home/karkak/Desktop/s100gmlbase.xsd"/>
-	<xs:import namespace="http://www.opengis.net/gml/3.2" schemaLocation="/home/karkak/Desktop/S100_gmlProfile.xsd"/>
-	<xs:import namespace="http://www.iho.int/S-100/profile/s100_gmlProfile" schemaLocation="/home/karkak/Desktop/S100_gmlProfileLevels.xsd"/>
+	<xs:import namespace="http://www.iho.int/s100gml/1.0" schemaLocation="swagger_server/controllers/s100gmlbase.xsd"/>
+	<xs:import namespace="http://www.opengis.net/gml/3.2" schemaLocation="swagger_server/controllers/S100_gmlProfile.xsd"/>
+	<xs:import namespace="http://www.iho.int/S-100/profile/s100_gmlProfile" schemaLocation="swagger_server/controllers/S100_gmlProfileLevels.xsd"/>
 
 	<!-- =============================================== -->
 	<!-- spatial property convenience types    -->
