@@ -383,9 +383,15 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     f.write(json.dumps(data))
     f.close()
     if deliveryAckEndPoint is not None:
-        f = open('import/' + uvid + '.ack', 'w')
-        f.write(deliveryAckEndPoint)
-        f.close()
+        data = collections.OrderedDict()
+        data['endpoint'] = deliveryAckEndPoint
+        data['id'] = uvid
+        data['client'] = client_mrn()
+        data['fromId'] = client_mrn()
+        data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+        data['referenceId'] = uvid
+        with open('import/' + uvid + '.ack', 'w') as f:
+            f.write(json.dumps(data))
     log_event('upload', callbackEndpoint, uvid)
 
     if simulate_vessel:

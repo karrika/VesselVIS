@@ -280,8 +280,8 @@ def post_ack(data):
         payload['referenceId'] = data['referenceId']
     else:
         payload['referenceId'] = 'urn:mrn:stm:referenceid:missing'
-    if 'timeOfDelivery' in data:
-        payload['timeOfDelivery'] = data['timeOfDelivery']
+    if 'time' in data:
+        payload['timeOfDelivery'] = data['time']
     else:
         payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     if 'fromId' in data:

@@ -90,7 +90,9 @@ def upload_area(area, deliveryAckEndPoint=None):
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
+        data['id'] = areaname
         data['client'] = client_mrn()
+        data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         with open('import/' + areaname + '.ack', 'w') as f:
             f.write(json.dumps(data))

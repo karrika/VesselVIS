@@ -94,7 +94,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
-        data['textMessageId'] = messageId
+        data['id'] = messageId
         data['client'] = client_mrn()
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
