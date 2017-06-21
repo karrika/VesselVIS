@@ -15,6 +15,7 @@ import re
 import collections
 from . import txt13
 import codecs
+from swagger_server import service
 
 def log_event(name, ackendpoint = None, textId = None, refId = None):
     data = collections.OrderedDict()
@@ -100,6 +101,10 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         if not (referenceId is None):
             data['referenceId'] = referenceId
+        if not service.conf is None:
+            data['toId'] = service.conf['id']
+            data['toName'] = service.conf['name']
+
         with open('import/' + messageId + '.ack', 'w') as f:
             f.write(json.dumps(data))
     

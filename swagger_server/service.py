@@ -36,6 +36,8 @@ if len(conffile) > 0:
         data = json.loads(f.read())
         conf['host'] = data['host']
         conf['port'] = data['port']
+        conf['id'] = data['id']
+        conf['name'] = data['name']
 vis_cert = list(p.glob('**/Certificate_VIS*.pem'))
 if len(vis_cert) == 0:
     print('Error: no Certificate_VIS*.pem found')

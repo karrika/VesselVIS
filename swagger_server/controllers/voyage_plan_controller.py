@@ -22,6 +22,7 @@ from . import rtzstm11
 import sys
 from datetime import datetime
 import collections
+from swagger_server import service
 
 simulate_vessel = False
 
@@ -390,6 +391,10 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         data['referenceId'] = uvid
+        if not service.conf is None:
+            data['toId'] = service.conf['id']
+            data['toName'] = service.conf['name']
+
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
     log_event('upload', callbackEndpoint, uvid)

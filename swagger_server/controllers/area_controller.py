@@ -16,6 +16,7 @@ import re
 import collections
 from . import S124
 import codecs
+from swagger_server import service
 
 def log_event(name ,areaname, ackendpoint = None):
     data = collections.OrderedDict()
@@ -86,7 +87,7 @@ def upload_area(area, deliveryAckEndPoint=None):
         areastr.close()
         return ret, 400
     tag='{http://www.iho.int/S124/gml/1.0}'
-    areaname = 'karri'
+    areaname = 'areaname'
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
@@ -94,6 +95,10 @@ def upload_area(area, deliveryAckEndPoint=None):
         data['client'] = client_mrn()
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+        if not service.conf is None:
+            data['toId'] = service.conf['id']
+            data['toName'] = service.conf['name']
+
         with open('import/' + areaname + '.ack', 'w') as f:
             f.write(json.dumps(data))
     log_event('area', areaname, deliveryAckEndPoint)
