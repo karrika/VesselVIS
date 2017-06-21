@@ -269,33 +269,49 @@ def upload_monitored(subscriber):
                     route = f.read()
                 post_voyageplan(subscriber, route)
 
-def send_ack(url, \
-    id = 'urn:mrn:stm:id:missing', \
-    timeOfDelivery = None, \
-    referenceId = 'urn:mrn:stm:referenceid:missing', \
-    fromId = 'urn:mrn:stm:fromid:missing', \
-    fromName = 'Unknown sender', \
-    toId = 'urn:mrn:stm:toid:missing', \
-    toName = 'Unknown receiver', \
-    ackResult = 'Ok'):
-
+def post_ack(data):
     payload = collections.OrderedDict()
-    payload['id'] = id
-    payload['referenceId'] = referenceId
-    if timeOfDelivery is None:
-        payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    
+    if 'id' in data:
+        payload['id'] = data['id']
     else:
-        payload['timeOfDelivery'] = timeOfDelivery
-    payload['fromId'] = fromId
-    payload['fromName'] = fromName
-    payload['toId'] = toId
-    payload['toName'] = toName
-    payload['ackResult'] = ackResult
-    sub='/acknowledgement'
-    try:
-        response=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
-    except ValueError:
-        printf('Fail')
+        payload['id'] = 'urn:mrn:stm:id:missing'
+    if 'referenceId' in data:
+        payload['referenceId'] = data['referenceId']
+    else:
+        payload['referenceId'] = 'urn:mrn:stm:referenceid:missing'
+    if 'timeOfDelivery' in data:
+        payload['timeOfDelivery'] = data['timeOfDelivery']
+    else:
+        payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    if 'fromId' in data:
+        payload['fromId'] = data['fromId']
+    else:
+        payload['fromId'] = 'urn:mrn:stm:fromid:missing'
+    if 'fromName' in data:
+        payload['fromName'] = data['fromName']
+    else:
+        payload['fromName'] = 'Unknown sender'
+    if 'toId' in data:
+        payload['toId'] = data['toId']
+    else:
+        payload['toId'] = 'urn:mrn:stm:toid:missing'
+    if 'toName' in data:
+        payload['toName'] = data['toName']
+    else:
+        payload['toName'] = 'Unknown receiver'
+    if 'ackResult' in data:
+        payload['ackResult'] = data['ackResult']
+    else:
+        payload['ackResult'] = 'OK'
+    if 'endpoint' in data:
+        url = data['endpoint']
+        sub='/acknowledgement'
+        log_event('post_ack', callback=url)
+        try:
+            response=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
+        except ValueError:
+            printf('Fail')
 
 def read_accesstoken():
     if not os.path.isfile('accesstoken'):
@@ -446,8 +462,7 @@ def vessel_connects():
                 except ValueError:
                     data = { 'endpoint' : content }
             os.remove(str(ack))
-            if 'endpoint' in data:
-                send_ack(data['endpoint'])
+            post_ack(data)
 
 def service():
     while True:
