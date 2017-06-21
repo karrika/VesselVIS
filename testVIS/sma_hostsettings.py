@@ -292,6 +292,61 @@ def upload_monitored(subscriber):
                     route = f.read()
                 post_voyageplan(subscriber, route)
 
+def post_ack(data):
+    payload = collections.OrderedDict()
+    
+    if 'textMessageId' in data:
+        payload['id'] = data['textMessageId']
+    else:
+        payload['id'] = 'urn:mrn:stm:id:missing'
+    if 'referenceId' in data:
+        payload['referenceId'] = data['referenceId']
+    else:
+        payload['referenceId'] = 'urn:mrn:stm:referenceid:missing'
+    if 'timeOfDelivery' in data:
+        payload['timeOfDelivery'] = data['timeOfDelivery']
+    else:
+        payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    if 'fromId' in data:
+        payload['fromId'] = data['fromId']
+    else:
+        payload['fromId'] = 'urn:mrn:stm:fromid:missing'
+    if 'fromName' in data:
+        payload['fromName'] = data['fromName']
+    else:
+        payload['fromName'] = 'Unknown sender'
+    if 'toId' in data:
+        payload['toId'] = data['toId']
+    else:
+        payload['toId'] = 'urn:mrn:stm:toid:missing'
+    if 'toName' in data:
+        payload['toName'] = data['toName']
+    else:
+        payload['toName'] = 'Unknown receiver'
+    if 'ackResult' in data:
+        payload['ackResult'] = data['ackResult']
+    else:
+        payload['ackResult'] = 'OK'
+    if 'endpoint' in data:
+        url = data['endpoint']
+        sub='/acknowledgement'
+        print(payload)
+        print(url + sub)
+        return requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
+
+def send_ack(endpoint, id = 'urn:mrn:'):
+    payload = collections.OrderedDict()
+    payload['id'] = 'urn:mrn:'
+    payload['referenceId'] = 'urn:mrn:'
+    payload['timeOfDelivery'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    payload['fromId'] = 'urn:mrn:'
+    payload['fromName'] = 'Who cares'
+    payload['toId'] = 'urn:mrn:'
+    payload['toName'] = 'Who cares'
+    payload['ackResult'] = 'Who cares'
+    sub='/acknowledgement'
+    return requests.post(endpoint + sub, json=payload, cert=vis_cert, verify=trustchain)
+
 def send_ack(endpoint, id = 'urn:mrn:'):
     payload = collections.OrderedDict()
     payload['id'] = 'urn:mrn:'
