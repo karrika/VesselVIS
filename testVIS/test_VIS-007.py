@@ -29,94 +29,58 @@ voyageuvid='urn:mrn:stm:voyage:id:004:001'
 vis2_uvid=hostsettings.vis2_uvid
 
 area='''<?xml version="1.0" encoding="UTF-8"?>
-<S124:DataSet xmlns:S124="http://www.iho.int/S124/gml/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:S100="http://www.iho.int/s100gml/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" gml:id="I.001.16">
-  <gml:boundedBy>
-    <gml:Envelope srsName="EPSG:4326">
-      <gml:lowerCorner>55.0000 20.0000</gml:lowerCorner>
-      <gml:upperCorner>85.0000 60.0000</gml:upperCorner>
-    </gml:Envelope>
-  </gml:boundedBy>
-  <S100:Surface gml:id="s.NW.I.001.16.1" srsName="EPSG:4326">
-    <gml:patches>
-      <gml:PolygonPatch>
-        <gml:exterior>
-          <gml:LinearRing>
-            <gml:posList>59.803000 23.836666 59.873917 23.833745 59.902731 24.095344 59.902560 24.370768 59.965007 24.637580 60.047886 25.015368 60.137687 25.402824 60.173118 25.814394 60.033779 25.714923 59.873677 24.903480 59.831262 24.384379</gml:posList>
-          </gml:LinearRing>
-        </gml:exterior>
-      </gml:PolygonPatch>
-    </gml:patches>
-  </S100:Surface>
-  <imember>
-    <S124:NWPreamble gml:id="PR.I.001.16">
-      <messageSeriesIdentifier>
-        <navOrMetArea>NAVAREA I</navOrMetArea>
-        <typeOfWarning>sub-area</typeOfWarning>
-        <warningNumber>23</warningNumber>
-        <year>2016</year>
-        <productionAgency>
-          <language>eng</language>
-          <text>XXX</text>
-        </productionAgency>
-      </messageSeriesIdentifier>
-	  <generalArea>
-				<text>Baltic sea</text>
-	  </generalArea>
-      <locality>
-				<text>gulf of Finland</text>
-	  </locality>
-      <sourceDate>2016-07-15</sourceDate>
-      <generalCategory>SailRaceEvent</generalCategory>
-
-      <!--<generalCategory>Sail Race Event</generalCategory>-->
-      <!--<locality>gulf of Finland</locality>-->
-      <!--<S100:informationAssociation gml:id='ia001' xlink:href='#NW.I.001.16.1' xlink:role='http://www.iho.int/S-124/gml/1.0/roles/theWarningPart'/>-->
-    </S124:NWPreamble>
-  </imember>
-  <member>
-    <S124:NavigationalWarningPart gml:id="NW.I.001.16.1">
-      <S100:informationAssociation gml:id="iaINV001" xlink:href="#PR.I.001.16" xlink:role="http://www.iho.int/S-124/gml/1.0/roles/header"/>
-      <S100:informationAssociation gml:id="ia002" xlink:href="#NW.I.001.16.2" xlink:role="http://www.iho.int/S-124/gml/1.0/roles/theReferences"/>
-      <information>
-        <text>Annual Sail Race is held on the 16th of July near Helsinki</text>
-      </information>
-      <fixedDateRange>
-        <timeStart>12:00:00</timeStart>
-        <timeEnd>17:00:00</timeEnd>
-        <dateStart>
-          <!--gDay>16</gDay-->
-          <date>2016-07-16</date>
-        </dateStart>
-        <dateEnd>
-          <!---gDay>16</gDay>
-				<gMonth>07</gMonth>
-				<gYear>2016</gYear-->
-          <date>2016-07-17</date>
-        </dateEnd>
-      </fixedDateRange>
-      <referenceUVID>urn:mrn:stm:metallica:12356</referenceUVID>
-      <header/>
-    </S124:NavigationalWarningPart>
-  </member>
-  <imember>
-    <S124:References gml:id="NW.I.001.16.2">
-      <S100:invInformationAssociation gml:id="iaINV0002" xlink:href="#NW.I.001.16.1" xlink:role="http://www.iho.int/S-124/gml/1.0/roles/theWarning"/>
-      <referenceType>source reference</referenceType>
-      <sourceIndication>
-        <categoryOfAuthority>maritime</categoryOfAuthority>
-        <country>Sweden</country>
-        <featureName>
-          <displayName>true</displayName>
-          <language>SWE</language>
-          <name>SMA</name>
-        </featureName>
-        <source>
-          <language>SWE</language>
-          <text>name of organization that carries out these competitions</text>
-        </source>
-      </sourceIndication>
-    </S124:References>
-  </imember>
+<S124:DataSet xmlns:S124="http://www.iho.int/S124/gml/1.0"
+	xsi:schemaLocation="http://www.iho.int/S124/gml/1.0 ../../schemas/0.5/S124.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:gml="http://www.opengis.net/gml/3.2"
+	xmlns:S100="http://www.iho.int/s100gml/1.0"
+	xmlns:xlink="http://www.w3.org/1999/xlink" gml:id="SE.local.100.17">
+	<gml:boundedBy><gml:Envelope srsName="EPSG:4326">
+			<gml:lowerCorner>-6.0000 30.0000</gml:lowerCorner>
+			<gml:upperCorner>45.0000 47.0000</gml:upperCorner>
+		</gml:Envelope></gml:boundedBy>
+<imember>
+	<S124:S124_NWPreamble gml:id="PR.SE.local.100.17">
+	<id>urn:mrn:s124:NW.SE.local.100.17.P</id>
+		<messageSeriesIdentifier>
+				<NameOfSeries>Oregrund VTS</NameOfSeries>
+				<typeOfWarning>local</typeOfWarning>
+				<warningNumber>100</warningNumber>
+				<year>17</year>
+				<productionAgency>
+					<language>eng</language>
+					<text>SWEDISH MARITIME AUTHORITY</text>
+				</productionAgency>
+				<country>SE</country>
+		</messageSeriesIdentifier>
+		<sourceDate>2017-05-08</sourceDate>
+		<generalArea>Sea of Åland and Archipelago Sea</generalArea>
+		<locality><text>west of island Orskar</text></locality>
+		<title><text>Small craft with 5 crew members is in a drift</text></title>
+		<theWarningPart xlink:href="#NW.SE.local.100.17.1"/>
+		</S124:S124_NWPreamble>
+</imember>
+<member>
+	<S124:S124_NavigationalWarningPart gml:id="NW.SE.local.100.17.1">
+		<id>urn:mrn:s124:NW.SE.local.100.17.1</id>
+		<geometry>
+		<S100:surfaceProperty>
+		<gml:Polygon gml:id="s.NW.SE.local.100.17.1" srsName="EPSG:4326">
+			<gml:exterior>
+				<gml:LinearRing>
+					<gml:posList>
+						60.53 18.307
+						60.53 18.35
+						60.50 18.35
+						60.50 18.307
+						</gml:posList>
+					</gml:LinearRing>
+				</gml:exterior>
+			</gml:Polygon>
+		</S100:surfaceProperty>
+		</geometry>  
+		<header xlink:href="#PR.SE.local.100.17"/>
+	</S124:S124_NavigationalWarningPart>
+</member>
 </S124:DataSet>
 '''
 
