@@ -63,7 +63,7 @@ def acknowledgement(deliveryAck):
             'to_name': str,
             'ack_result': str
         }
-    log_event('ack')
     """
+    log_event('ack')
     return 'Thank you for sending the acknowlegement'
 
