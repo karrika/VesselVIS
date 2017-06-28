@@ -46,9 +46,11 @@ def acknowledgement(deliveryAck):
     :type deliveryAck: dict | bytes
 
     :rtype: None
-    """
     if connexion.request.is_json:
         deliveryAck = DeliveryAck.from_dict(connexion.request.get_json())
+    """
+    with open('stm/ackmsg.txt', 'w') as f:
+        f.write(json.dumps(deliveryAck))
     """
     So, what an earth am I going to do about acknowledgements?
         self.swagger_types = {
@@ -61,7 +63,7 @@ def acknowledgement(deliveryAck):
             'to_name': str,
             'ack_result': str
         }
-    """
     log_event('ack')
+    """
     return 'Thank you for sending the acknowlegement'
 

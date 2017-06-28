@@ -5,7 +5,7 @@ info:
     \ VoyagePlan"
   version: "1.1.0"
   title: "STM Voyage Information Service SeaSWIM API"
-host: "stm.furuno.fi"
+host: "stm.furuno.fi:8001"
 basePath: "/"
 schemes:
 - "http"
@@ -76,7 +76,7 @@ paths:
         400:
           description: "Bad Request"
         401:
-          description: "Unauthorized (the user cannot be auhtenticated in the Identity\
+          description: "Unauthorized (the user cannot be authenticated in the Identity\
             \ Registry)"
         403:
           description: "Forbidden"
@@ -197,7 +197,7 @@ paths:
       - name: "callbackEndpoint"
         in: "query"
         description: "Callback expected. Base url of the vis instance as in the Service\
-          \ Registry. The callback response will be sended to the voyagePlans endPoint\
+          \ Registry. The callback response will be sent to the voyagePlans endPoint\
           \ of the instance"
         required: false
         type: "string"
@@ -231,7 +231,7 @@ paths:
       - name: "callbackEndpoint"
         in: "query"
         description: "Callback expected. Base url of the vis instance as in the Service\
-          \ Registry. The callback response will be sended to the voyagePlans endPoint\
+          \ Registry. The callback response will be sent to the voyagePlans endPoint\
           \ of the instance"
         required: true
         type: "string"
@@ -270,7 +270,7 @@ paths:
       - name: "callbackEndpoint"
         in: "query"
         description: "Callback expected. Base url of the vis instance as in the Service\
-          \ Registry. The callback response will be sended to the voyagePlans endPoint\
+          \ Registry. The callback response will be sent to the voyagePlans endPoint\
           \ of the instance"
         required: true
         type: "string"
@@ -312,7 +312,7 @@ paths:
       - name: "callbackEndpoint"
         in: "query"
         description: "Callback expected. Base url of the vis instance as in the Service\
-          \ Registry. The callback response will be sended to the voyagePlans endPoint\
+          \ Registry. The callback response will be sent to the voyagePlans endPoint\
           \ of the instance"
         required: true
         type: "string"
@@ -350,7 +350,6 @@ definitions:
         description: "Reference ID such as a UVID, TXT id or area message id"
       timeOfDelivery:
         type: "string"
-        format: "date-time"
         description: "Time of Delivery of message to consumer"
       fromId:
         type: "string"
@@ -374,7 +373,6 @@ definitions:
     properties:
       lastInteractionTime:
         type: "string"
-        format: "date-time"
         description: "Last interaction time with private application. Can indicate\
           \ the current connectivity on private side of VIS"
       voyagePlans:
