@@ -23,7 +23,7 @@ from datetime import datetime
 import time
 from subprocess import call
 
-simulate_vessel = True
+simulate_vessel = False
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -56,12 +56,6 @@ trustchain=str(vis_trust[0])
 
 url="https://localhost:8001"
 callbackurl="https://stm.furuno.fi:8000"
-voyageuvid='urn:mrn:stm:voyage:id:8320767:2017021010'
-newvoyageuvid='urn:mrn:stm:voyage:id:new:plan'
-newvoyageuvid2='urn:mrn:stm:voyage:id:new:plan2'
-vis1_uvid='urn:mrn:stm:service:instance:furuno:vis1'
-vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
-vis3_uvid='urn:mrn:stm:service:instance:furuno:vis3'
 
 def reportrow(sheet, row, col, state = True, reason = ''):
     if state:
@@ -75,8 +69,9 @@ def reportrow(sheet, row, col, state = True, reason = ''):
     with open('../create_worksheet.py', 'a') as f:
         f.write(report)
 
-def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None):
-    data = { }
+def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None):
+    data = collections.OrderedDict()
+    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     if not (name is None):
         data['event'] = name
     if not (ack is None):
@@ -85,9 +80,13 @@ def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None
         data['callback'] = callback
     if not (uvid is None):
         data['uvid'] = uvid
+    if not (url is None):
+        data['url'] = url
     if not (routeStatus is None):
         data['routeStatus'] = routeStatus
-    with open('event.log', 'a') as f:
+    if not (status is None):
+        data['status'] = status
+    with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
 
@@ -221,36 +220,52 @@ def unsubscribe_voyageplan(url, callback, uvid = None):
     }
     return requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
 
-def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndPoint = None):
+def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = None, uvid = None):
+    headers = {
+        'Content-Type': 'text/xml'
+    }
     parameters = {
     }
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-    if not (callbackEndPoint is None):
-        parameters['callbackEndPoint'] = callbackEndPoint
+    if not (callbackEndpoint is None):
+        parameters['callbackEndpoint'] = callbackEndpoint
     sub='/voyagePlans'
-    log_event('post_voyage', None)
-    return requests.post(url + sub, data=voyageplan, params = parameters, cert=vis_cert, verify=trustchain)
+    status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain)
+    log_event('post_voyage', url=url, uvid=uvid, status=status.text)
+    return status
 
 def post_area(url, area, deliveryAckEndPoint = None):
+    headers = {
+        'Content-Type': 'text/xml'
+    }
     sub='/area'
     parameters = {
     }
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
     log_event('post_area', None)
-    return requests.post(url + sub, data=area, cert=vis_cert, verify=trustchain)
+    return requests.post(url + sub, data=area.encode('utf-8'), headers=headers, cert=vis_cert, verify=trustchain)
 
 def post_text(url, text, deliveryAckEndPoint = None):
+    headers = {
+        'Content-Type': 'text/xml'
+    }
     sub='/textMessage'
     parameters = {
     }
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-        log_event('post_text', ack=deliveryAckEndPoint)
-    else:
-        log_event('post_text', None)
-    return requests.post(url + sub, data=text, params=parameters, cert=vis_cert, verify=trustchain)
+    status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, verify=trustchain)
+    log_event('post_text', url=url, ack=deliveryAckEndPoint, status=status.text)
+    return status
+
+def upload_xml(xml):
+    url = 'https://smavistest.stmvalidation.eu/SMA010'
+    with open(xml) as f:
+        text = f.read()
+    post_text(url, text)
+    shutil.copyfile(xml, 'import/xmls.sent')
 
 def upload_monitored(subscriber):
     '''
@@ -269,7 +284,48 @@ def upload_monitored(subscriber):
             for rtz in rtzs:
                 with rtz.open() as f:
                     route = f.read()
-                post_voyageplan(subscriber, route)
+                post_voyageplan(subscriber, route, uvid=data['uvid'])
+
+def upload_monitored_to_all():
+    '''
+    Upload monitored to all subscribers
+    '''
+    if os.path.isfile('export/monitored.uvid'):
+        with open('export/all.subs') as f:
+            subs = json.loads(f.read())
+        for sub in subs:
+            upload_monitored(sub['url'])
+        shutil.copyfile('export/monitored.uvid', 'import/monitored.sent')
+
+def upload_alternate(subscriber):
+    '''
+    Upload alternate route to subscriber
+    '''
+    p = Path('export')
+    uvids = list(p.glob('**/*.uvid'))
+    for uvid in uvids:
+        with open(str(uvid), 'r') as f:
+            data = json.loads(f.read())
+        if data['routeStatus'] != '7':
+            '''
+            Send this uvid to subscriber
+            '''
+            rtzs = list(p.glob('**/' + str(data['route'])))
+            for rtz in rtzs:
+                with rtz.open() as f:
+                    route = f.read()
+                post_voyageplan(subscriber, route, uvid=data['uvid'])
+
+def upload_alternate_to_all():
+    '''
+    Upload alternate to all subscribers
+    '''
+    if os.path.isfile('export/alternate.uvid'):
+        with open('export/all.subs') as f:
+            subs = json.loads(f.read())
+        for sub in subs:
+            upload_alternate(sub['url'])
+        shutil.copyfile('export/alternate.uvid', 'import/alternate.sent')
 
 def post_ack(data):
     payload = collections.OrderedDict()
@@ -465,6 +521,38 @@ def vessel_connects():
                     data = { 'endpoint' : content }
             os.remove(str(ack))
             post_ack(data)
+    '''
+    Check for monitored route being changed.
+    '''
+    if os.path.isfile('export/monitored.uvid'):
+        if os.path.isfile('import/monitored.sent'):
+            if os.path.getmtime('export/monitored.uvid') > os.path.getmtime('import/monitored.sent'):
+                upload_monitored_to_all()
+        else:
+            upload_monitored_to_all()
+    '''
+    Check for alternate route being changed.
+    '''
+    if os.path.isfile('export/alternate.uvid'):
+        if os.path.isfile('import/alternate.sent'):
+            if os.path.getmtime('export/alternate.uvid') > os.path.getmtime('import/alternate.sent'):
+                upload_alternate_to_all()
+        else:
+            upload_alternate_to_all()
+    '''
+    Check for text messages to be sent.
+    '''
+    p = Path('export')
+    xmls = list(p.glob('**/urn*.xml'))
+    if len(xmls) > 0:
+        for xml in xmls:
+            if os.path.isfile('import/xmls.sent'):
+                if os.path.getmtime(str(xml)) > os.path.getmtime('import/xmls.sent'):
+                    upload_xml(str(xml))
+                    '''os.remove(str(xml))'''
+            else:
+                upload_xml(str(xml))
+                '''os.remove(str(xml))'''
 
 def service():
     while True:
