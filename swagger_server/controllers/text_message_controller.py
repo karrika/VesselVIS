@@ -28,7 +28,7 @@ def log_event(name, ackendpoint = None, textId = None, refId = None):
         data['id'] = textId
     if not (refId is None):
         data['refid'] = refId
-    with open('event.log', 'a') as f:
+    with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
 
