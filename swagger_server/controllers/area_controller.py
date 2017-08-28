@@ -26,7 +26,7 @@ def log_event(name ,areaname, ackendpoint = None):
     data['name'] = areaname
     if not (ackendpoint is None):
         data['ack'] = ackendpoint
-    with open('event.log', 'a') as f:
+    with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
 

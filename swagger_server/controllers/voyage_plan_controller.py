@@ -37,7 +37,7 @@ def log_event(name, callback, uvid = None):
         data['uvid'] = uvid
     if not (callback is None):
         data['callback'] = callback
-    with open('event.log', 'a') as f:
+    with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
 
