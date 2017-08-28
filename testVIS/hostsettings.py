@@ -70,12 +70,12 @@ def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None
         data['uvid'] = uvid
     if not (routeStatus is None):
         data['routeStatus'] = routeStatus
-    with open('event.log', 'a') as f:
+    with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
 
 def check_event(name, callback = None, uvid = None):
-    for log in open('event.log', 'r'):
+    for log in open('import/event.log', 'r'):
         match = True
         length = len(log)
         if length > 0:
