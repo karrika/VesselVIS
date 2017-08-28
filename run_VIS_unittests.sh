@@ -159,7 +159,6 @@ cd ../VIS-1
 sleep 20
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-2
-../sr_client/getopenidtoken VIS-2
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_1_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-005.py:TestVIS_005.test_VIS_005_1_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
@@ -214,7 +213,6 @@ nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_12 > >(tee -a ../s
 nosetests -v testVIS/test_VIS-009.py:TestVIS_009.test_VIS_009_13 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 
 cd ../VIS-2
-../sr_client/getopenidtoken VIS-2
 nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-010.py:TestVIS_010.test_VIS_010_0_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
