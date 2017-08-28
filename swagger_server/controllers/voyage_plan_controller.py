@@ -25,6 +25,7 @@ import collections
 from swagger_server import service
 
 simulate_vessel = False
+instant_ack = True
 
 def log_event(name, callback, uvid = None):
     data = collections.OrderedDict()
@@ -359,6 +360,9 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     uvid = routeInfo.get('vesselVoyage')
     if uvid is None:
         return 'Missing vesselVoyage', 404
+    routeName = routeInfo.get('routeName')
+    if routeName is None:
+        return 'Missing routeName', 404
     if not ('urn:mrn:stm:voyage:id' in uvid):
         return 'Wrong vesselVoyage format', 400
     if tag == '{http://www.cirm.org/RTZ/1/1}':
@@ -376,10 +380,10 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         routeStatus = routeInfo.get('routeStatus')
     if not (routeStatus in '12345678'):
         return 'Wrong routeStatus format', 400
-    f = open('import/' + uvid + '.rtz', 'wb')
+    f = open('import/' + routeName + '.rtz', 'wb')
     f.write(voyagePlan)
     f.close()
-    data = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
+    data = { 'uvid': uvid, 'route': routeName + '.rtz', 'routeStatus': routeStatus }
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))
     f.close()
@@ -403,15 +407,20 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         """
         Now the vessel will need to process the uploaded voyagePlan and send an ack.
         """
-        os.remove('import/' + uvid + '.rtz')
-        with open('export/' + uvid + '.rtz', 'wb') as f:
+        os.remove('import/' + routeName + '.rtz')
+        with open('export/' + routeName + '.rtz', 'wb') as f:
             f.write(voyagePlan)
-        vp = { 'uvid': uvid, 'route': uvid + '.rtz', 'routeStatus': routeStatus }
+        vp = { 'uvid': uvid, 'route': routeName + '.rtz', 'routeStatus': routeStatus }
         with open('export/' + uvid + '.uvid', 'w') as f:
             f.write(json.dumps(vp))
         if deliveryAckEndPoint is not None:
             os.remove('import/' + uvid + '.ack')
             send_ack(deliveryAckEndPoint)
+    else:
+        if instant_ack:
+            if deliveryAckEndPoint is not None:
+                os.remove('import/' + uvid + '.ack')
+                send_ack(deliveryAckEndPoint)
 
     return 'OK'
 
