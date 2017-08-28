@@ -38,6 +38,7 @@ if len(conffile) > 0:
         conf['port'] = data['port']
         conf['id'] = data['id']
         conf['name'] = data['name']
+        conf['open_to_all'] = data['open_to_all']
         conf['simulate_vessel'] = data['simulate_vessel']
         simulate_vessel = data['simulate_vessel']
 vis_cert = list(p.glob('**/Certificate_VIS*.pem'))

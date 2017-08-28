@@ -72,6 +72,9 @@ def check_acl(uvid):
             f.close()
             if client_mrn() in data:
                 return True
+    if not service.conf is None:
+        if service.conf['open_to_all']:
+            return True
     return False
 
 
