@@ -75,7 +75,7 @@ voyageplan_in_the_past='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2016-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS in the past" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2016-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -119,7 +119,7 @@ voyageplan_in_the_past_and_future='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2030-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS in past and future" validityPeriodStart="2016-02-15T10:00:00Z" validityPeriodStop="2030-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -161,7 +161,7 @@ voyageplan_rtz10='''<?xml version="1.0"?>
 <route version="1.0" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.cirm.org/RTZ/1/0">
-  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeStatus="7" vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS rtz1.0" validityPeriodStart="2116-02-15T10:00:00Z" validityPeriodStop="2116-02-16T10:00:00Z" optimizationMethod="Time table">
   </routeInfo>
   <waypoints>
     <waypoint id="1" name="Hango" radius="0.800000">
@@ -189,7 +189,7 @@ voyageplan_in_the_future='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2030-02-15T10:00:00Z" validityPeriodStop="2030-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS 1.1" validityPeriodStart="2030-02-15T10:00:00Z" validityPeriodStop="2030-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -233,7 +233,7 @@ voyageplan_incorrect_xml='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS incorrect xml" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
         routeStatusEnum="7"
@@ -276,7 +276,7 @@ voyageplan_incorrect_schema='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/3/9">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS incorrect schema" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -320,7 +320,7 @@ voyageplan_missing_vesselVoyage='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo routeName="HAN-VIS missing vesselVoyage" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -364,7 +364,7 @@ voyageplan_wrong_syntax_vesselVoyage='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="Free text" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="Free text" routeName="HAN-VIS wrong syntax vesselVoyage" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -408,7 +408,7 @@ voyageplan_missing_routeStatusEnum='''<?xml version="1.0" encoding="UTF-8"?>
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS missing routeStatusEnum" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -451,7 +451,7 @@ voyageplan_wrong_syntax_routeStatusEnum='''<?xml version="1.0" encoding="UTF-8"?
   xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
   xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
   xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
+  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:001:001" routeName="HAN-VIS wrong syntax routeStatusEnum" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
@@ -780,29 +780,18 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        hostsettings.rm_uvid(newvoyageuvid)
-        vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
-        p = Path('import')
-        files = list(p.glob('**/' + newvoyageuvid + '.*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/' + vis2_uvid + '*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/parse*'))
-        for item in files:
-            os.remove(str(item))
+        def remove(file):
+            if os.path.exists(file):
+                os.remove(file)
 
-        p = Path('export')
-        files = list(p.glob('**/' + newvoyageuvid + '.*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/' + vis2_uvid + '*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/parse*'))
-        for item in files:
-            os.remove(str(item))
+        remove('import/parse:from:rtz.rtz')
+        remove('export/parse:from:rtz.rtz')
+        remove('export/urn:mrn:stm:voyage:id:001:001.uvid')
+        remove('export/HAN-VIS.rtz')
+        remove('export/HAN-VIS in the past.rtz')
+        remove('export/HAN-VIS in past and future.rtz')
+        remove('export/HAN-VIS rtz1.0.rtz')
+        remove('export/HAN-VIS 1.1.rtz')
         pass
 
 if __name__ == '__main__':
