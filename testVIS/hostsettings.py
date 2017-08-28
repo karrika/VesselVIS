@@ -298,17 +298,15 @@ def read_accesstoken():
     return ACCESSTOKEN
 
 def search(query):
-    url="https://sr-test.maritimecloud.net"
+    url="https://sr-staging.maritimecloud.net"
     sub='/api/_search/serviceInstance'
-    ACCESSTOKEN = read_accesstoken()
     headers={
-        'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
         'Accept' : 'application/json'
     }
     parameters={
         'query' : query
     }
-    return requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
+    return requests.get(url + sub, headers=headers, params=parameters)
 
 def sendpcm(body):
     url="https://sandbox-2.portcdm.eu:8443"
