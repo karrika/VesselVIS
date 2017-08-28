@@ -24,9 +24,6 @@ from datetime import datetime
 import collections
 from swagger_server import service
 
-simulate_vessel = False
-instant_ack = True
-
 def log_event(name, callback, uvid = None):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
@@ -143,7 +140,11 @@ def get_voyage_plans(uvid=None, routeStatus=None):
             return 'Forbidden', 403
         else:
             return 'Voyage plan with routeStatus ' + routeStatus + ' not found', 404
-    timestamp = '2017-02-15T10:35:00Z'
+    if os.path.exists('export/last_interaction_time'):
+        with open('export/last_interaction_time', 'r') as f:
+            timestamp = f.read()
+    else:
+        timestamp = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     log_event('get_voyage', None)
     return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
 
@@ -180,27 +181,6 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     f.write(json.dumps(data))
     f.close()
     log_event('remove_subscription', callbackEndpoint, uvid)
-
-    if simulate_vessel:
-        """
-        Now the vessel will get the request to remove a subscription. As we have no vessel we have to simulate it here.
-        At this time we also remove the client from the acl.
-        As there is no way to clean up garbage we re-use this method to delete old stuff as well.
-        """
-        os.remove('import/' + vp + '.rmsubs')
-        p = Path('export')
-        uvids = list(p.glob('**/*' + vp + '.subs'))
-        data = []
-        if len(uvids) > 0:
-            with uvids[0].open() as f: data = json.loads(f.read())
-            f.close()
-            if me in data:
-                data.remove(me)
-            if len(data) == 0:
-                os.remove('export/' + vp + '.subs')
-            else:
-                with open('export/' + vp + '.subs', 'w') as f:
-                    f.write(json.dumps(data))
     return 'OK'
 
 
@@ -287,18 +267,6 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         f.write(json.dumps(data))
         f.close()
         log_event('subscribe', callbackEndpoint, uvid)
-
-    if simulate_vessel:
-        """
-        Now the vessel will get the request to subscribe. As we have no vessel we have to simulate it here.
-        Also add the client_mrn to the access list.
-        """
-        if allowed:
-            with open('export/' + vp + '.subs', 'w') as f:
-                f.write(json.dumps(data))
-        os.remove('import/' + vp + '.subs')
-
-    if allowed:
         return 'OK'
     return 'Forbidden', 403
 
@@ -402,25 +370,5 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
     log_event('upload', callbackEndpoint, uvid)
-
-    if simulate_vessel:
-        """
-        Now the vessel will need to process the uploaded voyagePlan and send an ack.
-        """
-        os.remove('import/' + routeName + '.rtz')
-        with open('export/' + routeName + '.rtz', 'wb') as f:
-            f.write(voyagePlan)
-        vp = { 'uvid': uvid, 'route': routeName + '.rtz', 'routeStatus': routeStatus }
-        with open('export/' + uvid + '.uvid', 'w') as f:
-            f.write(json.dumps(vp))
-        if deliveryAckEndPoint is not None:
-            os.remove('import/' + uvid + '.ack')
-            send_ack(deliveryAckEndPoint)
-    else:
-        if instant_ack:
-            if deliveryAckEndPoint is not None:
-                os.remove('import/' + uvid + '.ack')
-                send_ack(deliveryAckEndPoint)
-
     return 'OK'
 
