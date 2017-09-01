@@ -374,21 +374,10 @@ def post_ack(data):
         except ValueError:
             printf('Fail')
 
-def read_accesstoken():
-    if not os.path.isfile('accesstoken'):
-        call(['./getaccesstoken.sh', vesselName])        
-    if time.time() - os.stat('accesstoken').st_mtime > 4 * 60 + 30:
-        call(['./getaccesstoken.sh', vesselName])        
-    with open('accesstoken', 'r') as f:
-        ACCESSTOKEN = f.read()
-    return ACCESSTOKEN
-
 def search(query, params = None):
-    url="https://sr-test.maritimecloud.net"
+    url="https://sr-staging.maritimecloud.net"
     sub='/api/_search/serviceInstance'
-    ACCESSTOKEN = read_accesstoken()
     headers={
-        'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
         'Accept' : 'application/json'
     }
     parameters={
@@ -396,11 +385,11 @@ def search(query, params = None):
         'size' : 1000
     }
     if params is None:
-        return requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
+        return requests.get(url + sub, headers=headers, params=parameters)
     else:
         if not (query is None):
             params['query'] = query;
-        return requests.get(url + sub, headers=headers, params=params, cert=vis_cert)
+        return requests.get(url + sub, headers=headers, params=params)
 
 
 def sendpcm(body):
