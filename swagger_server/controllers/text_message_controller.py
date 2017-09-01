@@ -89,7 +89,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         return ret, 400
     tag='{http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd}'
     messageId = root.find(tag + 'textMessageId').text
-    referenceId = root.find(tag + 'informationObjectReferenceId').text
+    referenceId = root.find(tag + 'informationObjectReferenceId')
     with open('import/' + messageId + '.xml', 'w', encoding='utf-8') as f:
         f.write(txtmsg)
     if deliveryAckEndPoint is not None:
@@ -100,7 +100,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         if not (referenceId is None):
-            data['referenceId'] = referenceId
+            data['referenceId'] = referenceId.text
         if not service.conf is None:
             data['toId'] = service.conf['id']
             data['toName'] = service.conf['name']
@@ -108,6 +108,9 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         with open('import/' + messageId + '.ack', 'w') as f:
             f.write(json.dumps(data))
     
-    log_event('text', ackendpoint = deliveryAckEndPoint, textId = messageId, refId = referenceId)
+    if referenceId is None:
+        log_event('text', ackendpoint = deliveryAckEndPoint, textId = messageId)
+    else:
+        log_event('text', ackendpoint = deliveryAckEndPoint, textId = messageId, refId = referenceId.text)
     return 'OK'
 
