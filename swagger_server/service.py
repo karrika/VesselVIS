@@ -263,12 +263,73 @@ def post_text(url, text, deliveryAckEndPoint = None):
     log_event('post_text', url=url, ack=deliveryAckEndPoint, status=status.text)
     return status
 
+def post_pcm(url, msg):
+    url="https://sandbox-2.portcdm.eu:8443"
+    sub='/amss/state-update'
+    headers={
+        'Content-Type' : 'application/xml'
+    }
+    status = requests.post(url + sub, headers=headers, data=body, cert=vis_cert, verify=trustchain)
+    log_event('post_pcm', url=url, status=status.text)
+    return status
+
+def get_service_url(xml):
+    if os.path.exists('import/ports.dat'):
+        with open('import/ports.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if (item['instanceId'] + '.xml') == xml:
+                    return ('PortCDM', item['endpointUri'])
+    if os.path.exists('import/vts.dat'):
+        with open('import/vts.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if (item['instanceId'] + '.xml') == xml:
+                    return ('VIS', item['endpointUri'])
+    if os.path.exists('import/ros.dat'):
+        with open('import/ros.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if (item['instanceId'] + '.xml') == xml:
+                    return ('VIS', item['endpointUri'])
+    if os.path.exists('import/rcs.dat'):
+        with open('import/rcs.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if (item['instanceId'] + '.xml') == xml:
+                    return ('VIS', item['endpointUri'])
+    if os.path.exists('import/ems.dat'):
+        with open('import/ems.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if (item['instanceId'] + '.xml') == xml:
+                    return ('VIS', item['endpointUri'])
+    if os.path.exists('import/shore.dat'):
+        with open('import/shore.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if (item['instanceId'] + '.xml') == xml:
+                    return ('VIS', item['endpointUri'])
+    if os.path.exists('import/vessels.dat'):
+        with open('import/vessels.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if (item['instanceId'] + '.xml') == xml:
+                    return ('VIS', item['endpointUri'])
+    return ('None', 'None')
+
 def upload_xml(xml):
-    url = 'https://smavistest.stmvalidation.eu/SMA010'
-    with open(xml) as f:
-        text = f.read()
-    post_text(url, text)
-    shutil.copyfile(xml, 'import/xmls.sent')
+    servicetype, url = get_service_url(xml)
+    if servicetype == 'PortCDM':
+        with open(xml) as f:
+            text = f.read()
+        post_pcm(url, text)
+        shutil.copyfile(xml, 'import/xmls.sent')
+    if servicetype == 'VIS':
+        with open(xml) as f:
+            text = f.read()
+        post_text(url, text)
+        shutil.copyfile(xml, 'import/xmls.sent')
 
 def upload_monitored(subscriber):
     '''
@@ -374,21 +435,10 @@ def post_ack(data):
         except ValueError:
             printf('Fail')
 
-def read_accesstoken():
-    if not os.path.isfile('accesstoken'):
-        call(['./getaccesstoken.sh', vesselName])        
-    if time.time() - os.stat('accesstoken').st_mtime > 4 * 60 + 30:
-        call(['./getaccesstoken.sh', vesselName])        
-    with open('accesstoken', 'r') as f:
-        ACCESSTOKEN = f.read()
-    return ACCESSTOKEN
-
 def search(query, params = None):
-    url="https://sr-test.maritimecloud.net"
+    url="https://sr-staging.maritimecloud.net"
     sub='/api/_search/serviceInstance'
-    ACCESSTOKEN = read_accesstoken()
     headers={
-        'Authorization' : 'Bearer ' + ACCESSTOKEN[0:len(ACCESSTOKEN)-1],
         'Accept' : 'application/json'
     }
     parameters={
@@ -396,12 +446,11 @@ def search(query, params = None):
         'size' : 1000
     }
     if params is None:
-        return requests.get(url + sub, headers=headers, params=parameters, cert=vis_cert)
+        return requests.get(url + sub, headers=headers, params=parameters)
     else:
         if not (query is None):
             params['query'] = query;
-        return requests.get(url + sub, headers=headers, params=params, cert=vis_cert)
-
+        return requests.get(url + sub, headers=headers, params=params)
 
 def sendpcm(body):
     url="https://sandbox-2.portcdm.eu:8443"
