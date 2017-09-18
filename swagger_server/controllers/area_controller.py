@@ -86,12 +86,31 @@ def upload_area(area, deliveryAckEndPoint=None):
     if not result:
         areastr.close()
         return ret, 400
+    areaname = 'Rescue operations'
+    uvid = 'urn:mrn:s124:1'
     tag='{http://www.iho.int/S124/gml/1.0}'
-    areaname = 'areaname'
+    for imember in root.findall('imember'):
+        S124_NWPreamble = imember.find(tag + 'S124_NWPreamble')
+        if not (S124_NWPreamble is None):
+            for item in S124_NWPreamble:
+                if item.tag == 'id':
+                    uvid = item.text
+                if item.tag == 'title':
+                    areaname = item[0].text
+    if os.path.exists(uvid):
+        subnr = 0
+        while os.path.exists(uvid + '-' + str(subnr)):
+            subnr = subnr + 1
+        uvid = uvid + '-' + str(subnr)
+    data = { 'uvid': uvid, 'area': areaname, 'from': client_mrn() }
+    with open('import/' + uvid + '.uvid', 'w') as f:
+        f.write(json.dumps(data))
+    with open('import/' + uvid + '.xml', 'w') as f:
+        f.write(areamsg)
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
-        data['id'] = areaname
+        data['id'] = uvid
         data['client'] = client_mrn()
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
@@ -99,7 +118,7 @@ def upload_area(area, deliveryAckEndPoint=None):
             data['toId'] = service.conf['id']
             data['toName'] = service.conf['name']
 
-        with open('import/' + areaname + '.ack', 'w') as f:
+        with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
     log_event('area', areaname, deliveryAckEndPoint)
     return 'OK'
