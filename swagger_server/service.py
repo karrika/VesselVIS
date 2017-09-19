@@ -272,48 +272,48 @@ def post_pcm(url, msg):
     return status
 
 def get_service_url(xml):
-    fname = os.path.basename(xml)
+    instanceId = os.path.splitext(os.path.basename(xml))[0]
     if os.path.exists('import/ports.dat'):
         with open('import/ports.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == fname:
+                if item['instanceId'] == instanceId:
                     return ('PortCDM', item['endpointUri'])
     if os.path.exists('import/vts.dat'):
         with open('import/vts.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == fname:
+                if item['instanceId'] == instanceId:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/ros.dat'):
         with open('import/ros.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == fname:
+                if item['instanceId'] == instanceId:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/rcs.dat'):
         with open('import/rcs.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == fname:
+                if item['instanceId'] == instanceId:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/ems.dat'):
         with open('import/ems.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == fname:
+                if item['instanceId'] == instanceId:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/shore.dat'):
         with open('import/shore.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == fname:
+                if item['instanceId'] == instanceId:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/vessels.dat'):
         with open('import/vessels.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == fname:
+                if item['instanceId'] == instanceId:
                     return ('VIS', item['endpointUri'])
     return ('None', 'None')
 
@@ -334,31 +334,29 @@ def upload_monitored(subscriber):
     '''
     Upload monitored route to subscriber
     '''
-    p = Path('export')
-    uvids = list(p.glob('**/*.uvid'))
-    for uvid in uvids:
-        with open(str(uvid), 'r') as f:
-            data = json.loads(f.read())
-        if data['routeStatus'] == '7':
-            '''
-            Send this uvid to subscriber
-            '''
-            rtzs = list(p.glob('**/' + str(data['route'])))
-            for rtz in rtzs:
-                with rtz.open() as f:
-                    route = f.read()
-                post_voyageplan(subscriber, route, uvid=data['uvid'])
+    servicetype, url = get_service_url(subscriber)
+    if servicetype == 'VIS':
+        fname = 'export/monitored.uvid'
+        if os.path.exists(fname):
+            with open(fname, 'r') as f:
+                data = json.loads(f.read())
+                routeFile = 'export/' + data['route']
+                if os.path.exists(routeFile):
+                    with open(routeFile) as f:
+                        route = f.read()
+                        post_voyageplan(url, route, uvid=data['uvid'])
 
 def upload_monitored_to_all():
     '''
     Upload monitored to all subscribers
     '''
-    if os.path.isfile('export/monitored.uvid'):
-        with open('export/all.subs') as f:
+    if os.path.isfile('export/monitored.subs'):
+        with open('export/monitored.subs') as f:
             subs = json.loads(f.read())
         for sub in subs:
-            upload_monitored(sub['url'])
-        shutil.copyfile('export/monitored.uvid', 'import/monitored.sent')
+            upload_monitored(sub)
+        if os.path.isfile('export/monitored.uvid'):
+            shutil.copyfile('export/monitored.uvid', 'import/monitored.sent')
 
 def upload_alternate(subscriber):
     '''
