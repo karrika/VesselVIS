@@ -16,7 +16,6 @@ import shutil
 import sys
 import json
 from pathlib import Path
-import requests
 from swagger_server.models.delivery_ack import DeliveryAck
 import collections
 from datetime import datetime
@@ -264,57 +263,57 @@ def post_text(url, text, deliveryAckEndPoint = None):
     return status
 
 def post_pcm(url, msg):
-    url="https://sandbox-2.portcdm.eu:8443"
     sub='/amss/state-update'
     headers={
         'Content-Type' : 'application/xml'
     }
-    status = requests.post(url + sub, headers=headers, data=body, cert=vis_cert, verify=trustchain)
+    status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert, verify=trustchain)
     log_event('post_pcm', url=url, status=status.text)
     return status
 
 def get_service_url(xml):
+    fname = os.path.basename(xml)
     if os.path.exists('import/ports.dat'):
         with open('import/ports.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == xml:
+                if (item['instanceId'] + '.xml') == fname:
                     return ('PortCDM', item['endpointUri'])
     if os.path.exists('import/vts.dat'):
         with open('import/vts.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == xml:
+                if (item['instanceId'] + '.xml') == fname:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/ros.dat'):
         with open('import/ros.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == xml:
+                if (item['instanceId'] + '.xml') == fname:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/rcs.dat'):
         with open('import/rcs.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == xml:
+                if (item['instanceId'] + '.xml') == fname:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/ems.dat'):
         with open('import/ems.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == xml:
+                if (item['instanceId'] + '.xml') == fname:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/shore.dat'):
         with open('import/shore.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == xml:
+                if (item['instanceId'] + '.xml') == fname:
                     return ('VIS', item['endpointUri'])
     if os.path.exists('import/vessels.dat'):
         with open('import/vessels.dat') as f:
             data=json.loads(f.read())
             for item in data:
-                if (item['instanceId'] + '.xml') == xml:
+                if (item['instanceId'] + '.xml') == fname:
                     return ('VIS', item['endpointUri'])
     return ('None', 'None')
 
@@ -592,7 +591,7 @@ def vessel_connects():
         else:
             upload_alternate_to_all()
     '''
-    Check for text messages to be sent.
+    Check for text and PortCDM messages to be sent.
     '''
     p = Path('export')
     xmls = list(p.glob('**/urn*.xml'))
