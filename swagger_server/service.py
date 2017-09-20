@@ -317,6 +317,16 @@ def get_service_url(xml):
                     return ('VIS', item['endpointUri'])
     return ('None', 'None')
 
+def subscribe_all(instanceId):
+    servicetype, url = get_service_url(instanceId)
+    if servicetype == 'VIS':
+        subscribe_voyageplan(url, callbackurl)
+
+def unsubscribe_all(instanceId):
+    servicetype, url = get_service_url(instanceId)
+    if servicetype == 'VIS':
+        unsubscribe_voyageplan(url, callbackurl)
+
 def upload_xml(xml):
     servicetype, url = get_service_url(xml)
     if servicetype == 'PortCDM':
@@ -396,6 +406,26 @@ def upload_alternate_to_all():
         for sub in subs:
             upload_alternate(sub['url'])
         shutil.copyfile('export/alternate.uvid', 'import/alternate.sent')
+
+def upload_subscriptions_to_all():
+    prev = []
+    fname = 'import/request.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            prev = json.loads(f.read())
+    current = []
+    fname = 'export/request.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            current = json.loads(f.read())
+    for preitem in prev:
+        if not (preitem in current):
+            unsubscribe_all(preitem)
+            shutil.copyfile('export/request.subs', 'import/request.subs')
+    for curitem in current:
+        if not (curitem in prev):
+            subscribe_all(curitem)
+            shutil.copyfile('export/request.subs', 'import/request.subs')
 
 def post_ack(data):
     payload = collections.OrderedDict()
@@ -597,6 +627,15 @@ def vessel_connects():
                 upload_alternate_to_all()
         else:
             upload_alternate_to_all()
+    '''
+    Check for request changes.
+    '''
+    if os.path.isfile('export/request.subs'):
+        if os.path.isfile('import/request.subs'):
+            if os.path.getmtime('export/request.subs') > os.path.getmtime('import/request.subs'):
+                upload_subscriptions_to_all()
+        else:
+            upload_subscriptions_to_all()
     '''
     Check for text and PortCDM messages to be sent.
     '''
