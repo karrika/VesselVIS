@@ -78,7 +78,7 @@ def log_event(eventname, name = None, callback = None, uvid = None, routeStatus 
     if not (eventname is None):
         data['event'] = eventname
     if not (name is None):
-        data['name'] = name
+        data['name'] = name.replace('"','').replace('{','').replace('}','')
     if not (ack is None):
         data['ack'] = ack
     if not (callback is None):
@@ -242,7 +242,11 @@ def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoin
     if not (callbackEndpoint is None):
         parameters['callbackEndpoint'] = callbackEndpoint
     sub='/voyagePlans'
-    status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain)
+    try:
+        status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain, timeout = 15)
+    except requests.exceptions.Timeout:
+        status = requests.Response
+        status.text = "Timeout"
     log_event('send ' + routeName, name=name, status = status.text)
     return status
 
