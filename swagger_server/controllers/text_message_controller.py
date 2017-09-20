@@ -17,21 +17,6 @@ from . import txt13
 import codecs
 from swagger_server import service
 
-def log_event(name, ackendpoint = None, textId = None, refId = None):
-    data = collections.OrderedDict()
-    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    data['client'] = client_mrn()
-    data['event'] = name
-    if not (ackendpoint is None):
-        data['ack'] = ackendpoint
-    if not (textId is None):
-        data['id'] = textId
-    if not (refId is None):
-        data['refid'] = refId
-    with open('import/event.log', 'a') as f:
-        json.dump(data, f, ensure_ascii=True)
-        f.write('\n')
-
 def client_mrn():
     """
     Get the real DN name of the requestor
@@ -88,14 +73,16 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         txt.close()
         return ret, 400
     tag='{http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd}'
-    messageId = root.find(tag + 'textMessageId').text
+    messageId = root.find(tag + 'textMessageId')
     referenceId = root.find(tag + 'informationObjectReferenceId')
-    with open('import/' + messageId + '.xml', 'w', encoding='utf-8') as f:
+    subject = root.find(tag + 'subject')
+    body = root.find(tag + 'body')
+    with open('import/' + messageId.text + '.xml', 'w', encoding='utf-8') as f:
         f.write(txtmsg)
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
-        data['id'] = messageId
+        data['id'] = messageId.text
         data['client'] = client_mrn()
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
@@ -105,12 +92,10 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
             data['toId'] = service.conf['id']
             data['toName'] = service.conf['name']
 
-        with open('import/' + messageId + '.ack', 'w') as f:
+        with open('import/' + messageId.text + '.ack', 'w') as f:
             f.write(json.dumps(data))
     
-    if referenceId is None:
-        log_event('text', ackendpoint = deliveryAckEndPoint, textId = messageId)
-    else:
-        log_event('text', ackendpoint = deliveryAckEndPoint, textId = messageId, refId = referenceId.text)
+    servicetype, url, name = service.get_service_url(client_mrn())
+    service.log_event('received ' + subject.text, name=body.text, status = name)
     return 'OK'
 

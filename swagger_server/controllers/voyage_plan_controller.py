@@ -372,6 +372,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
-    log_event('upload', callbackEndpoint, uvid)
+    servicetype, url, name = service.get_service_url(client_mrn())
+    service.log_event('received voyageplan', name=routeName, status = name)
     return 'OK'
 
