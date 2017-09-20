@@ -79,11 +79,12 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     body = root.find(tag + 'body')
     with open('import/' + messageId.text + '.xml', 'w', encoding='utf-8') as f:
         f.write(txtmsg)
+    servicetype, url, name = service.get_service_url(client_mrn())
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
         data['id'] = messageId.text
-        data['client'] = client_mrn()
+        data['fromName'] = name
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         if not (referenceId is None):
@@ -95,7 +96,6 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         with open('import/' + messageId.text + '.ack', 'w') as f:
             f.write(json.dumps(data))
     
-    servicetype, url, name = service.get_service_url(client_mrn())
     service.log_event('received ' + subject.text, name=body.text, status = name)
     return 'OK'
 
