@@ -362,20 +362,29 @@ def upload_alternate(subscriber):
     '''
     Upload alternate route to subscriber
     '''
-    p = Path('export')
-    uvids = list(p.glob('**/*.uvid'))
-    for uvid in uvids:
-        with open(str(uvid), 'r') as f:
-            data = json.loads(f.read())
-        if data['routeStatus'] != '7':
-            '''
-            Send this uvid to subscriber
-            '''
-            rtzs = list(p.glob('**/' + str(data['route'])))
-            for rtz in rtzs:
-                with rtz.open() as f:
-                    route = f.read()
-                post_voyageplan(subscriber, route, uvid=data['uvid'])
+    servicetype, url = get_service_url(subscriber)
+    if servicetype == 'VIS':
+        fname = 'export/alternate.uvid'
+        if os.path.exists(fname):
+            with open(fname, 'r') as f:
+                data = json.loads(f.read())
+                routeFile = 'export/' + data['route']
+                if os.path.exists(routeFile):
+                    with open(routeFile) as f:
+                        route = f.read()
+                        post_voyageplan(url, route, uvid=data['uvid'])
+
+def upload_alternate_to_all():
+    '''
+    Upload alternate to all subscribers
+    '''
+    if os.path.isfile('export/alternate.subs'):
+        with open('export/alternate.subs') as f:
+            subs = json.loads(f.read())
+        for sub in subs:
+            upload_monitored(sub)
+        if os.path.isfile('export/alternate.uvid'):
+            shutil.copyfile('export/alternate.uvid', 'import/alternate.sent')
 
 def upload_alternate_to_all():
     '''
