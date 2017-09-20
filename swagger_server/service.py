@@ -21,6 +21,7 @@ import collections
 from datetime import datetime
 import time
 from subprocess import call
+import xml.etree.ElementTree as ET
 
 simulate_vessel = False
 
@@ -71,11 +72,13 @@ def reportrow(sheet, row, col, state = True, reason = ''):
     with open('../create_worksheet.py', 'a') as f:
         f.write(report)
 
-def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None):
+def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    if not (eventname is None):
+        data['event'] = eventname
     if not (name is None):
-        data['event'] = name
+        data['name'] = name
     if not (ack is None):
         data['ack'] = ack
     if not (callback is None):
@@ -87,7 +90,7 @@ def log_event(name, callback = None, uvid = None, routeStatus = None, ack = None
     if not (routeStatus is None):
         data['routeStatus'] = routeStatus
     if not (status is None):
-        data['status'] = status
+        data['status'] = status.replace('"','').replace('{','').replace('}','')
     with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
@@ -194,35 +197,41 @@ def get_voyageplan(url, uvid = None, routeStatus = None):
     log_event('get_voyage', uvid=uvid, routeStatus=routeStatus)
     return requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
 
-def subscribe_voyageplan(url, callback, uvid = None):
+def subscribe_voyageplan(url, callback, uvid = None, name = None):
     sub='/voyagePlans/subscription'
     if uvid is None:
         parameters={
             'callbackEndpoint': callback
         }
-        log_event('post_subscription', callback = callback)
-        return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        log_event('subscribe', name=name, status = status.text)
+        return status
     parameters={
         'callbackEndpoint': callback,
         'uvid': uvid
     }
-    log_event('post_subscription', callback = callback, uvid = uvid)
-    return requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    log_event('subscribe', name=name, status = status.text)
+    return status
 
-def unsubscribe_voyageplan(url, callback, uvid = None):
+def unsubscribe_voyageplan(url, callback, uvid = None, name = None):
     sub='/voyagePlans/subscription'
     if uvid is None:
         parameters={
             'callbackEndpoint': callback
         }
-        return requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        log_event('delete subscription', name=name, status = status.text)
+        return status
     parameters={
         'callbackEndpoint': callback,
         'uvid': uvid
     }
-    return requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    log_event('delete subscription', name=name, status = status.text)
+    return status
 
-def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = None, uvid = None):
+def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = None, uvid = None, name = None, routeName = None):
     headers = {
         'Content-Type': 'text/xml'
     }
@@ -234,7 +243,7 @@ def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoin
         parameters['callbackEndpoint'] = callbackEndpoint
     sub='/voyagePlans'
     status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain)
-    log_event('post_voyage', url=url, uvid=uvid, status=status.text)
+    log_event('send ' + routeName, name=name, status = status.text)
     return status
 
 def post_area(url, area, deliveryAckEndPoint = None):
@@ -262,13 +271,13 @@ def post_text(url, text, deliveryAckEndPoint = None):
     log_event('post_text', url=url, ack=deliveryAckEndPoint, status=status.text)
     return status
 
-def post_pcm(url, msg):
+def post_pcm(url, msg, name=None, subj = None):
     sub='/amss/state-update'
     headers={
         'Content-Type' : 'application/xml'
     }
     status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert, verify=trustchain)
-    log_event('post_pcm', url=url, status=status.text)
+    log_event('send ' + subj, name=name, status = status.text)
     return status
 
 def get_service_url(xml):
@@ -278,61 +287,57 @@ def get_service_url(xml):
             data=json.loads(f.read())
             for item in data:
                 if item['instanceId'] == instanceId:
-                    return ('PortCDM', item['endpointUri'])
+                    return ('PortCDM', item['endpointUri'], item['unlocode'])
     if os.path.exists('import/vts.dat'):
         with open('import/vts.dat') as f:
             data=json.loads(f.read())
             for item in data:
                 if item['instanceId'] == instanceId:
-                    return ('VIS', item['endpointUri'])
-    if os.path.exists('import/ros.dat'):
-        with open('import/ros.dat') as f:
+                    return ('VIS', item['endpointUri'], item['name'])
+    if os.path.exists('import/services.dat'):
+        with open('import/services.dat') as f:
             data=json.loads(f.read())
             for item in data:
                 if item['instanceId'] == instanceId:
-                    return ('VIS', item['endpointUri'])
-    if os.path.exists('import/rcs.dat'):
-        with open('import/rcs.dat') as f:
-            data=json.loads(f.read())
-            for item in data:
-                if item['instanceId'] == instanceId:
-                    return ('VIS', item['endpointUri'])
-    if os.path.exists('import/ems.dat'):
-        with open('import/ems.dat') as f:
-            data=json.loads(f.read())
-            for item in data:
-                if item['instanceId'] == instanceId:
-                    return ('VIS', item['endpointUri'])
-    if os.path.exists('import/shore.dat'):
-        with open('import/shore.dat') as f:
-            data=json.loads(f.read())
-            for item in data:
-                if item['instanceId'] == instanceId:
-                    return ('VIS', item['endpointUri'])
+                    return ('VIS', item['endpointUri'], item['name'])
     if os.path.exists('import/vessels.dat'):
         with open('import/vessels.dat') as f:
             data=json.loads(f.read())
             for item in data:
                 if item['instanceId'] == instanceId:
-                    return ('VIS', item['endpointUri'])
-    return ('None', 'None')
+                    return ('VIS', item['endpointUri'], item['name'])
+    return ('None', 'None', 'None')
 
 def subscribe_all(instanceId):
-    servicetype, url = get_service_url(instanceId)
+    servicetype, url, name = get_service_url(instanceId)
     if servicetype == 'VIS':
-        subscribe_voyageplan(url, callbackurl)
+        return subscribe_voyageplan(url, callbackurl, name=name)
 
 def unsubscribe_all(instanceId):
-    servicetype, url = get_service_url(instanceId)
+    servicetype, url, name = get_service_url(instanceId)
     if servicetype == 'VIS':
-        unsubscribe_voyageplan(url, callbackurl)
+        return unsubscribe_voyageplan(url, callbackurl, name=name)
 
 def upload_xml(xml):
-    servicetype, url = get_service_url(xml)
+    servicetype, url, name = get_service_url(xml)
     if servicetype == 'PortCDM':
         with open(xml) as f:
             text = f.read()
-        post_pcm(url, text)
+            tree = ET.parse(xml)
+            root = tree.getroot()
+            locationState = root.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationState')
+            if not (locationState is None):
+                timeval = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}time')
+                subj = timeval.text
+                arrivalLocation = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}arrivalLocation')
+                if not (arrivalLocation is None):
+                    to = arrivalLocation.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}to')
+                    if not (to is None):
+                        locationType = to.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationType')
+                        subj = subj + ' ' + locationType.text
+            else:
+                subj = None
+        post_pcm(url, text, name = name, subj = subj)
         shutil.copyfile(xml, 'import/xmls.sent')
     if servicetype == 'VIS':
         with open(xml) as f:
@@ -344,7 +349,7 @@ def upload_monitored(subscriber):
     '''
     Upload monitored route to subscriber
     '''
-    servicetype, url = get_service_url(subscriber)
+    servicetype, url, name = get_service_url(subscriber)
     if servicetype == 'VIS':
         fname = 'export/monitored.uvid'
         if os.path.exists(fname):
@@ -354,7 +359,14 @@ def upload_monitored(subscriber):
                 if os.path.exists(routeFile):
                     with open(routeFile) as f:
                         route = f.read()
-                        post_voyageplan(url, route, uvid=data['uvid'])
+                        tree = ET.parse(routeFile)
+                        root = tree.getroot()
+                        routeInfo = root.find('{http://www.cirm.org/RTZ/1/1}routeInfo')
+                        if not (routeInfo is None):
+                            routeName = routeInfo.get('routeName')
+                        else:
+                            routeName = data['route']
+                        post_voyageplan(url, route, uvid=data['uvid'], name=name, routeName=routeName)
 
 def upload_monitored_to_all():
     '''
@@ -372,7 +384,7 @@ def upload_alternate(subscriber):
     '''
     Upload alternate route to subscriber
     '''
-    servicetype, url = get_service_url(subscriber)
+    servicetype, url, name = get_service_url(subscriber)
     if servicetype == 'VIS':
         fname = 'export/alternate.uvid'
         if os.path.exists(fname):
@@ -382,7 +394,14 @@ def upload_alternate(subscriber):
                 if os.path.exists(routeFile):
                     with open(routeFile) as f:
                         route = f.read()
-                        post_voyageplan(url, route, uvid=data['uvid'])
+                        tree = ET.parse(routeFile)
+                        root = tree.getroot()
+                        routeInfo = root.find('{http://www.cirm.org/RTZ/1/1}routeInfo')
+                        if not (routeInfo is None):
+                            routeName = routeInfo.get('routeName')
+                        else:
+                            routeName = data['route']
+                        post_voyageplan(url, route, uvid=data['uvid'], name=name, routeName=routeName)
 
 def upload_alternate_to_all():
     '''
@@ -501,7 +520,7 @@ def vessel_connects():
     Check the possible new subsciptions and handle it if is allowed in acl.
     '''
     p = Path('import')
-    subs = list(p.glob('**/*.subs'))
+    subs = list(p.glob('**/all.subs'))
     if len(subs) > 0:
         for sub in subs:
             with sub.open() as f:
