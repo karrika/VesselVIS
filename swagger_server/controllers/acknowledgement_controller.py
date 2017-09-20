@@ -14,15 +14,7 @@ from lxml import etree
 import io
 import re
 import collections
-
-def log_event(name):
-    data = collections.OrderedDict()
-    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    data['client'] = client_mrn()
-    data['event'] = name
-    with open('event.log', 'a') as f:
-        json.dump(data, f, ensure_ascii=True)
-        f.write('\n')
+from swagger_server import service
 
 def client_mrn():
     """
@@ -64,6 +56,7 @@ def acknowledgement(deliveryAck):
             'ack_result': str
         }
     """
-    log_event('ack')
+    servicetype, url, name = service.get_service_url(client_mrn())
+    service.log_event('received ack ' + deliveryAck['id'], name=deliveryAck['ackResult'], status = name)
     return 'Thank you for sending the acknowlegement'
 

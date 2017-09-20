@@ -247,7 +247,7 @@ def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoin
     except requests.exceptions.Timeout:
         status = requests.Response
         status.text = "Timeout"
-    log_event('send ' + routeName, name=name, status = status.text)
+    log_event('sent ' + routeName, name=name, status = status.text)
     return status
 
 def post_area(url, area, deliveryAckEndPoint = None):
@@ -281,7 +281,7 @@ def post_pcm(url, msg, name=None, subj = None):
         'Content-Type' : 'application/xml'
     }
     status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert, verify=trustchain)
-    log_event('send ' + subj, name=name, status = status.text)
+    log_event('sent ' + subj, name=name, status = status.text)
     return status
 
 def get_service_url(xml):
@@ -451,6 +451,7 @@ def upload_subscriptions_to_all():
             shutil.copyfile('export/request.subs', 'import/request.subs')
 
 def post_ack(data):
+    servicetype, url, name = get_service_url(data['id'])
     payload = collections.OrderedDict()
     
     if 'id' in data:
@@ -488,11 +489,12 @@ def post_ack(data):
     if 'endpoint' in data:
         url = data['endpoint']
         sub='/acknowledgement'
-        log_event('post_ack', callback=url)
         try:
-            response=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
+            status=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
         except ValueError:
-            printf('Fail')
+            status = requests.Response
+            response.text = 'Fail'
+        log_event('sent ack', name=name, status = status.text)
 
 def search(query, params = None):
     url="https://sr-staging.maritimecloud.net"
