@@ -18,18 +18,6 @@ from . import S124
 import codecs
 from swagger_server import service
 
-def log_event(name ,areaname, ackendpoint = None):
-    data = collections.OrderedDict()
-    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    data['client'] = client_mrn()
-    data['event'] = name
-    data['name'] = areaname
-    if not (ackendpoint is None):
-        data['ack'] = ackendpoint
-    with open('import/event.log', 'a') as f:
-        json.dump(data, f, ensure_ascii=True)
-        f.write('\n')
-
 def client_mrn():
     """
     Get the real DN name of the requestor
@@ -86,8 +74,8 @@ def upload_area(area, deliveryAckEndPoint=None):
     if not result:
         areastr.close()
         return ret, 400
-    areaname = 'Rescue operations'
-    uvid = 'urn:mrn:s124:1'
+    areaname = ''
+    uvid = 'urn:mrn:s124:missing'
     tag='{http://www.iho.int/S124/gml/1.0}'
     for imember in root.findall('imember'):
         S124_NWPreamble = imember.find(tag + 'S124_NWPreamble')
@@ -107,11 +95,12 @@ def upload_area(area, deliveryAckEndPoint=None):
         f.write(json.dumps(data))
     with open('import/' + uvid + '.xml', 'w') as f:
         f.write(areamsg)
+    servicetype, url, name = service.get_service_url(client_mrn())
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
         data['id'] = uvid
-        data['client'] = client_mrn()
+        data['fromName'] = name
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         if not service.conf is None:
@@ -120,5 +109,6 @@ def upload_area(area, deliveryAckEndPoint=None):
 
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
-    log_event('area', areaname, deliveryAckEndPoint)
+    
+    service.log_event('received area', name=areaname, status = name)
     return 'OK'

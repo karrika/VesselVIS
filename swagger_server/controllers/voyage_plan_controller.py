@@ -358,21 +358,20 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))
     f.close()
+    servicetype, url, name = service.get_service_url(client_mrn())
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
         data['id'] = uvid
-        data['client'] = client_mrn()
+        data['fromName'] = name
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-        data['referenceId'] = uvid
         if not service.conf is None:
             data['toId'] = service.conf['id']
             data['toName'] = service.conf['name']
 
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
-    servicetype, url, name = service.get_service_url(client_mrn())
     service.log_event('received voyageplan', name=routeName, status = name)
     return 'OK'
 
