@@ -76,14 +76,32 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     messageId = root.find(tag + 'textMessageId')
     referenceId = root.find(tag + 'informationObjectReferenceId')
     subject = root.find(tag + 'subject')
+    if subject is None:
+        subj = ''
+    else:
+        subj = subject.text
     body = root.find(tag + 'body')
-    with open('import/' + messageId.text + '.xml', 'w', encoding='utf-8') as f:
+    if body is None:
+        bod = ''
+    else:
+        bod = body.text
+    position = root.find(tag + 'position')
+    area = root.find(tag + 'area')
+    if (area is None) and (position is None):
+        graphics = False
+    else:
+        graphics = True
+    uvid = messageId.text
+    with open('import/' + uvid + '.xml', 'w', encoding='utf-8') as f:
         f.write(txtmsg)
+    data = { 'uvid': uvid, 'msg': uvid + '.xml', 'from': client_mrn(), 'subject': subj, 'body': bod, 'graphics': graphics }
+    with open('import/' + uvid + '.uvid', 'w') as f:
+        f.write(json.dumps(data))
     servicetype, url, name = service.get_service_url(client_mrn())
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
-        data['id'] = messageId.text
+        data['id'] = uvid
         data['fromName'] = name
         data['fromId'] = client_mrn()
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
