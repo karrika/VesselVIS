@@ -451,7 +451,7 @@ def upload_subscriptions_to_all():
             shutil.copyfile('export/request.subs', 'import/request.subs')
 
 def post_ack(data):
-    servicetype, url, name = get_service_url(data['id'])
+    servicetype, url, name = get_service_url(data['fromId'])
     payload = collections.OrderedDict()
     
     if 'id' in data:
@@ -486,15 +486,13 @@ def post_ack(data):
         payload['ackResult'] = data['ackResult']
     else:
         payload['ackResult'] = 'OK'
-    if 'endpoint' in data:
-        url = data['endpoint']
-        sub='/acknowledgement'
-        try:
-            status=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
-        except ValueError:
-            status = requests.Response
-            response.text = 'Fail'
-        log_event('sent ack', name=name, status = status.text)
+    sub='/acknowledgement'
+    try:
+        status=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
+    except ValueError:
+        status = requests.Response
+        response.text = 'Fail'
+    log_event('sent ack', name=name, status = status.text)
 
 def search(query, params = None):
     url="https://sr-staging.maritimecloud.net"
