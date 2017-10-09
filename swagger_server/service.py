@@ -12,6 +12,7 @@ from __future__ import print_function
 import os
 import sys
 import requests
+from requests.exceptions import SSLError, ConnectionError, Timeout
 import shutil
 import sys
 import json
@@ -28,6 +29,11 @@ simulate_vessel = False
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+portcdm_version='0.0.16'
+'''
+portcdm_version='0.6'
+'''
+
 conf={}
 p = Path('.')
 conffile = list(p.glob('**/vessel.conf'))
@@ -37,6 +43,8 @@ if len(conffile) > 0:
         conf['host'] = data['host']
         conf['port'] = data['port']
         conf['id'] = data['id']
+        length = len(data['id'])
+        conf['imo'] = data['id'][length-7:length]
         conf['name'] = data['name']
         conf['open_to_all'] = data['open_to_all']
         conf['simulate_vessel'] = data['simulate_vessel']
@@ -186,7 +194,7 @@ def rm_uvid(uvid):
         if acl_exists(uvid):
             os.remove('export/' + uvid + '.acl') 
 
-def get_voyageplan(url, uvid = None, routeStatus = None):
+def get_voyageplan(url, uvid = None, routeStatus = None, name = None):
     parameters = {
     }
     sub='/voyagePlans'
@@ -194,8 +202,25 @@ def get_voyageplan(url, uvid = None, routeStatus = None):
         parameters['uvid'] = uvid
     if not (routeStatus is None):
         parameters['routeStatus'] = routeStatus
-    log_event('get_voyage', uvid=uvid, routeStatus=routeStatus)
-    return requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    try:
+        status = requests.get(url + sub, params = parameters, cert=vis_cert, verify=trustchain, timeout = 15)
+    except Timeout as e:
+        print(e)
+        status = requests.Response
+        status.text = "Timeout"
+        status.status_code = 500
+    except SSLError as e:
+        print(e)
+        status = requests.Response
+        status.text = "SSLError"
+        status.status_code = 500
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
+    log_event('get voyageplan', name=name, status = status.text, url=url)
+    return status
 
 def subscribe_voyageplan(url, callback, uvid = None, name = None):
     sub='/voyagePlans/subscription'
@@ -271,7 +296,23 @@ def post_text(url, text, deliveryAckEndPoint = None):
     }
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-    status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, verify=trustchain)
+    try:
+        status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, verify=trustchain, timeout = 15)
+    except Timeout as e:
+        print(e)
+        status = requests.Response
+        status.text = "Timeout"
+        status.status_code = 500
+    except SSLError as e:
+        print(e)
+        status = requests.Response
+        status.text = "SSLError"
+        status.status_code = 500
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
     log_event('post_text', url=url, ack=deliveryAckEndPoint, status=status.text)
     return status
 
@@ -348,6 +389,29 @@ def upload_xml(xml):
             text = f.read()
         post_text(url, text)
         shutil.copyfile(xml, 'import/xmls.sent')
+
+def upload_pcm(to, msg):
+    servicetype, url, name = get_service_url(to)
+    if servicetype == 'PortCDM':
+        fname = 'export/' + msg
+        with open(fname) as f:
+            text = f.read()
+            tree = ET.parse(fname)
+            root = tree.getroot()
+            locationState = root.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationState')
+            if not (locationState is None):
+                timeval = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}time')
+                subj = timeval.text
+                arrivalLocation = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}arrivalLocation')
+                if not (arrivalLocation is None):
+                    to = arrivalLocation.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}to')
+                    if not (to is None):
+                        locationType = to.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationType')
+                        subj = subj + ' ' + locationType.text
+            else:
+                subj = None
+        post_pcm(url, text, name = name, subj = subj)
+        shutil.copyfile(fname, 'import/portcdm.sent')
 
 def upload_monitored(subscriber):
     '''
@@ -511,6 +575,23 @@ def search(query, params = None):
             params['query'] = query;
         return requests.get(url + sub, headers=headers, params=params)
 
+def searchgeometry(query = None, params = None):
+    url="https://sr-staging.maritimecloud.net"
+    sub='/api/_searchGeometryWKT/serviceInstance'
+    headers={
+        'Accept' : 'application/json'
+    }
+    parameters={
+        'query' : query,
+        'size' : 1000
+    }
+    if params is None:
+        return requests.get(url + sub, headers=headers, params=parameters)
+    else:
+        if not (query is None):
+            params['query'] = query;
+        return requests.get(url + sub, headers=headers, params=params)
+
 def sendpcm(body):
     url="https://sandbox-2.portcdm.eu:8443"
     sub='/amss/state-update'
@@ -518,6 +599,185 @@ def sendpcm(body):
         'Content-Type' : 'application/xml'
     }
     return requests.post(url + sub, headers=headers, data=body, cert=vis_cert, verify=trustchain)
+
+pcmfilter='''[
+  {
+    "type": "VESSEL",
+    "element": "urn:x-mrn:stm:vessel:IMO:7917551"
+  }
+]'''
+
+pcmnofilter='''[
+]'''
+
+def createpcmqueue(instanceId, fil = pcmfilter):
+    servicetype, url, name = get_service_url(instanceId)
+    if servicetype == 'PortCDM':
+        if portcdm_version == '0.0.16':
+            sub='/mqs_legacy/mb/mqs'
+        else:
+            sub='/mb/mqs'
+        headers={
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json'
+        }
+        try:
+            status = requests.post(url + sub, headers=headers, data=fil, cert=vis_cert, verify=trustchain, timeout = 15)
+        except Timeout as e:
+            print(e)
+            status = requests.Response
+            status.text = "Timeout"
+            status.status_code = 500
+        except SSLError as e:
+            print(e)
+            status = requests.Response
+            status.text = "SSLError"
+            status.status_code = 500
+        except ConnectionError as e:
+            print(e)
+            status = requests.Response
+            status.text = "ConnectionError"
+            status.status_code = 500
+        if status.status_code == 200:
+            queueId = status.text
+            fname = 'import/queue.dat'
+            queue = []
+            if os.path.isfile(fname):
+                with open(fname) as f:
+                    queue = json.loads(f.read())
+            found = False
+            for srv in queue:
+                if srv['instanceId'] == instanceId:
+                    srv['queueId'] = queueId
+                    found = True
+            if not found:
+                queue.append({'instanceId': instanceId, 'queueId': queueId})
+            with open(fname,'w') as f:
+                f.write(json.dumps(queue))
+        return status
+    status = requests.Response
+    status.text = "Unknown"
+    status.status_code = 500
+    return status
+            
+
+def pollpcmqueue(instanceId):
+    servicetype, url, name = get_service_url(instanceId)
+    if servicetype == 'PortCDM':
+        fname = 'import/queue.dat'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                queue = json.loads(f.read())
+                for srv in queue:
+                    if srv['instanceId'] == instanceId:
+                        queueId = srv['queueId']
+                        if portcdm_version == '0.0.16':
+                            sub='/mqs_legacy/mb/mqs/' + queueId
+                        else:
+                            sub='/mb/mqs/' + queueId
+                        headers={
+                            'Accept' : 'application/json',
+                            'Content-Type' : 'application/json'
+                        }
+                        return requests.get(url + sub, headers=headers, cert=vis_cert, verify=trustchain)
+    res = requests.Response
+    res.status_code = 500
+    res.text = ""
+    return res
+
+def createallqueues():
+    fname = 'import/ports.dat'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            queue = json.loads(f.read())
+            for srv in queue:
+                createpcmqueue(srv['instanceId'])
+
+def parse_portcdm(msg):
+    if 'reportedAt' in msg:
+        reportedAt = msg['reportedAt']
+        messageId = msg['messageId']
+        if not (msg['serviceState'] is None):
+            serviceState = msg['serviceState']
+            timeSequence = serviceState['timeSequence']
+            timeval = serviceState['time']
+            serviceObject = serviceState['serviceObject']
+            if serviceObject:
+                body = serviceObject + ' '
+            else:
+                body = ''
+            if timeSequence:
+                body = body + ' ' + timeSequence
+            if timeval:
+                t = datetime.utcfromtimestamp(timeval / 1000)
+                body = body + ' at ' + t.strftime('%Y-%m-%dT%H:%MZ')
+            if 'between' in serviceState:
+                between = serviceState['between']
+                if between:
+                    fr = serviceState['between']['from']
+                    if fr:
+                        body = body + ' from '
+                        name = fr['name']
+                        if name:
+                            body = body + name
+                        frtyp = fr['locationType']
+                        if frtyp:
+                            body = body + ' (' + frtyp + ')'
+                    to = serviceState['between']['to']
+                    if to:
+                        body = body + ' to '
+                        name = to['name']
+                        if name:
+                            body = body + name
+                        totyp = to['locationType']
+                        if totyp:
+                            body = body + ' (' + totyp + ')'
+                with open('import/' + messageId + '.msg', 'w') as f:
+                    f.write(body)
+        elif not (msg['locationState'] is None):
+            locationState = msg['locationState']
+            timeType = locationState['timeType']
+            timeval = locationState['time']
+            t = datetime.utcfromtimestamp(timeval / 1000)
+            body = timeType + ' ' + t.strftime('%Y-%m-%dT%H:%MZ')
+            if not (locationState['arrivalLocation'] is None):
+                to = locationState['arrivalLocation']['to']
+                fr = locationState['arrivalLocation']['from']
+            if not (locationState['departureLocation'] is None):
+                to = locationState['departureLocation']['to']
+                fr = locationState['departureLocation']['from']
+            if not (fr is None):
+                body = body + ' from '
+                frtyp = fr['locationType']
+                if not (fr['name'] is None):
+                    body = body + fr['name'] + ' (' + frtyp + ')'
+                else:
+                    body = body + frtyp
+            if not (to is None):
+                body = body + ' to '
+                totyp = to['locationType']
+                if not (to['name'] is None):
+                    body = body + to['name'] + ' (' + totyp + ')'
+                else:
+                    body = body + totyp
+            with open('import/' + messageId + '.msg', 'w') as f:
+                f.write(body)
+
+def pollallqueues():
+    fname = 'import/queue.dat'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            queue = json.loads(f.read())
+            for srv in queue:
+                res = pollpcmqueue(srv['instanceId'])
+                if not (res is None):
+                    if (res.status_code == 200) and (res.text != 'ConnectionError'):
+                        msgs = json.loads(res.text)
+                        for msg in msgs:
+                            messageId = msg['messageId']
+                            parse_portcdm(msg)
+                            with open('import/' + messageId + '.uvid', 'w') as f:
+                                f.write(json.dumps(msg))
 
 def vessel_connects():
     '''
@@ -620,18 +880,20 @@ def vessel_connects():
     '''
     Check for ack requests.
     '''
-    p = Path('import')
+    p = Path('export')
     acks = list(p.glob('**/*.ack'))
     if len(acks) > 0:
         for ack in acks:
-            with open(str(ack)) as f:
-                content = f.read()
-                try:
-                    data = json.loads(content)
-                except ValueError:
-                    data = { 'endpoint' : content }
-            os.remove(str(ack))
-            post_ack(data)
+            fname = str(ack).lstrip('export/')
+            if os.path.isfile('import/' + fname):
+                os.remove('import/' + fname)
+                with open(str(ack)) as f:
+                    content = f.read()
+                    try:
+                        data = json.loads(content)
+                    except ValueError:
+                        data = { 'endpoint' : content }
+                post_ack(data)
     '''
     Check for monitored route being changed.
     '''
@@ -660,21 +922,28 @@ def vessel_connects():
         else:
             upload_subscriptions_to_all()
     '''
-    Check for text and PortCDM messages to be sent.
+    Check for PortCDM messages to be sent.
     '''
     p = Path('export')
-    xmls = list(p.glob('**/urn*.xml'))
-    if len(xmls) > 0:
-        for xml in xmls:
-            if os.path.isfile('import/xmls.sent'):
-                if os.path.getmtime(str(xml)) > os.path.getmtime('import/xmls.sent'):
-                    upload_xml(str(xml))
-                    '''os.remove(str(xml))'''
+    uvids = list(p.glob('**/urn:x-mrn:stm:portcdm:message:*.uvid'))
+    if len(uvids) > 0:
+        for item in uvids:
+            if os.path.isfile('import/portcdm.sent'):
+                if os.path.getmtime(str(item)) > os.path.getmtime('import/portcdm.sent'):
+                    with item.open() as f:
+                        data = json.loads(f.read())
+                        upload_pcm(data['to'], data['msg'])
             else:
-                upload_xml(str(xml))
-                '''os.remove(str(xml))'''
+                with item.open() as f:
+                    data = json.loads(f.read())
+                    upload_pcm(data['to'], data['msg'])
+    '''
+    Check for PortCDM messages to be received.
+    '''
+    pollallqueues()
 
 def service():
+    createallqueues()
     while True:
         time.sleep(20)
         vessel_connects()
