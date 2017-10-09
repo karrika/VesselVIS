@@ -239,6 +239,15 @@ def subscribe_voyageplan(url, callback, uvid = None, name = None):
     log_event('subscribe', name=name, status = status.text)
     return status
 
+def get_subscriptions(url, callback, name=None):
+    sub='/voyagePlans/subscription'
+    parameters={
+        'callbackEndpoint': callback
+    }
+    status = requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    log_event('get subscriptions', name=name, status = status.text)
+    return status
+
 def unsubscribe_voyageplan(url, callback, uvid = None, name = None):
     sub='/voyagePlans/subscription'
     if uvid is None:

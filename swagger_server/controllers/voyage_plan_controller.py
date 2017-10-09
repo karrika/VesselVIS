@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 import os
 import requests
-from lxml import etree
+import xml.etree.ElementTree as ET
 import io
 import re
 from . import rtz10
@@ -57,26 +57,40 @@ def check_acl(uvid):
     """
     Check if client is authorized in the access list of the voyage
     """
-    p = Path('export')
-    acl = list(p.glob('**/all.acl'))
-    if len(acl) > 0:
-        with acl[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if client_mrn() in data:
-            return True
-
-    if not (uvid is None):
-        acl = list(p.glob('**/' + uvid + '.acl'))
-        if len(acl) > 0:
-            with acl[0].open() as f: data = json.loads(f.read())
-            f.close()
+    fname = 'export/all.acl'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
             if client_mrn() in data:
                 return True
+
+    fname = 'export/monitored.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if client_mrn() in data:
+                return True
+
+    fname = 'export/alternate.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if client_mrn() in data:
+                return True
+
     if not service.conf is None:
         if service.conf['open_to_all']:
             return True
     return False
 
+def getuvid(routename):
+    fname = 'export/' + routename
+    if os.path.isfile(fname):
+        tree = ET.parse(fname)
+        root = tree.getroot()
+        tag='{http://www.cirm.org/RTZ/1/1}'
+        routeInfo = root.find(tag + 'routeInfo')
+        return(routeInfo.get('vesselVoyage'))
 
 def get_subscription_to_voyage_plans(callbackEndpoint):
     """
@@ -87,18 +101,21 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
 
     :rtype: List[GetSubscriptionResponse]
     """
-    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
-    p = Path('export')
-    subsl = [] 
-    subs = list(p.glob('**/*.subs'))
-    for sub in subs:
-        with sub.open() as f:
+    subsl = []
+    fname = 'export/monitored.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
             data = json.loads(f.read())
-            if me in data:
-                uvid = str(sub)[7:]
-                length = len(uvid)
-                sr = GetSubscriptionResponse(uvid[:length-5])
-                subsl.append(sr)
+            if client_mrn() in data:
+                subsl.append(getuvid('monitored.rtz'))
+
+    fname = 'export/alternate.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if client_mrn() in data:
+                subsl.append(getuvid('alternate.rtz'))
+
     log_event('get_subscriptions', callbackEndpoint)
     return subsl
 
@@ -116,7 +133,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
     markForbidden = False
     p = Path('export')
     if uvid is None:
-        uvids = list(p.glob('**/*.uvid'))
+        uvids = list(p.glob('**/monitored.uvid'))
     else:
         uvids = list(p.glob('**/' + uvid + '.uvid'))
     if len(uvids) == 0:
@@ -128,16 +145,19 @@ def get_voyage_plans(uvid=None, routeStatus=None):
         routeStatus = '7'
     vps = []
     for voyage in uvids:
-        with voyage.open() as f: data = json.loads(f.read())
-        if routeStatus == data['routeStatus']:
-            if not check_acl(str(voyage).split('/')[1].split('.')[0]):
-                markForbidden = True
-            else:
-                vp = VoyagePlan()
-                f = open('export/' + data['route'], 'r')
-                vp.route = f.read()
-                f.close()
-                vps.append(vp)
+        with voyage.open() as f:
+            data = json.loads(f.read())
+            print(data)
+            if 'routeStatus' in data:
+                if routeStatus == data['routeStatus']:
+                    if not check_acl(str(voyage).split('/')[1].split('.')[0]):
+                        markForbidden = True
+                    else:
+                        vp = VoyagePlan()
+                        f = open('export/' + data['route'], 'r')
+                        vp.route = f.read()
+                        f.close()
+                        vps.append(vp)
     if len(vps) == 0:
         if markForbidden:
             return 'Forbidden', 403
@@ -298,7 +318,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     rtz = io.StringIO()
     rtz.write(RE_XML_ENCODING.sub("", vp, count=1))
     rtz.seek(0)
-    doc = etree.parse(rtz)
+    doc = ET.parse(rtz)
     root = doc.getroot()
     if root.tag == '{http://www.cirm.org/RTZ/1/0}route':
         '''
