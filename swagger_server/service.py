@@ -829,27 +829,28 @@ def vessel_connects():
     '''
     Check the possible new subsciption removals and take care of them.
     '''
-    p = Path('import')
-    rmsubs = list(p.glob('**/*.rmsubs'))
-    if len(rmsubs) > 0:
-        for rmsub in rmsubs:
-            with rmsub.open() as f:
-                new_rmsubs = json.loads(f.read())
-            os.remove(str(rmsub))
-            sub = str(rmsub.parts[1]).split('.')[0] + '.subs'
-            q = Path('export')
-            q = q / sub
-            if q.exists():
-                with q.open() as f:
-                    old_subs = json.loads(f.read())
-                for subscriber in new_rmsubs:
-                    if subscriber in old_subs:
-                        old_subs.remove(subscriber)
-                if len(old_subs) == 0:
-                    os.remove(str(q))
-                else:
-                    with open(str(q), 'w') as f:
-                        f.write(json.dumps(old_subs))
+    if simulate_vessel:
+        p = Path('import')
+        rmsubs = list(p.glob('**/*.rmsubs'))
+        if len(rmsubs) > 0:
+            for rmsub in rmsubs:
+                with rmsub.open() as f:
+                    new_rmsubs = json.loads(f.read())
+                os.remove(str(rmsub))
+                sub = str(rmsub.parts[1]).split('.')[0] + '.subs'
+                q = Path('export')
+                q = q / sub
+                if q.exists():
+                    with q.open() as f:
+                        old_subs = json.loads(f.read())
+                    for subscriber in new_rmsubs:
+                        if subscriber in old_subs:
+                            old_subs.remove(subscriber)
+                    if len(old_subs) == 0:
+                        os.remove(str(q))
+                    else:
+                        with open(str(q), 'w') as f:
+                            f.write(json.dumps(old_subs))
     '''
     Check for new voyage plans being uploaded and send ack if required.
     Also send the plans further if an active subscription exists.
