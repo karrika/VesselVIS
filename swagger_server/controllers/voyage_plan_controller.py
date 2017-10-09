@@ -53,7 +53,7 @@ def client_mrn():
                         return field[4:]
     return 'urn:mrn:stm:service:instance:furuno:vis2'
 
-def check_acl(uvid):
+def check_acl():
     """
     Check if client is authorized in the access list of the voyage
     """
@@ -130,39 +130,39 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVoyagePlanResponse
     """
-    markForbidden = False
-    p = Path('export')
-    if uvid is None:
-        uvids = list(p.glob('**/monitored.uvid'))
-    else:
-        uvids = list(p.glob('**/' + uvid + '.uvid'))
-    if len(uvids) == 0:
-        if uvid is None:
-            return 'No voyage plans found', 404
-        else:
-            return 'Voyage plan ' + uvid + ' not found', 404
-    if routeStatus is None:
-        routeStatus = '7'
+    if not check_acl():
+        return 'Forbidden', 403
     vps = []
-    for voyage in uvids:
-        with voyage.open() as f:
-            data = json.loads(f.read())
-            print(data)
-            if 'routeStatus' in data:
-                if routeStatus == data['routeStatus']:
-                    if not check_acl(str(voyage).split('/')[1].split('.')[0]):
-                        markForbidden = True
-                    else:
-                        vp = VoyagePlan()
-                        f = open('export/' + data['route'], 'r')
-                        vp.route = f.read()
-                        f.close()
-                        vps.append(vp)
+    fname = 'export/monitored.rtz'
+    if os.path.isfile(fname):
+        filterOK = True
+        if not (uvid is None):
+            if uvid == getuvid('monitored.rtz'):
+                filterOK = False
+        if not (routeStatus is None):
+            if int(routeStatus) != 7:
+                filterOK = False
+        if filterOK:
+            with open(fname) as f:
+                vp = VoyagePlan()
+                vp.route = f.read()
+                vps.append(vp)
+    fname = 'export/alternate.rtz'
+    if os.path.isfile(fname):
+        filterOK = True
+        if not (uvid is None):
+            if uvid == getuvid('alternate.rtz'):
+                filterOK = False
+        if not (routeStatus is None):
+            if int(routeStatus) == 7:
+                filterOK = False
+        if filterOK:
+            with open(fname) as f:
+                vp = VoyagePlan()
+                vp.route = f.read()
+                vps.append(vp)
     if len(vps) == 0:
-        if markForbidden:
-            return 'Forbidden', 403
-        else:
-            return 'Voyage plan with routeStatus ' + routeStatus + ' not found', 404
+        return 'No voyage plans found', 404
     if os.path.exists('export/last_interaction_time'):
         with open('export/last_interaction_time', 'r') as f:
             timestamp = f.read()
@@ -170,7 +170,6 @@ def get_voyage_plans(uvid=None, routeStatus=None):
         timestamp = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     log_event('get_voyage', None)
     return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
-
 
 def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     """
@@ -194,7 +193,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     if len(uvids) > 0:
         with uvids[0].open() as f: data = json.loads(f.read())
         f.close()
-        if not check_acl(vp):
+        if not check_acl():
             return 'Forbidden', 403
         if not (me in data):
             data.append(me)
@@ -275,7 +274,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         uvids = list(p2.glob('**/' + uvid + '.uvid'))
         if len(uvids) == 0:
             return 'Voyage plan ' + uvid + ' not found', 404
-        if not check_acl(uvid):
+        if not check_acl():
             allowed = False
     uvids = list(p.glob('**/*' + vp + '.subs'))
     if len(uvids) > 0:
