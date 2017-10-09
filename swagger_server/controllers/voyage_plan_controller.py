@@ -332,6 +332,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     doc = ET.parse(rtz)
     root = doc.getroot()
     result = True
+    ret = ''
     if root.tag == '{http://www.cirm.org/RTZ/1/0}route':
         '''
         if rtz10.xmlschema.validate(doc) == False:
@@ -350,6 +351,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
                     ret = str(rtzstm11.xmlschema.error_log)
                     return ret, 400
             except:
+                ret = 'Schema validation exception'
                 result = False
             tag='{http://www.cirm.org/RTZ/1/1}'
         else:
