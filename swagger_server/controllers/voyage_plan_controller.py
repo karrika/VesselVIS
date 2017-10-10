@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 import os
 import requests
-import xml.etree.ElementTree as ET
+from lxml import etree
 import io
 import re
 from . import rtz10
@@ -86,7 +86,7 @@ def check_acl():
 def getuvid(routename):
     fname = 'export/' + routename
     if os.path.isfile(fname):
-        tree = ET.parse(fname)
+        tree = etree.parse(fname)
         root = tree.getroot()
         tag='{http://www.cirm.org/RTZ/1/1}'
         routeInfo = root.find(tag + 'routeInfo')
@@ -329,7 +329,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     rtz = io.StringIO()
     rtz.write(RE_XML_ENCODING.sub("", vp, count=1))
     rtz.seek(0)
-    doc = ET.parse(rtz)
+    doc = etree.parse(rtz)
     root = doc.getroot()
     result = True
     ret = ''

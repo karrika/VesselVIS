@@ -17,10 +17,130 @@ vis_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 newplan='urn:mrn:stm:voyage:id:new:plan'
 callbackEndpoint='http://localhost:8002'
 
-f = open('export/' + voyageuvid + '.acl', 'w')
+f = open('export/all.acl', 'w')
 data=[ vis_uvid ]
 f.write(json.dumps(data))
 f.close()
+
+voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
+<!--route node-->
+<route version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stm="http://stmvalidation.eu/STM/1/0/0" xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd" xmlns="http://www.cirm.org/RTZ/1/1">
+  <!--routeInfo node-->
+  <routeInfo routeName="HELUME" validityPeriodStart="2017-10-09T12:00:00Z" validityPeriodStop="2017-10-10T19:00:00Z" vesselName="FURUNO KOEAJO" vesselMMSI="230031001" vesselIMO="7917551" vesselVoyage="urn:mrn:stm:voyage:id:Furuno:20171006132651-15-HELUME" optimizationMethod="Time table">
+    <extensions>
+      <extension xsi:type="stm:RouteInfoExtension" manufacturer="STM" name="routeInfoEx" version="1.0.0" routeStatusEnum="7" depPort="SEGOT" arrPort="SEUME">
+        <stm:routeChanges/>
+      </extension>
+      <extension manufacturer="Furuno" name="AdditionalRouteInfo" version="1.0">
+        <property income="0" channelLimitMode="0" safetyContour="10" ukcLimit="30.000000"/>
+      </extension>
+    </extensions>
+  </routeInfo>
+  <!--waypoints node-->
+  <waypoints>
+    <!--No.1 waypoint-->
+    <waypoint id="1" name="" radius="0.800000">
+      <position lat="60.163433" lon="24.708550"/>
+    </waypoint>
+    <!--No.2 waypoint-->
+    <waypoint id="2" name="" radius="0.800000">
+      <position lat="59.794683" lon="24.523083"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.3 waypoint-->
+    <waypoint id="3" name="" radius="0.800000">
+      <position lat="59.498433" lon="20.900950"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.4 waypoint-->
+    <waypoint id="4" name="" radius="0.800000">
+      <position lat="60.191217" lon="19.091933"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.5 waypoint-->
+    <waypoint id="5" name="" radius="0.800000">
+      <position lat="60.773083" lon="19.052767"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.6 waypoint-->
+    <waypoint id="6" name="" radius="0.800000">
+      <position lat="62.689833" lon="19.531500"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.7 waypoint-->
+    <waypoint id="7" name="" radius="0.800000">
+      <position lat="63.470867" lon="20.710450"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.8 waypoint-->
+    <waypoint id="8" name="" radius="0.800000">
+      <position lat="63.638017" lon="20.374267"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.9 waypoint-->
+    <waypoint id="9" name="" radius="0.800000">
+      <position lat="63.654767" lon="20.340667"/>
+      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+  </waypoints>
+  <!--schedules node-->
+  <schedules>
+    <schedule id="1">
+      <calculated>
+        <scheduleElement etd="2017-10-09T12:00:00Z" waypointId="1"/>
+        <scheduleElement eta="2017-10-09T13:41:00Z" waypointId="2" speed="13.700000"/>
+        <scheduleElement eta="2017-10-09T21:48:00Z" waypointId="3" speed="13.700000"/>
+        <scheduleElement eta="2017-10-10T02:48:00Z" waypointId="4" speed="13.700000"/>
+        <scheduleElement eta="2017-10-10T05:20:00Z" waypointId="5" speed="13.700000"/>
+        <scheduleElement eta="2017-10-10T13:48:00Z" waypointId="6" speed="13.700000"/>
+        <scheduleElement eta="2017-10-10T17:57:00Z" waypointId="7" speed="13.700000"/>
+        <scheduleElement eta="2017-10-10T18:54:00Z" waypointId="8" speed="13.700000"/>
+        <scheduleElement eta="2017-10-10T19:00:00Z" waypointId="9" speed="13.700000"/>
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
+'''
 
 class TestVoyagePlanController(BaseTestCase):
     """ VoyagePlanController integration test stubs """
@@ -31,55 +151,10 @@ class TestVoyagePlanController(BaseTestCase):
 
         
         """
-        voyagePlan = VoyagePlan()
-        voyagePlan='''<?xml version="1.0" encoding="UTF-8"?>
-<route version="1.1" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:stm="http://stmvalidation.eu/STM/1/0/0"
-  xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd"
-  xmlns="http://www.cirm.org/RTZ/1/1">
-  <routeInfo vesselVoyage="urn:mrn:stm:voyage:id:new:plan" routeName="HAN-VIS" validityPeriodStart="2017-02-15T10:00:00Z" validityPeriodStop="2017-02-16T10:00:00Z" optimizationMethod="Time table">
-    <extensions>
-      <extension xsi:type="stm:RouteInfoExtension"
-        manufacturer="STM" name="routeInfoEx" version="1.0.0"
-        routeStatusEnum="7"
-        depPort="FIHAN"
-        arrPort="SEVIS"
-        depPortCallId="urn:mrn:stm:portcdm:port_call:FIHAN:20170421"
-        arrPortCallId="urn:mrn:stm:portcdm:port_call:SEVIS:20170421"
-        startSeaPassage="PILOT_BOARDING_AREA:WP1"
-        endSeaPassage="PILOT_BOARDING_AREA:WP2">
-        <stm:routeChanges>
-            <stm:historyItem dateTime="2016-10-20T11:14:41Z" author="1st mate"
-              reason="initial creation"/>
-        </stm:routeChanges>
-      </extension>
-    </extensions>
-  </routeInfo>
-  <waypoints>
-    <waypoint id="1" name="Hango" radius="0.800000">
-      <position lat="59.811700" lon="22.935567"/>
-    </waypoint>
-    <waypoint id="2" radius="0.800000">
-      <position lat="59.758817" lon="23.020267"/>
-      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="7.000000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
-    </waypoint>
-  </waypoints>
-  <schedules>
-    <schedule id="1">
-      <calculated>
-        <scheduleElement etd="2017-02-15T10:00:00Z" waypointId="1"/>
-        <scheduleElement eta="2017-02-15T10:35:00Z" waypointId="2" speed="7.000000"/>
-      </calculated>
-    </schedule>
-  </schedules>
-</route>
-'''
-        query_string = [('deliveryAckEndPoint', 'http://localhost:8002'),
-                        ('callbackEndpoint', 'http://localhost:8002')]
+        query_string = [('callbackEndpoint', 'http://localhost:8002')]
         response = self.client.open('/voyagePlans',
                                     method='POST',
-                                    data=voyagePlan,
+                                    data=voyageplan.encode('utf-8'),
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -114,8 +189,7 @@ class TestVoyagePlanController(BaseTestCase):
 
         
         """
-        query_string = [('uvid', voyageuvid),
-                        ('routeStatus', '7')]
+        query_string = []
         response = self.client.open('/voyagePlans',
                                     method='GET',
                                     query_string=query_string)
@@ -140,6 +214,7 @@ class TestVoyagePlanController(BaseTestCase):
 
         
         """
+        '''
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
         files = list(p.glob('**/' + voyageuvid + '.acl'))
@@ -174,6 +249,7 @@ class TestVoyagePlanController(BaseTestCase):
         files = list(p.glob('**/' + newplan + '*'))
         for item in files:
             os.remove(str(item))
+        '''
         pass
 
 if __name__ == '__main__':
