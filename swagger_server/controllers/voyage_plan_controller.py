@@ -126,7 +126,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
     if os.path.isfile(fname):
         filterOK = True
         if not (uvid is None):
-            if uvid == getuvid('monitored.rtz'):
+            if uvid != getuvid('monitored.rtz'):
                 filterOK = False
         if not (routeStatus is None):
             if int(routeStatus) != 7:
@@ -140,7 +140,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
     if os.path.isfile(fname):
         filterOK = True
         if not (uvid is None):
-            if uvid == getuvid('alternate.rtz'):
+            if uvid != getuvid('alternate.rtz'):
                 filterOK = False
         if not (routeStatus is None):
             if int(routeStatus) == 7:
@@ -256,36 +256,38 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     if not check_acl():
         return 'Forbidden', 403
 
-    subs = []
+    subs1 = []
     fname = 'export/monitored.subs'
     if os.path.isfile(fname):
         with open(fname) as f:
-            subs = json.loads(f.read())
+            subs1 = json.loads(f.read())
     filterOK = True
     if not (uvid is None):
         if os.path.isfile('export/monitored.rtz'):
             if uvid == getuvid('monitored.rtz'):
                 filterOK = False
-    if not client_mrn() in subs:
-        subs.append(client_mrn())
+    if not client_mrn() in subs1:
+        subs1.append(client_mrn())
     with open(fname, 'w') as f:
-        f.write(json.dumps(subs))
+        f.write(json.dumps(subs1))
 
-    subs = []
+    subs2 = []
     fname = 'export/alternate.subs'
     if os.path.isfile(fname):
         with open(fname) as f:
-            subs = json.loads(f.read())
+            subs2 = json.loads(f.read())
     filterOK = True
     if not (uvid is None):
         if os.path.isfile('export/alternate.rtz'):
             if uvid == getuvid('alternate.rtz'):
                 filterOK = False
-    if not client_mrn() in subs:
-        subs.append(client_mrn())
+    if not client_mrn() in subs2:
+        subs2.append(client_mrn())
     with open(fname, 'w') as f:
-        f.write(json.dumps(subs))
+        f.write(json.dumps(subs2))
 
+    if len(subs1) + len(subs2) == 0:
+        return 'No voyage plans found', 404
     service.log_event('subscribe', client=client_mrn(), callback=callbackEndpoint, uvid=uvid)
     return 'OK'
 
