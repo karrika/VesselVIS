@@ -17,14 +17,13 @@ import shutil
 import sys
 import json
 from pathlib import Path
-from . import hostsettings
 import logging
 from swagger_server import service
 
-url=hostsettings.url
-callbackurl=hostsettings.callbackurl
+url=service.url
+callbackurl=service.callbackurl
 newvoyageuvid='urn:mrn:stm:voyage:id:001:001'
-vis2_uvid=hostsettings.vis2_uvid
+vis2_uvid=service.vis2_uvid
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <route version="1.1" 

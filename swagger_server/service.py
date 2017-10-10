@@ -68,6 +68,7 @@ trustchain=str(vis_trust[0])
 
 url="https://localhost:8001"
 callbackurl=conf['host'] + ':' + str(conf['stmport'])
+vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 
 def reportrow(sheet, row, col, state = True, reason = ''):
     if state:
@@ -81,11 +82,13 @@ def reportrow(sheet, row, col, state = True, reason = ''):
     with open('../create_worksheet.py', 'a') as f:
         f.write(report)
 
-def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None):
+def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     if not (eventname is None):
         data['event'] = eventname
+    if not (client is None):
+        data['client'] = client
     if not (name is None):
         data['name'] = name.replace('"','').replace('{','').replace('}','')
     if not (ack is None):

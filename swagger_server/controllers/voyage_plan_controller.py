@@ -24,21 +24,6 @@ from datetime import datetime
 import collections
 from swagger_server import service
 
-def log_event(name, callback, uvid = None):
-    data = collections.OrderedDict()
-    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    if not (client_mrn() is None):
-        data['client'] = client_mrn()
-    if not (name is None):
-        data['event'] = name
-    if not (uvid is None):
-        data['uvid'] = uvid
-    if not (callback is None):
-        data['callback'] = callback
-    with open('import/event.log', 'a') as f:
-        json.dump(data, f, ensure_ascii=True)
-        f.write('\n')
-
 def client_mrn():
     """
     Get the real DN name of the requestor
@@ -119,7 +104,7 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
             if client_mrn() in data:
                 subsl.append(getuvid('alternate.rtz'))
 
-    log_event('get_subscriptions', callbackEndpoint)
+    service.log_event('get_subscriptions', client=client_mrn(), callback=callbackEndpoint)
     return subsl
 
 def get_voyage_plans(uvid=None, routeStatus=None):
@@ -172,7 +157,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
             timestamp = f.read()
     else:
         timestamp = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    log_event('get_voyage', None)
+    service.log_event('get_voyage', client=client_mrn())
     return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
 
 def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
@@ -227,7 +212,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
                     with open(rmsubsname, 'w') as g:
                         g.write(json.dumps(data))
 
-    log_event('remove_subscription', callbackEndpoint, uvid)
+    service.log_event('remove_subscription', client=client_mrn(), callback=callbackEndpoint, uvid=uvid)
     return 'OK'
 
 
@@ -301,7 +286,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     with open(fname, 'w') as f:
         f.write(json.dumps(subs))
 
-    log_event('subscribe', callbackEndpoint, uvid)
+    service.log_event('subscribe', client=client_mrn(), callback=callbackEndpoint, uvid=uvid)
     return 'OK'
 
 
@@ -406,6 +391,6 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
-    service.log_event('received voyageplan', name=routeName, status = name)
+    service.log_event('received voyageplan', client=client_mrn(), name=routeName, status = name)
     return 'OK'
 
