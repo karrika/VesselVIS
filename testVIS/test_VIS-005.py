@@ -17,17 +17,15 @@ import shutil
 import sys
 import json
 from pathlib import Path
-from . import hostsettings
+from swagger_server import service
 import logging
 
-vis_cert=hostsettings.vis_cert
-trustchain=hostsettings.trustchain
+vis_cert=service.vis_cert
+trustchain=service.trustchain
 
-url=hostsettings.url
-callbackurl=hostsettings.callbackurl
+url=service.url
+callbackurl=service.callbackurl
 voyageuvid='urn:mrn:stm:voyage:id:005:001'
-vis1_uvid=hostsettings.vis1_uvid
-vis2_uvid=hostsettings.vis2_uvid
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <route version="1.1" 
@@ -88,8 +86,8 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS005sheet', 'VIS_005_01_row', 'VIS_005_01_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS005sheet', 'VIS_005_01_row', 'VIS_005_01_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -100,8 +98,8 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS005sheet', 'VIS_005_02_row', 'VIS_005_02_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS005sheet', 'VIS_005_02_row', 'VIS_005_02_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -111,7 +109,7 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        self.assertTrue(hostsettings.uvid_exists(voyageuvid))
+        self.assertTrue(service.uvid_exists(voyageuvid))
 
     def test_VIS_005_1_1(self):
         """
@@ -119,8 +117,8 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        response = hostsettings.search('mmsi:12345678')
-        hostsettings.reportrow('VIS005sheet', 'VIS_005_1_1_row', 'VIS_005_1_1_col',
+        response = service.search('mmsi:12345678')
+        service.reportrow('VIS005sheet', 'VIS_005_1_1_row', 'VIS_005_1_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -130,8 +128,8 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        response=hostsettings.post_voyageplan(url, voyageplan, deliveryAckEndPoint = 'https://localhost:8002')
-        hostsettings.reportrow('VIS005sheet', 'VIS_005_1_2_row', 'VIS_005_1_2_col',
+        response=service.post_voyageplan(url, voyageplan, deliveryAckEndPoint = 'https://localhost:8002')
+        service.reportrow('VIS005sheet', 'VIS_005_1_2_row', 'VIS_005_1_2_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -141,8 +139,8 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('upload')
-        hostsettings.reportrow('VIS005sheet', 'VIS_005_1_3_row', 'VIS_005_1_3_col',
+        logged = service.check_event('upload')
+        service.reportrow('VIS005sheet', 'VIS_005_1_3_row', 'VIS_005_1_3_col',
             logged, '')
         self.assertTrue(logged)
 
@@ -152,7 +150,7 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        response=hostsettings.post_voyageplan(url, voyageplan, deliveryAckEndPoint = 'https://localhost:8001')
+        response=service.post_voyageplan(url, voyageplan, deliveryAckEndPoint = 'https://localhost:8001')
         self.assert200(response, "Response body is : " + response.text)
 
     def test_VIS_005_2_2(self):
@@ -161,8 +159,8 @@ class TestVIS_005(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('upload')
-        hostsettings.reportrow('VIS005sheet', 'VIS_005_2_2_row', 'VIS_005_2_2_col',
+        logged = service.check_event('upload')
+        service.reportrow('VIS005sheet', 'VIS_005_2_2_row', 'VIS_005_2_2_col',
             logged, '')
         self.assertTrue(logged)
 
