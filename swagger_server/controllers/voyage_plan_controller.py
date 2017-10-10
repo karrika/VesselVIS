@@ -286,7 +286,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     with open(fname, 'w') as f:
         f.write(json.dumps(subs2))
 
-    if len(subs1) + len(subs2) == 0:
+    if (len(subs1) == 0) and (len(subs2) == 0):
         return 'No voyage plans found', 404
     service.log_event('subscribe', client=client_mrn(), callback=callbackEndpoint, uvid=uvid)
     return 'OK'

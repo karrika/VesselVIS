@@ -108,7 +108,7 @@ def log_event(eventname, name = None, callback = None, uvid = None, routeStatus 
         f.write('\n')
 
 def check_event(name, callback = None, uvid = None):
-    with open('event.log', 'r') as f:
+    with open('import/event.log', 'r') as f:
         log = f.readlines()
         length = len(log)
         if length > 0:

@@ -17,14 +17,14 @@ import shutil
 import sys
 import json
 from pathlib import Path
-from . import hostsettings
+from swagger_server import service
 import logging
 
-url=hostsettings.url
-callbackurl=hostsettings.callbackurl
-voyageuvid=hostsettings.voyageuvid
+url=service.url
+callbackurl=service.callbackurl
+voyageuvid="urn:mrn:stm:voyage:id:Furuno:20171006132651-15-HELUME"
 newvoyageuvid='urn:mrn:stm:voyage:id:003:001'
-vis2_uvid=hostsettings.vis2_uvid
+vis2_uvid=service.vis2_uvid
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <route version="1.1" 
@@ -80,9 +80,8 @@ class TestVIS_003(BaseTestCase):
         pass
 
     def test_VIS_003_00(self):
-        hostsettings.set_acl(vis2_uvid, newvoyageuvid)
-        hostsettings.set_acl(vis2_uvid, None)
-        response=hostsettings.post_voyageplan(url, voyageplan)
+        service.set_acl(vis2_uvid)
+        response=service.post_voyageplan(url, voyageplan)
         pass
 
     def test_VIS_003_01(self):
@@ -91,8 +90,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_01_row', 'VIS_003_01_col',
+        response=service.subscribe_voyageplan(url, callbackurl)
+        service.reportrow('VIS003sheet', 'VIS_003_01_row', 'VIS_003_01_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -102,8 +101,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('post_subscription')
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_02_row', 'VIS_003_02_col',
+        logged = service.check_event('subscribed')
+        service.reportrow('VIS003sheet', 'VIS_003_02_row', 'VIS_003_02_col',
             logged, '')
         self.assertTrue(logged)
 
@@ -113,8 +112,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('subscribe')
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_03_row', 'VIS_003_03_col',
+        logged = service.check_event('subscribed')
+        service.reportrow('VIS003sheet', 'VIS_003_03_row', 'VIS_003_03_col',
             logged, '')
         self.assertTrue(logged)
 
@@ -124,8 +123,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('subscribe')
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_04_row', 'VIS_003_04_col',
+        logged = service.check_event('subscribed')
+        service.reportrow('VIS003sheet', 'VIS_003_04_row', 'VIS_003_04_col',
             logged, '')
         self.assertTrue(logged)
 
@@ -135,8 +134,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        allowed = hostsettings.acl_allowed(vis2_uvid)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_05_row', 'VIS_003_05_col',
+        allowed = service.acl_allowed(vis2_uvid)
+        service.reportrow('VIS003sheet', 'VIS_003_05_row', 'VIS_003_05_col',
             allowed, '')
         self.assertTrue(allowed)
 
@@ -146,8 +145,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('post_voyage')
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_06_row', 'VIS_003_06_col',
+        logged = service.check_event('post_voyage')
+        service.reportrow('VIS003sheet', 'VIS_003_06_row', 'VIS_003_06_col',
             logged, '')
         self.assertTrue(logged)
 
@@ -157,8 +156,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_07_row', 'VIS_003_07_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS003sheet', 'VIS_003_07_row', 'VIS_003_07_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -169,8 +168,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, hostsettings.callbackurl, newvoyageuvid)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_1_1_row', 'VIS_003_1_1_col',
+        response=service.subscribe_voyageplan(url, service.callbackurl, newvoyageuvid)
+        service.reportrow('VIS003sheet', 'VIS_003_1_1_row', 'VIS_003_1_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -180,8 +179,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_1_2_row', 'VIS_003_1_2_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS003sheet', 'VIS_003_1_2_row', 'VIS_003_1_2_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -191,8 +190,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, 'urn:mrn:stm:voyage:id:not:existing')
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_2_1_row', 'VIS_003_2_1_col',
+        response=service.subscribe_voyageplan(url, callbackurl, 'urn:mrn:stm:voyage:id:not:existing')
+        service.reportrow('VIS003sheet', 'VIS_003_2_1_row', 'VIS_003_2_1_col',
             response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
@@ -202,7 +201,7 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_2_2_row', 'VIS_003_2_2_col')
+        service.reportrow('VIS003sheet', 'VIS_003_2_2_row', 'VIS_003_2_2_col')
         pass
 
 
@@ -212,8 +211,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_3_1_row', 'VIS_003_3_1_col',
+        response=service.subscribe_voyageplan(url, callbackurl)
+        service.reportrow('VIS003sheet', 'VIS_003_3_1_row', 'VIS_003_3_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -223,8 +222,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_3_2_row', 'VIS_003_3_2_col',
+        response=service.subscribe_voyageplan(url, callbackurl)
+        service.reportrow('VIS003sheet', 'VIS_003_3_2_row', 'VIS_003_3_2_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -234,8 +233,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_3_3_row', 'VIS_003_3_3_col',
+        response=service.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        service.reportrow('VIS003sheet', 'VIS_003_3_3_row', 'VIS_003_3_3_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -245,8 +244,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
-        hostsettings.reportrow('VIS003sheet', 'VIS_003_3_4_row', 'VIS_003_3_4_col',
+        response=service.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        service.reportrow('VIS003sheet', 'VIS_003_3_4_row', 'VIS_003_3_4_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -257,10 +256,8 @@ class TestVIS_003(BaseTestCase):
 
         
         """
-        hostsettings.rm_uvid(newvoyageuvid)
-        hostsettings.rm_acl(vis2_uvid, newvoyageuvid)
-        hostsettings.rm_acl(vis2_uvid)
-        hostsettings.rm_subs(vis2_uvid)
+        service.rm_alternate()
+        service.rm_acl()
         p = Path('import')
         files = list(p.glob('**/' + voyageuvid + '.*'))
         for item in files:
