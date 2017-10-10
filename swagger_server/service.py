@@ -42,6 +42,7 @@ if len(conffile) > 0:
         data = json.loads(f.read())
         conf['host'] = data['host']
         conf['port'] = data['port']
+        conf['stmport'] = data['stmport']
         conf['id'] = data['id']
         length = len(data['id'])
         conf['imo'] = data['id'][length-7:length]
@@ -66,7 +67,7 @@ vis_cert=(str(vis_cert[0]), str(vis_key[0]))
 trustchain=str(vis_trust[0])
 
 url="https://localhost:8001"
-callbackurl="https://stm.furuno.fi:8000"
+callbackurl=conf['host'] + ':' + str(conf['stmport'])
 
 def reportrow(sheet, row, col, state = True, reason = ''):
     if state:
@@ -117,14 +118,34 @@ def check_event(name, callback = None, uvid = None):
                                 return True
     return False
 
+'''
+Unit tests only
+'''
+def rm_acl():
+    fname = 'export/all.acl'
+    if os.path.isfile(fname):
+        os.remove(fname)
+    fname = 'export/monitored.subs'
+    if os.path.isfile(fname):
+        os.remove(fname)
+    fname = 'export/alternate.subs'
+    if os.path.isfile(fname):
+        os.remove(fname)
+
 def set_acl(id, uvid=None):
-    if uvid is None: 
-        f = open('export/all.acl', 'w')
-    else:
-        f = open('export/' + uvid + '.acl', 'w')
+    rm_acl()
     data=[ id ]
-    f.write(json.dumps(data))
-    f.close()
+    fname = 'export/all.acl'
+    with open(fname, 'w') as f:
+        f.write(json.dumps(data))
+
+def rm_alternate():
+    fname = 'export/alternate.uvid'
+    if os.path.isfile(fname):
+        os.remove(fname)
+    fname = 'export/alternate.rtz'
+    if os.path.isfile(fname):
+        os.remove(fname)
 
 def uvid_exists(uvid):
     p = Path('export')
@@ -151,14 +172,6 @@ def acl_exists(uvid):
     else:
         uvids = list(p.glob('**/' + uvid + '.acl'))
     return len(uvids) > 0
-
-def rm_acl(id, uvid=None):
-    if uvid is None:
-        if acl_exists(None):
-            os.remove('export/all.acl') 
-    else:
-        if acl_exists(uvid):
-            os.remove('export/' + uvid + '.acl') 
 
 def acl_allowed(uvid):
     p = Path('export')
@@ -265,7 +278,7 @@ def unsubscribe_voyageplan(url, callback, uvid = None, name = None):
     log_event('delete subscription', name=name, status = status.text)
     return status
 
-def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = None, uvid = None, name = None, routeName = None):
+def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = callbackurl, uvid = None, name = '', routeName = ''):
     headers = {
         'Content-Type': 'text/xml'
     }

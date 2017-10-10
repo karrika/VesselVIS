@@ -214,7 +214,6 @@ class TestVoyagePlanController(BaseTestCase):
 
         
         """
-        '''
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
         files = list(p.glob('**/' + voyageuvid + '.acl'))
@@ -249,7 +248,6 @@ class TestVoyagePlanController(BaseTestCase):
         files = list(p.glob('**/' + newplan + '*'))
         for item in files:
             os.remove(str(item))
-        '''
         pass
 
 if __name__ == '__main__':
