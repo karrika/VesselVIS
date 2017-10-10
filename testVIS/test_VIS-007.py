@@ -17,16 +17,16 @@ import shutil
 import sys
 import json
 from pathlib import Path
-from . import hostsettings
+from swagger_server import service
 import logging
 
-vis_cert=hostsettings.vis_cert
-trustchain=hostsettings.trustchain
+vis_cert=service.vis_cert
+trustchain=service.trustchain
 
-url=hostsettings.url
-ackurl=hostsettings.callbackurl
+url=service.url
+ackurl=service.callbackurl
 voyageuvid='urn:mrn:stm:voyage:id:004:001'
-vis2_uvid=hostsettings.vis2_uvid
+vis2_uvid=service.vis2_uvid
 
 area='''<?xml version="1.0" encoding="UTF-8"?>
 <S124:DataSet xmlns:S124="http://www.iho.int/S124/gml/1.0"
@@ -99,7 +99,7 @@ class TestVIS_007(BaseTestCase):
 
         
         """
-        hostsettings.set_acl(vis2_uvid, None)
+        service.set_acl(vis2_uvid, None)
         pass
 
     def test_VIS_007_01(self):
@@ -108,8 +108,8 @@ class TestVIS_007(BaseTestCase):
 
         
         """
-        response=hostsettings.post_area(url, area, ackurl)
-        hostsettings.reportrow('VIS007sheet', 'VIS_007_01_row', 'VIS_007_01_col',
+        response=service.post_area(url, area, ackurl)
+        service.reportrow('VIS007sheet', 'VIS_007_01_row', 'VIS_007_01_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -119,8 +119,8 @@ class TestVIS_007(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('area')
-        hostsettings.reportrow('VIS007sheet', 'VIS_007_02_row', 'VIS_007_02_col',
+        logged = service.check_event('area')
+        service.reportrow('VIS007sheet', 'VIS_007_02_row', 'VIS_007_02_col',
             logged, '')
         self.assertTrue(logged)
 
@@ -130,8 +130,8 @@ class TestVIS_007(BaseTestCase):
 
         
         """
-        response=hostsettings.post_area(url, area, ackurl)
-        hostsettings.reportrow('VIS007sheet', 'VIS_007_1_1_row', 'VIS_007_1_1_col',
+        response=service.post_area(url, area, ackurl)
+        service.reportrow('VIS007sheet', 'VIS_007_1_1_row', 'VIS_007_1_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -141,8 +141,8 @@ class TestVIS_007(BaseTestCase):
 
         
         """
-        logged = hostsettings.check_event('area')
-        hostsettings.reportrow('VIS007sheet', 'VIS_007_1_2_row', 'VIS_007_1_2_col',
+        logged = service.check_event('area')
+        service.reportrow('VIS007sheet', 'VIS_007_1_2_row', 'VIS_007_1_2_col',
             not logged, '')
         self.assertFalse(logged)
 
