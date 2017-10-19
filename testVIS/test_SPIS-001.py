@@ -17,7 +17,7 @@ import shutil
 import sys
 import json
 from pathlib import Path
-from . import hostsettings
+from swagger_server import service
 import logging
 
 pcmdata='''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -53,8 +53,8 @@ class TestSPIS_001(BaseTestCase):
 
         
         """
-        response = hostsettings.sendpcm(pcmdata)
-        hostsettings.reportrow('SPIS001sheet', 'SPIS_001_01_row', 'SPIS_001_01_col',
+        response = service.sendpcm(pcmdata)
+        service.reportrow('SPIS001sheet', 'SPIS_001_01_row', 'SPIS_001_01_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -64,8 +64,8 @@ class TestSPIS_001(BaseTestCase):
 
         
         """
-        response = hostsettings.sendpcm(pcmdata)
-        hostsettings.reportrow('SPIS001sheet', 'SPIS_001_02_row', 'SPIS_001_02_col',
+        response = service.sendpcm(pcmdata)
+        service.reportrow('SPIS001sheet', 'SPIS_001_02_row', 'SPIS_001_02_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -75,8 +75,8 @@ class TestSPIS_001(BaseTestCase):
 
         
         """
-        response = hostsettings.sendpcm(pcmdata)
-        hostsettings.reportrow('SPIS001sheet', 'SPIS_001_03_row', 'SPIS_001_03_col',
+        response = service.sendpcm(pcmdata)
+        service.reportrow('SPIS001sheet', 'SPIS_001_03_row', 'SPIS_001_03_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -86,8 +86,8 @@ class TestSPIS_001(BaseTestCase):
 
         
         """
-        response = hostsettings.sendpcm(pcmdata)
-        hostsettings.reportrow('SPIS001sheet', 'SPIS_001_04_row', 'SPIS_001_04_col',
+        response = service.sendpcm(pcmdata)
+        service.reportrow('SPIS001sheet', 'SPIS_001_04_row', 'SPIS_001_04_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -97,8 +97,8 @@ class TestSPIS_001(BaseTestCase):
 
         
         """
-        response = hostsettings.sendpcm(pcmdata)
-        hostsettings.reportrow('SPIS001sheet', 'SPIS_001_05_row', 'SPIS_001_05_col',
+        response = service.sendpcm(pcmdata)
+        service.reportrow('SPIS001sheet', 'SPIS_001_05_row', 'SPIS_001_05_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -108,8 +108,8 @@ class TestSPIS_001(BaseTestCase):
 
         
         """
-        response = hostsettings.sendpcm(pcmdata)
-        hostsettings.reportrow('SPIS001sheet', 'SPIS_001_06_row', 'SPIS_001_06_col',
+        response = service.sendpcm(pcmdata)
+        service.reportrow('SPIS001sheet', 'SPIS_001_06_row', 'SPIS_001_06_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -119,8 +119,8 @@ class TestSPIS_001(BaseTestCase):
 
         
         """
-        response = hostsettings.sendpcm(pcmdata)
-        hostsettings.reportrow('SPIS001sheet', 'SPIS_001_07_row', 'SPIS_001_07_col',
+        response = service.sendpcm(pcmdata)
+        service.reportrow('SPIS001sheet', 'SPIS_001_07_row', 'SPIS_001_07_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 

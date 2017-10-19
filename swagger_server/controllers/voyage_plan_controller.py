@@ -24,21 +24,6 @@ from datetime import datetime
 import collections
 from swagger_server import service
 
-def log_event(name, callback, uvid = None):
-    data = collections.OrderedDict()
-    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    if not (client_mrn() is None):
-        data['client'] = client_mrn()
-    if not (name is None):
-        data['event'] = name
-    if not (uvid is None):
-        data['uvid'] = uvid
-    if not (callback is None):
-        data['callback'] = callback
-    with open('import/event.log', 'a') as f:
-        json.dump(data, f, ensure_ascii=True)
-        f.write('\n')
-
 def client_mrn():
     """
     Get the real DN name of the requestor
@@ -53,30 +38,44 @@ def client_mrn():
                         return field[4:]
     return 'urn:mrn:stm:service:instance:furuno:vis2'
 
-def check_acl(uvid):
+def check_acl():
     """
     Check if client is authorized in the access list of the voyage
     """
-    p = Path('export')
-    acl = list(p.glob('**/all.acl'))
-    if len(acl) > 0:
-        with acl[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if client_mrn() in data:
-            return True
-
-    if not (uvid is None):
-        acl = list(p.glob('**/' + uvid + '.acl'))
-        if len(acl) > 0:
-            with acl[0].open() as f: data = json.loads(f.read())
-            f.close()
+    fname = 'export/all.acl'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
             if client_mrn() in data:
                 return True
+
+    fname = 'export/monitored.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if client_mrn() in data:
+                return True
+
+    fname = 'export/alternate.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if client_mrn() in data:
+                return True
+
     if not service.conf is None:
         if service.conf['open_to_all']:
             return True
     return False
 
+def getuvid(routename):
+    fname = 'export/' + routename
+    if os.path.isfile(fname):
+        tree = etree.parse(fname)
+        root = tree.getroot()
+        tag='{http://www.cirm.org/RTZ/1/1}'
+        routeInfo = root.find(tag + 'routeInfo')
+        return(routeInfo.get('vesselVoyage'))
 
 def get_subscription_to_voyage_plans(callbackEndpoint):
     """
@@ -87,19 +86,25 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
 
     :rtype: List[GetSubscriptionResponse]
     """
-    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
-    p = Path('export')
-    subsl = [] 
-    subs = list(p.glob('**/*.subs'))
-    for sub in subs:
-        with sub.open() as f:
+    if not check_acl():
+        return 'Forbidden', 403
+
+    subsl = []
+    fname = 'export/monitored.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
             data = json.loads(f.read())
-            if me in data:
-                uvid = str(sub)[7:]
-                length = len(uvid)
-                sr = GetSubscriptionResponse(uvid[:length-5])
-                subsl.append(sr)
-    log_event('get_subscriptions', callbackEndpoint)
+            if client_mrn() in data:
+                subsl.append(getuvid('monitored.rtz'))
+
+    fname = 'export/alternate.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if client_mrn() in data:
+                subsl.append(getuvid('alternate.rtz'))
+
+    service.log_event('get_subscriptions', client=client_mrn(), callback=callbackEndpoint)
     return subsl
 
 def get_voyage_plans(uvid=None, routeStatus=None):
@@ -113,44 +118,47 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVoyagePlanResponse
     """
-    markForbidden = False
-    p = Path('export')
-    if uvid is None:
-        uvids = list(p.glob('**/*.uvid'))
-    else:
-        uvids = list(p.glob('**/' + uvid + '.uvid'))
-    if len(uvids) == 0:
-        if uvid is None:
-            return 'No voyage plans found', 404
-        else:
-            return 'Voyage plan ' + uvid + ' not found', 404
-    if routeStatus is None:
-        routeStatus = '7'
+    if not check_acl():
+        return 'Forbidden', 403
+
     vps = []
-    for voyage in uvids:
-        with voyage.open() as f: data = json.loads(f.read())
-        if routeStatus == data['routeStatus']:
-            if not check_acl(str(voyage).split('/')[1].split('.')[0]):
-                markForbidden = True
-            else:
+    fname = 'export/monitored.rtz'
+    if os.path.isfile(fname):
+        filterOK = True
+        if not (uvid is None):
+            if uvid != getuvid('monitored.rtz'):
+                filterOK = False
+        if not (routeStatus is None):
+            if int(routeStatus) != 7:
+                filterOK = False
+        if filterOK:
+            with open(fname) as f:
                 vp = VoyagePlan()
-                f = open('export/' + data['route'], 'r')
                 vp.route = f.read()
-                f.close()
+                vps.append(vp)
+    fname = 'export/alternate.rtz'
+    if os.path.isfile(fname):
+        filterOK = True
+        if not (uvid is None):
+            if uvid != getuvid('alternate.rtz'):
+                filterOK = False
+        if not (routeStatus is None):
+            if int(routeStatus) == 7:
+                filterOK = False
+        if filterOK:
+            with open(fname) as f:
+                vp = VoyagePlan()
+                vp.route = f.read()
                 vps.append(vp)
     if len(vps) == 0:
-        if markForbidden:
-            return 'Forbidden', 403
-        else:
-            return 'Voyage plan with routeStatus ' + routeStatus + ' not found', 404
+        return 'No voyage plans found', 404
     if os.path.exists('export/last_interaction_time'):
         with open('export/last_interaction_time', 'r') as f:
             timestamp = f.read()
     else:
         timestamp = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    log_event('get_voyage', None)
+    service.log_event('get_voyage', client=client_mrn())
     return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
-
 
 def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     """
@@ -163,27 +171,48 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
 
     :rtype: None
     """
-    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
-    meacl = client_mrn()
-    p = Path('import')
-    if uvid is None:
-        vp = 'all'
-    else:
-        vp = uvid
-    uvids = list(p.glob('**/' + vp + '.rmsubs'))
-    if len(uvids) > 0:
-        with uvids[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if not check_acl(vp):
-            return 'Forbidden', 403
-        if not (me in data):
-            data.append(me)
-    else:
-        data = [ me ]
-    f = open('import/' + vp + '.rmsubs', 'w')
-    f.write(json.dumps(data))
-    f.close()
-    log_event('remove_subscription', callbackEndpoint, uvid)
+    if not check_acl():
+        return 'Forbidden', 403
+
+    fname = 'export/monitored.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            subs = json.loads(f.read())
+            if client_mrn() in subs:
+                filterOK = True
+                if not (uvid is None):
+                    if uvid == getuvid('monitored.rtz'):
+                        filterOK = False
+                if filterOK:
+                    rmsubsname = 'import/monitored.rmsubs'
+                    data = []
+                    if os.path.isfile(rmsubsname):
+                        with open(rmsubsname) as g:
+                            data = json.loads(g.read())
+                    data.append(client_mrn())
+                    with open(rmsubsname, 'w') as g:
+                        g.write(json.dumps(data))
+
+    fname = 'export/alternate.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            subs = json.loads(f.read())
+            if client_mrn() in subs:
+                filterOK = True
+                if not (uvid is None):
+                    if uvid == getuvid('alternate.rtz'):
+                        filterOK = False
+                if filterOK:
+                    rmsubsname = 'import/alternate.rmsubs'
+                    data = []
+                    if os.path.isfile(rmsubsname):
+                        with open(rmsubsname) as g:
+                            data = json.loads(g.read())
+                    data.append(client_mrn())
+                    with open(rmsubsname, 'w') as g:
+                        g.write(json.dumps(data))
+
+    service.log_event('remove_subscription', client=client_mrn(), callback=callbackEndpoint, uvid=uvid)
     return 'OK'
 
 
@@ -198,80 +227,69 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     :rtype: None
     """
-    meacl = client_mrn()
-    if uvid is None:
-        vp1 = 'all'
-    else:
-        vp1 = uvid
-    p = Path('export')
+
+    '''
+    This section is for stand-alone unit testing only
+    '''
+    acl = []
+    fname = 'export/all.acl'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            acl = json.loads(f.read())
     if callbackEndpoint == 'allow':
-        acls = list(p.glob('**/*' + vp1 + '.acl'))
-        if len(acls) > 0:
-            with acls[0].open() as f: data = json.loads(f.read())
-            f.close()
-            if not (meacl in data):
-                data.append(meacl)
-        else:
-            data = [ meacl ]
-        f = open('export/' + vp1 + '.acl', 'w')
-        f.write(json.dumps(data))
-        f.close()
+        if not (client_mrn() in acl):
+            acl.append(client_mrn())
+            with open(fname, 'w') as g:
+                g.write(acl)
         return 'OK'
     elif callbackEndpoint == 'deny':
-        acls = list(p.glob('**/*' + vp1 + '.acl'))
-        if len(acls) > 0:
-            with acls[0].open() as f: data = json.loads(f.read())
-            f.close()
-            if meacl in data:
-                data.remove(meacl)
-            if len(data) == 0:
-                os.remove('export/' + vp1 + '.acl')
-            else:
-                f = open('export/' + vp1 + '.acl', 'w')
-                f.write(json.dumps(data))
-                f.close()
+        if client_mrn() in acl:
+            acl.remove(client_mrn())
+            with open(fname, 'w') as g:
+                g.write(acl)
         return 'OK'
     elif callbackEndpoint == 'delete':
-        uvids = list(p.glob('**/*' + vp1 + '.uvid'))
-        if len(uvids) > 0:
-            os.remove('export/' + vp1 + '.uvid')
-            os.remove('export/' + vp1 + '.rtz')
-        uvids = list(p.glob('**/*' + vp1 + '.subs'))
-        if len(uvids) > 0:
-            os.remove('export/' + vp1 + '.subs')
-        uvids = list(p.glob('**/*' + vp1 + '.acl'))
-        if len(uvids) > 0:
-            os.remove('export/' + vp1 + '.acl')
+        if os.path.isfile(fname):
+            os.remove(fname)
         return 'OK'
 
-    me = { 'uid': client_mrn(), 'url': callbackEndpoint}
-    allowed=True
-    p = Path('import')
-    if uvid is None:
-        vp = 'all'
-    else:
-        vp = uvid
-        p2 = Path('export')
-        uvids = list(p2.glob('**/' + uvid + '.uvid'))
-        if len(uvids) == 0:
-            return 'Voyage plan ' + uvid + ' not found', 404
-        if not check_acl(uvid):
-            allowed = False
-    uvids = list(p.glob('**/*' + vp + '.subs'))
-    if len(uvids) > 0:
-        with uvids[0].open() as f: data = json.loads(f.read())
-        f.close()
-        if not (me in data):
-            data.append(me)
-    else:
-        data = [ me ]
-    if allowed:
-        f = open('import/' + vp + '.subs', 'w')
-        f.write(json.dumps(data))
-        f.close()
-        log_event('subscribe', callbackEndpoint, uvid)
-        return 'OK'
-    return 'Forbidden', 403
+    if not check_acl():
+        return 'Forbidden', 403
+
+    subs1 = []
+    fname = 'export/monitored.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            subs1 = json.loads(f.read())
+    filterOK = True
+    if not (uvid is None):
+        if os.path.isfile('export/monitored.rtz'):
+            if uvid == getuvid('monitored.rtz'):
+                filterOK = False
+    if not client_mrn() in subs1:
+        subs1.append(client_mrn())
+    with open(fname, 'w') as f:
+        f.write(json.dumps(subs1))
+
+    subs2 = []
+    fname = 'export/alternate.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            subs2 = json.loads(f.read())
+    filterOK = True
+    if not (uvid is None):
+        if os.path.isfile('export/alternate.rtz'):
+            if uvid == getuvid('alternate.rtz'):
+                filterOK = False
+    if not client_mrn() in subs2:
+        subs2.append(client_mrn())
+    with open(fname, 'w') as f:
+        f.write(json.dumps(subs2))
+
+    if (len(subs1) == 0) and (len(subs2) == 0):
+        return 'No voyage plans found', 404
+    service.log_event('subscribe', client=client_mrn(), callback=callbackEndpoint, uvid=uvid)
+    return 'OK'
 
 
 def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=None):
@@ -300,6 +318,8 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     rtz.seek(0)
     doc = etree.parse(rtz)
     root = doc.getroot()
+    result = True
+    ret = ''
     if root.tag == '{http://www.cirm.org/RTZ/1/0}route':
         '''
         if rtz10.xmlschema.validate(doc) == False:
@@ -318,6 +338,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
                     ret = str(rtzstm11.xmlschema.error_log)
                     return ret, 400
             except:
+                ret = 'Schema validation exception'
                 result = False
             tag='{http://www.cirm.org/RTZ/1/1}'
         else:
@@ -372,6 +393,6 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
-    service.log_event('received voyageplan', name=routeName, status = name)
+    service.log_event('received voyageplan', client=client_mrn(), name=routeName, status = name)
     return 'OK'
 

@@ -17,14 +17,14 @@ import shutil
 import sys
 import json
 from pathlib import Path
-from . import hostsettings
+from swagger_server import service
 import logging
 
-url=hostsettings.url
-callbackurl=hostsettings.callbackurl
-voyageuvid=hostsettings.voyageuvid
-newvoyageuvid='urn:mrn:stm:voyage:id:002:001'
-vis2_uvid=hostsettings.vis2_uvid
+url=service.url
+callbackurl=service.callbackurl
+vis2_uvid=service.vis2_uvid
+
+voyageuvid="urn:mrn:stm:voyage:id:Furuno:20171006132651-15-HELUME"
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <route version="1.1" 
@@ -130,9 +130,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        hostsettings.set_acl(vis2_uvid, voyageuvid)
-        hostsettings.set_acl(vis2_uvid, newvoyageuvid)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_00_row', 'VIS_002_00_col')
+        service.set_acl(vis2_uvid)
+        service.reportrow('VIS002sheet', 'VIS_002_00_row', 'VIS_002_00_col')
         pass
 
     def test_VIS_002_01(self):
@@ -141,8 +140,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_01_row', 'VIS_002_01_col',
+        response=service.get_voyageplan(url)
+        service.reportrow('VIS002sheet', 'VIS_002_01_row', 'VIS_002_01_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -152,8 +151,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, voyageuvid)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_02_row', 'VIS_002_02_col',
+        response=service.get_voyageplan(url, voyageuvid)
+        service.reportrow('VIS002sheet', 'VIS_002_02_row', 'VIS_002_02_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -163,8 +162,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, routeStatus = '7')
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_03_row', 'VIS_002_03_col',
+        response=service.get_voyageplan(url, routeStatus = '7')
+        service.reportrow('VIS002sheet', 'VIS_002_03_row', 'VIS_002_03_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -174,8 +173,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, uvid=voyageuvid, routeStatus = '7')
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_04_row', 'VIS_002_04_col',
+        response=service.get_voyageplan(url, uvid=voyageuvid, routeStatus = '7')
+        service.reportrow('VIS002sheet', 'VIS_002_04_row', 'VIS_002_04_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -185,8 +184,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, uvid='urn:mrn:stm:voyage:id:not:found', routeStatus = '7')
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_05_row', 'VIS_002_05_col',
+        response=service.get_voyageplan(url, uvid='urn:mrn:stm:voyage:id:not:found', routeStatus = '7')
+        service.reportrow('VIS002sheet', 'VIS_002_05_row', 'VIS_002_05_col',
             response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
@@ -196,8 +195,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, uvid=voyageuvid, routeStatus = '6')
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_06_row', 'VIS_002_06_col',
+        response=service.get_voyageplan(url, uvid=voyageuvid, routeStatus = '6')
+        service.reportrow('VIS002sheet', 'VIS_002_06_row', 'VIS_002_06_col',
             response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
@@ -207,8 +206,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, uvid='urn:mrn:stm:voyage:id:not:found')
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_07_row', 'VIS_002_07_col',
+        response=service.get_voyageplan(url, uvid='urn:mrn:stm:voyage:id:not:found')
+        service.reportrow('VIS002sheet', 'VIS_002_07_row', 'VIS_002_07_col',
             response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
@@ -218,8 +217,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, routeStatus='6')
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_08_row', 'VIS_002_08_col',
+        response=service.get_voyageplan(url, routeStatus='6')
+        service.reportrow('VIS002sheet', 'VIS_002_08_row', 'VIS_002_08_col',
             response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
@@ -229,9 +228,9 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        hostsettings.rm_uvid(newvoyageuvid)
-        hostsettings.set_acl(vis2_uvid, newvoyageuvid)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_0_row', 'VIS_002_1_0_col')
+        service.rm_alternate()
+        service.set_acl(vis2_uvid)
+        service.reportrow('VIS002sheet', 'VIS_002_1_0_row', 'VIS_002_1_0_col')
         pass
 
     def test_VIS_002_9_1(self):
@@ -240,8 +239,8 @@ class TestVIS_002(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_1_row', 'VIS_002_1_1_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS002sheet', 'VIS_002_1_1_row', 'VIS_002_1_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -251,8 +250,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_2_row', 'VIS_002_1_2_col',
+        response=service.get_voyageplan(url)
+        service.reportrow('VIS002sheet', 'VIS_002_1_2_row', 'VIS_002_1_2_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -262,8 +261,8 @@ class TestVIS_002(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_3_row', 'VIS_002_1_3_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS002sheet', 'VIS_002_1_3_row', 'VIS_002_1_3_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -273,8 +272,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_4_row', 'VIS_002_1_4_col',
+        response=service.get_voyageplan(url)
+        service.reportrow('VIS002sheet', 'VIS_002_1_4_row', 'VIS_002_1_4_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -284,8 +283,8 @@ class TestVIS_002(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_5_row', 'VIS_002_1_5_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS002sheet', 'VIS_002_1_5_row', 'VIS_002_1_5_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -295,8 +294,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_6_row', 'VIS_002_1_6_col',
+        response=service.get_voyageplan(url)
+        service.reportrow('VIS002sheet', 'VIS_002_1_6_row', 'VIS_002_1_6_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -306,8 +305,8 @@ class TestVIS_002(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_7_row', 'VIS_002_1_7_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS002sheet', 'VIS_002_1_7_row', 'VIS_002_1_7_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -317,8 +316,8 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url)
-        hostsettings.reportrow('VIS002sheet', 'VIS_002_1_8_row', 'VIS_002_1_8_col',
+        response=service.get_voyageplan(url)
+        service.reportrow('VIS002sheet', 'VIS_002_1_8_row', 'VIS_002_1_8_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -329,12 +328,9 @@ class TestVIS_002(BaseTestCase):
 
         
         """
-        hostsettings.rm_uvid(newvoyageuvid)
-        hostsettings.rm_acl(vis2_uvid, voyageuvid)
+        service.rm_alternate()
+        service.rm_acl()
         p = Path('import')
-        files = list(p.glob('**/' + newvoyageuvid + '.*'))
-        for item in files:
-            os.remove(str(item))
         files = list(p.glob('**/' + vis2_uvid + '*'))
         for item in files:
             os.remove(str(item))
@@ -343,9 +339,6 @@ class TestVIS_002(BaseTestCase):
             os.remove(str(item))
 
         p = Path('export')
-        files = list(p.glob('**/' + newvoyageuvid + '.*'))
-        for item in files:
-            os.remove(str(item))
         files = list(p.glob('**/' + vis2_uvid + '*'))
         for item in files:
             os.remove(str(item))

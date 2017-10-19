@@ -57,6 +57,12 @@ def acknowledgement(deliveryAck):
         }
     """
     servicetype, url, name = service.get_service_url(client_mrn())
-    service.log_event('received ack ' + deliveryAck['id'], name=deliveryAck['ackResult'], status = name)
+    id = ''
+    if 'id' in deliveryAck:
+        id = deliveryAck['id']
+    ackResult = ''
+    if 'ackResult' in deliveryAck:
+        ackResult = deliveryAck['ackResult']
+    service.log_event('received ack ' + id, name=ackResult, status = name)
     return 'Thank you for sending the acknowlegement'
 

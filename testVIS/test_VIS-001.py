@@ -17,13 +17,13 @@ import shutil
 import sys
 import json
 from pathlib import Path
-from . import hostsettings
 import logging
+from swagger_server import service
 
-url=hostsettings.url
-callbackurl=hostsettings.callbackurl
+url=service.url
+callbackurl=service.callbackurl
 newvoyageuvid='urn:mrn:stm:voyage:id:001:001'
-vis2_uvid=hostsettings.vis2_uvid
+vis2_uvid=service.vis2_uvid
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <route version="1.1" 
@@ -504,11 +504,10 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        hostsettings.rm_uvid(newvoyageuvid)
-        hostsettings.rm_acl(vis2_uvid)
-        hostsettings.rm_subs(vis2_uvid)
+        service.rm_acl()
+        service.rm_alternate()
 
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_00_row', 'VIS_001_00_col')
+        service.reportrow('VIS001sheet', 'VIS_001_00_row', 'VIS_001_00_col')
         pass
 
     def test_VIS_001_01(self):
@@ -517,10 +516,10 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_01_row', 'VIS_001_01_col',
-            response.status_code == 404, response.reason)
-        self.assert404(response, "Response body is : " + response.text)
+        response=service.get_voyageplan(url, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_01_row', 'VIS_001_01_col',
+            response.status_code == 403, response.reason)
+        self.assert403(response, "Response body is : " + response.text)
 
     def test_VIS_001_02(self):
         """
@@ -528,10 +527,10 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_02_row', 'VIS_001_02_col',
-            response.status_code == 404, response.reason)
-        self.assert404(response, "Response body is : " + response.text)
+        response=service.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_02_row', 'VIS_001_02_col',
+            response.status_code == 403, response.reason)
+        self.assert403(response, "Response body is : " + response.text)
 
     def test_VIS_001_03(self):
         """
@@ -539,8 +538,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_03_row', 'VIS_001_03_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS001sheet', 'VIS_001_03_row', 'VIS_001_03_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -550,8 +549,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_04_row', 'VIS_001_04_col',
+        response=service.get_voyageplan(url, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_04_row', 'VIS_001_04_col',
             response.status_code == 403, response.reason)
         self.assert403(response, "Response body is : " + response.text)
 
@@ -561,8 +560,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_05_row', 'VIS_001_05_col',
+        response=service.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_05_row', 'VIS_001_05_col',
             response.status_code == 403, response.reason)
         self.assert403(response, "Response body is : " + response.text)
 
@@ -572,8 +571,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        hostsettings.set_acl(vis2_uvid, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_06_row', 'VIS_001_06_col')
+        service.set_acl(vis2_uvid, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_06_row', 'VIS_001_06_col')
         pass
 
     def test_VIS_001_07(self):
@@ -582,8 +581,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_07_row', 'VIS_001_07_col',
+        response=service.get_voyageplan(url, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_07_row', 'VIS_001_07_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -593,8 +592,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_08_row', 'VIS_001_08_col',
+        response=service.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_08_row', 'VIS_001_08_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -604,8 +603,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        hostsettings.rm_acl(vis2_uvid, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_09_row', 'VIS_001_09_col')
+        service.rm_acl()
+        service.reportrow('VIS001sheet', 'VIS_001_09_row', 'VIS_001_09_col')
         pass
 
     def test_VIS_001_10(self):
@@ -614,8 +613,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.get_voyageplan(url, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_10_row', 'VIS_001_10_col',
+        response=service.get_voyageplan(url, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_10_row', 'VIS_001_10_col',
             response.status_code == 403, response.reason)
         self.assert403(response, "Response body is : " + response.text)
 
@@ -625,8 +624,8 @@ class TestVIS_001(BaseTestCase):
 
         
         """
-        response=hostsettings.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_11_row', 'VIS_001_11_col',
+        response=service.subscribe_voyageplan(url, callbackurl, newvoyageuvid)
+        service.reportrow('VIS001sheet', 'VIS_001_11_row', 'VIS_001_11_col',
             response.status_code == 403, response.reason)
         self.assert403(response, "Response body is : " + response.text)
 
@@ -636,8 +635,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_in_the_past)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_3_1_row', 'VIS_001_12_3_1_col',
+        response=service.post_voyageplan(url, voyageplan_in_the_past)
+        service.reportrow('VIS001sheet', 'VIS_001_12_3_1_row', 'VIS_001_12_3_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -647,8 +646,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_in_the_past_and_future)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_3_2_row', 'VIS_001_12_3_2_col',
+        response=service.post_voyageplan(url, voyageplan_in_the_past_and_future)
+        service.reportrow('VIS001sheet', 'VIS_001_12_3_2_row', 'VIS_001_12_3_2_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -658,8 +657,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_in_the_future)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_3_3_row', 'VIS_001_12_3_3_col',
+        response=service.post_voyageplan(url, voyageplan_in_the_future)
+        service.reportrow('VIS001sheet', 'VIS_001_12_3_3_row', 'VIS_001_12_3_3_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -669,8 +668,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_rtz10)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_4_1_row', 'VIS_001_12_4_1_col',
+        response=service.post_voyageplan(url, voyageplan_rtz10)
+        service.reportrow('VIS001sheet', 'VIS_001_12_4_1_row', 'VIS_001_12_4_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -680,8 +679,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_in_the_future)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_4_2_row', 'VIS_001_12_4_2_col',
+        response=service.post_voyageplan(url, voyageplan_in_the_future)
+        service.reportrow('VIS001sheet', 'VIS_001_12_4_2_row', 'VIS_001_12_4_2_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -691,8 +690,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_in_the_future)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_4_3_row', 'VIS_001_12_4_3_col',
+        response=service.post_voyageplan(url, voyageplan_in_the_future)
+        service.reportrow('VIS001sheet', 'VIS_001_12_4_3_row', 'VIS_001_12_4_3_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -702,8 +701,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_incorrect_xml)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_5_1_row', 'VIS_001_12_5_1_col',
+        response=service.post_voyageplan(url, voyageplan_incorrect_xml)
+        service.reportrow('VIS001sheet', 'VIS_001_12_5_1_row', 'VIS_001_12_5_1_col',
             response.status_code == 500, response.reason)
         self.assert500(response, "Response body is : " + response.text)
 
@@ -713,8 +712,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_incorrect_schema)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_5_2_row', 'VIS_001_12_5_2_col',
+        response=service.post_voyageplan(url, voyageplan_incorrect_schema)
+        service.reportrow('VIS001sheet', 'VIS_001_12_5_2_row', 'VIS_001_12_5_2_col',
             response.status_code == 400, response.reason)
         self.assert400(response, "Response body is : " + response.text)
 
@@ -724,8 +723,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_6_1_row', 'VIS_001_12_6_1_col',
+        response=service.post_voyageplan(url, voyageplan)
+        service.reportrow('VIS001sheet', 'VIS_001_12_6_1_row', 'VIS_001_12_6_1_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -735,8 +734,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_missing_vesselVoyage)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_1_row', 'VIS_001_12_7_1_col',
+        response=service.post_voyageplan(url, voyageplan_missing_vesselVoyage)
+        service.reportrow('VIS001sheet', 'VIS_001_12_7_1_row', 'VIS_001_12_7_1_col',
             response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
@@ -746,8 +745,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_wrong_syntax_vesselVoyage)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_2_row', 'VIS_001_12_7_2_col',
+        response=service.post_voyageplan(url, voyageplan_wrong_syntax_vesselVoyage)
+        service.reportrow('VIS001sheet', 'VIS_001_12_7_2_row', 'VIS_001_12_7_2_col',
             response.status_code == 400, response.reason)
         self.assert400(response, "Response body is : " + response.text)
 
@@ -757,8 +756,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_missing_routeStatusEnum)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_3_row', 'VIS_001_12_7_3_col',
+        response=service.post_voyageplan(url, voyageplan_missing_routeStatusEnum)
+        service.reportrow('VIS001sheet', 'VIS_001_12_7_3_row', 'VIS_001_12_7_3_col',
             response.status_code == 404, response.reason)
         self.assert404(response, "Response body is : " + response.text)
 
@@ -768,8 +767,8 @@ class TestVIS_001(BaseTestCase):
 
 
         """
-        response=hostsettings.post_voyageplan(url, voyageplan_wrong_syntax_routeStatusEnum)
-        hostsettings.reportrow('VIS001sheet', 'VIS_001_12_7_4_row', 'VIS_001_12_7_4_col',
+        response=service.post_voyageplan(url, voyageplan_wrong_syntax_routeStatusEnum)
+        service.reportrow('VIS001sheet', 'VIS_001_12_7_4_row', 'VIS_001_12_7_4_col',
             response.status_code == 400, response.reason)
         self.assert400(response, "Response body is : " + response.text)
 

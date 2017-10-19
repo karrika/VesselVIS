@@ -17,7 +17,7 @@ import shutil
 import sys
 import json
 from pathlib import Path
-from . import hostsettings
+from swagger_server import service
 import logging
 
 class TestVIS_010(BaseTestCase):
@@ -35,8 +35,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('keywords:ROS')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_01_row', 'VIS_010_01_col',
+        response = service.search('keywords:ROS')
+        service.reportrow('VIS010sheet', 'VIS_010_01_row', 'VIS_010_01_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -46,8 +46,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('keywords:ROS AND keywords:SSPA')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_02_row', 'VIS_010_02_col',
+        response = service.search('keywords:ROS AND keywords:SSPA')
+        service.reportrow('VIS010sheet', 'VIS_010_02_row', 'VIS_010_02_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -57,8 +57,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('keywords:RO')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_03_row', 'VIS_010_03_col',
+        response = service.search('keywords:RO')
+        service.reportrow('VIS010sheet', 'VIS_010_03_row', 'VIS_010_03_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -68,8 +68,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('keywords:ros')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_04_row', 'VIS_010_04_col',
+        response = service.search('keywords:ros')
+        service.reportrow('VIS010sheet', 'VIS_010_04_row', 'VIS_010_04_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -79,8 +79,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('keywords:voyage')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_05_row', 'VIS_010_05_col',
+        response = service.search('keywords:voyage')
+        service.reportrow('VIS010sheet', 'VIS_010_05_row', 'VIS_010_05_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -90,8 +90,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('keywords:service')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_06_row', 'VIS_010_06_col',
+        response = service.search('keywords:service')
+        service.reportrow('VIS010sheet', 'VIS_010_06_row', 'VIS_010_06_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -101,8 +101,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('imo:8719188')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_07_row', 'VIS_010_07_col',
+        response = service.search('imo:8719188')
+        service.reportrow('VIS010sheet', 'VIS_010_07_row', 'VIS_010_07_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -112,8 +112,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('mmsi')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_08_row', 'VIS_010_08_col',
+        response = service.search('mmsi')
+        service.reportrow('VIS010sheet', 'VIS_010_08_row', 'VIS_010_08_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -123,8 +123,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('serviceType')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_09_row', 'VIS_010_09_col',
+        response = service.search('serviceType')
+        service.reportrow('VIS010sheet', 'VIS_010_09_row', 'VIS_010_09_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -134,8 +134,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('imo:8719188 AND keywords:ROS')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_10_row', 'VIS_010_10_col',
+        response = service.search('imo:8719188 AND keywords:ROS')
+        service.reportrow('VIS010sheet', 'VIS_010_10_row', 'VIS_010_10_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -145,8 +145,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('serviceType AND ROS')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_11_row', 'VIS_010_11_col',
+        response = service.search('serviceType AND ROS')
+        service.reportrow('VIS010sheet', 'VIS_010_11_row', 'VIS_010_11_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -156,8 +156,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('serviceType AND RCS')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_12_row', 'VIS_010_12_col',
+        response = service.search('serviceType AND RCS')
+        service.reportrow('VIS010sheet', 'VIS_010_12_row', 'VIS_010_12_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
@@ -167,8 +167,8 @@ class TestVIS_010(BaseTestCase):
 
         
         """
-        response = hostsettings.search('serviceType AND EMS')
-        hostsettings.reportrow('VIS010sheet', 'VIS_010_13_row', 'VIS_010_13_col',
+        response = service.search('serviceType AND EMS')
+        service.reportrow('VIS010sheet', 'VIS_010_13_row', 'VIS_010_13_col',
             response.status_code == 200, response.reason)
         self.assert200(response, "Response body is : " + response.text)
 
