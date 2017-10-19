@@ -50,15 +50,15 @@ if len(conffile) > 0:
         conf['open_to_all'] = data['open_to_all']
         conf['simulate_vessel'] = data['simulate_vessel']
         simulate_vessel = data['simulate_vessel']
-vis_cert = list(p.glob('**/Certificate_VIS*.pem'))
+vis_cert = list(p.glob('**/Certificate_*.pem'))
 if len(vis_cert) == 0:
-    print('Error: no Certificate_VIS*.pem found')
+    print('Error: no Certificate_*.pem found')
 else:
     vesselName = str(vis_cert[0])
     vesselName = vesselName[12:len(vesselName)-4]
-vis_key = list(p.glob('**/PrivateKey_VIS*.pem'))
+vis_key = list(p.glob('**/PrivateKey_*.pem'))
 if len(vis_key) == 0:
-    print('Error: no PrivateKey_VIS*.pem found')
+    print('Error: no PrivateKey_*.pem found')
 vis_trust = list(p.glob('**/mc-ca-chain.pem'))
 if len(vis_trust) == 0:
     print('Error: no mc-ca-chain.pem found')
