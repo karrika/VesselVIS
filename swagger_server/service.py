@@ -415,6 +415,11 @@ def upload_xml(xml):
         post_text(url, text)
         shutil.copyfile(xml, 'import/xmls.sent')
 
+def upload_text(to, msg):
+    servicetype, url, name = get_service_url(to)
+    if servicetype == 'VIS':
+        post_text(url, msg)
+
 def upload_pcm(to, msg):
     servicetype, url, name = get_service_url(to)
     if servicetype == 'PortCDM':
@@ -903,6 +908,30 @@ def vessel_connects():
         for text in texts:
             shutil.copyfile(str(text), 'stm/' + text.parts[1])
             os.remove(str(text)) 
+    '''
+    Check for new text messages to be sent.
+    '''
+    p = Path('export')
+    msgs = list(p.glob('**/urn:mrn:stm:txt:imo:*.uvid'))
+    if len(msgs) > 0:
+        if os.path.isfile('import/textmsg.sent'):
+            lastSentTime = os.path.getmtime('import/textmsg.sent')
+        else:
+            lastSentTime = None
+        for msg in msgs:
+            msg_already_sent = False
+            if not (lastSentTime is None):
+                if os.path.getmtime(str(msg)) < lastSentTime:
+                    msg_already_sent = True
+            if msg_already_sent == False:
+                with msg.open() as f:
+                    envel = json.loads(f.read())
+                    fname = 'export/' + envel['msg']
+                    if os.path.isfile(fname):
+                        with open(fname) as g:
+                            data = g.read()
+                            upload_text(envel['to'], data)
+                            shutil.copyfile(str(msg), 'import/textmsg.sent')
     '''
     Check for ack requests.
     '''
