@@ -12,12 +12,12 @@ from . import service
 
 p = Path('.')
 print(service.conf)
-vis_cert = list(p.glob('**/Certificate_VIS*.pem'))
+vis_cert = list(p.glob('**/Certificate_*.pem'))
 if len(vis_cert) == 0:
-    print('Error: no Certificate_VIS*.pem found')
-vis_key = list(p.glob('**/PrivateKey_VIS*.pem'))
+    print('Error: no Certificate_*.pem found')
+vis_key = list(p.glob('**/PrivateKey_*.pem'))
 if len(vis_key) == 0:
-    print('Error: no PrivateKey_VIS*.pem found')
+    print('Error: no PrivateKey_*.pem found')
 context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.load_cert_chain(str(vis_cert[0]), str(vis_key[0]))
 app = connexion.App(__name__, specification_dir='./swagger/')
