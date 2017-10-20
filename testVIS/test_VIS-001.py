@@ -783,14 +783,11 @@ class TestVIS_001(BaseTestCase):
             if os.path.exists(file):
                 os.remove(file)
 
+        service.rm_acl()
+        service.rm_alternate()
+        remove('import/alternate.sent')
         remove('import/parse:from:rtz.rtz')
         remove('export/parse:from:rtz.rtz')
-        remove('export/urn:mrn:stm:voyage:id:001:001.uvid')
-        remove('export/HAN-VIS.rtz')
-        remove('export/HAN-VIS in the past.rtz')
-        remove('export/HAN-VIS in past and future.rtz')
-        remove('export/HAN-VIS rtz1.0.rtz')
-        remove('export/HAN-VIS 1.1.rtz')
         pass
 
 if __name__ == '__main__':
