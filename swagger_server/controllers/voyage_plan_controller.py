@@ -122,12 +122,15 @@ def get_voyage_plans(uvid=None, routeStatus=None):
         return 'Forbidden', 403
 
     vps = []
-    fname = 'export/monitored.rtz'
+    fname = 'export/monitored.uvid'
     if os.path.isfile(fname):
         filterOK = True
-        if not (uvid is None):
-            if uvid != getuvid('monitored.rtz'):
-                filterOK = False
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if 'route' in data:
+                if not (uvid is None):
+                    if uvid != getuvid(data['route']):
+                        filterOK = False
         if not (routeStatus is None):
             if int(routeStatus) != 7:
                 filterOK = False
@@ -136,12 +139,15 @@ def get_voyage_plans(uvid=None, routeStatus=None):
                 vp = VoyagePlan()
                 vp.route = f.read()
                 vps.append(vp)
-    fname = 'export/alternate.rtz'
+    fname = 'export/alternate.uvid'
     if os.path.isfile(fname):
         filterOK = True
-        if not (uvid is None):
-            if uvid != getuvid('alternate.rtz'):
-                filterOK = False
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if 'route' in data:
+                if not (uvid is None):
+                    if uvid != getuvid(data['route']):
+                        filterOK = False
         if not (routeStatus is None):
             if int(routeStatus) == 7:
                 filterOK = False
