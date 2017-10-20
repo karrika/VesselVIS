@@ -11,8 +11,9 @@ from flask import json
 from pathlib import Path
 import os
 import unittest
+from swagger_server import service
 
-voyageuvid='urn:mrn:stm:voyage:id:8320767:2017021010'
+voyageuvid='urn:mrn:stm:voyage:id:Furuno:20171006132651-15-HELUME'
 vis_uvid='urn:mrn:stm:service:instance:furuno:vis2'
 newplan='urn:mrn:stm:voyage:id:new:plan'
 callbackEndpoint='http://localhost:8002'
@@ -165,7 +166,7 @@ class TestVoyagePlanController(BaseTestCase):
         
         """
         query_string = [('callbackEndpoint', 'http://localhost:8002'),
-                        ('uvid', 'urn:mrn:stm:voyage:id:8320767:2017021010')]
+                        ('uvid', voyageuvid)]
         response = self.client.open('/voyagePlans/subscription',
                                     method='POST',
                                     query_string=query_string)
@@ -216,36 +217,27 @@ class TestVoyagePlanController(BaseTestCase):
         """
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
-        files = list(p.glob('**/' + voyageuvid + '.acl'))
+        files = list(p.glob('**/urn:mrn:stm:voyage:id:*'))
         for item in files:
             os.remove(str(item))
-        files = list(p.glob('**/' + voyageuvid + '.subs'))
+        files = list(p.glob('**/*.rtz'))
         for item in files:
             os.remove(str(item))
-        files = list(p.glob('**/' + vis2_uvid + '*'))
+        files = list(p.glob('**/*.subs'))
+        for item in files:
+            os.remove(str(item))
+        files = list(p.glob('**/*.rmsubs'))
         for item in files:
             os.remove(str(item))
         files = list(p.glob('**/parse*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/' + newplan + '*'))
         for item in files:
             os.remove(str(item))
 
         p = Path('export')
-        files = list(p.glob('**/' + voyageuvid + '.acl'))
+        files = list(p.glob('**/*.acl'))
         for item in files:
             os.remove(str(item))
-        files = list(p.glob('**/' + voyageuvid + '.subs'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/' + vis2_uvid + '*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/parse*'))
-        for item in files:
-            os.remove(str(item))
-        files = list(p.glob('**/' + newplan + '*'))
+        files = list(p.glob('**/*.subs'))
         for item in files:
             os.remove(str(item))
         pass

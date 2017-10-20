@@ -90,7 +90,7 @@ class TestAreaController(BaseTestCase):
         """
         vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
         p = Path('import')
-        files = list(p.glob('**/' + vis2_uvid + '*'))
+        files = list(p.glob('**/urn:mrn:s124:*'))
         for item in files:
             print(item)
             os.remove(str(item))
