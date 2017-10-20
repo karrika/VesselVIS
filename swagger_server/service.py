@@ -145,9 +145,12 @@ def set_acl(id, uvid=None):
 def rm_alternate():
     fname = 'export/alternate.uvid'
     if os.path.isfile(fname):
-        os.remove(fname)
-    fname = 'export/alternate.rtz'
-    if os.path.isfile(fname):
+        with open(fname) as f:
+            data = json.loads(f.read())
+            if 'route' in data:
+                route = 'export/' + data['route']
+                if os.path.isfile(route):
+                    os.remove(route)
         os.remove(fname)
 
 def uvid_exists(uvid):
@@ -518,10 +521,12 @@ def upload_alternate_to_all():
     Upload alternate to all subscribers
     '''
     if os.path.isfile('export/alternate.uvid'):
-        with open('export/all.subs') as f:
-            subs = json.loads(f.read())
-        for sub in subs:
-            upload_alternate(sub['url'])
+        fname = 'export/alternate.subs'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                subs = json.loads(f.read())
+            for sub in subs:
+                upload_alternate(sub['url'])
         shutil.copyfile('export/alternate.uvid', 'import/alternate.sent')
 
 def upload_subscriptions_to_all():
@@ -878,17 +883,17 @@ def vessel_connects():
     '''
     if simulate_vessel:
         p = Path('import')
-        uvids = list(p.glob('**/*.uvid'))
+        uvids = list(p.glob('**/urn:mrn:stm:voyage:id:*.uvid'))
         for item in uvids:
-            shutil.copyfile(str(item), 'stm/' + item.parts[1])
-            shutil.copyfile(str(item), 'export/' + item.parts[1])
-            os.remove(str(item)) 
-        rtzs = list(p.glob('**/*.rtz'))
-        for item in rtzs:
-            shutil.copyfile(str(item), 'stm/' + item.parts[1])
-            shutil.copyfile(str(item), 'export/' + item.parts[1])
+            rm_alternate()
+            shutil.copyfile(str(item), 'export/alternate.uvid')
             os.remove(str(item))
-        
+            with open('export/alternate.uvid') as f:
+                data = json.loads(f.read())
+                if 'route' in data:
+                    fname = 'import/' + data['route']
+                    if os.path.isfile(fname):
+                        shutil.move(fname, 'export/' + data['route'])
     '''
     Check for new areas being uploaded.
     '''
