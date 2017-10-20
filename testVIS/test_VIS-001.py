@@ -35,7 +35,7 @@ voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
     <extensions>
       <extension xsi:type="stm:RouteInfoExtension"
         manufacturer="STM" name="routeInfoEx" version="1.0.0"
-        routeStatusEnum="7"
+        routeStatusEnum="1"
         depPort="FIHAN"
         arrPort="SEVIS"
         depPortCallId="urn:mrn:stm:portcdm:port_call:FIHAN:20170421"
