@@ -28,9 +28,7 @@ cd ../VIS-2
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_01 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_02 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_03 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
-cd ../VIS-1
 sleep 20
-cd ../VIS-2
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_04 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_05 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
@@ -44,18 +42,31 @@ cd ../VIS-2
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_10 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_11 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_3_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_3_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_3_3 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_4_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_4_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_4_3 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_5_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_5_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_6_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_1 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_2 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_3 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_4 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
+sleep 20
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_5 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
 cd ../VIS-1
 nosetests -v testVIS/test_VIS-001.py:TestVIS_001.test_VIS_001_12_7_5 > >(tee -a ../stdout.log) 2> >(tee -a ../stderr.log >&2)
