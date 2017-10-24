@@ -350,7 +350,7 @@ def post_pcm(url, msg, name=None, subj = None):
         'Content-Type' : 'application/xml'
     }
     status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert, verify=trustchain)
-    log_event('sent ' + subj, name=name, status = status.text)
+    log_event('sent ' + subj, name=name, status = str(status.status_code) + " " + status.text)
     return status
 
 def get_service_url(xml):
@@ -551,7 +551,7 @@ def upload_subscriptions_to_all():
 
 def post_ack(data):
     servicetype, url, name = get_service_url(data['fromId'])
-    if url is None:
+    if url == 'None':
         return
     payload = collections.OrderedDict()
     
@@ -677,7 +677,7 @@ def createpcmqueue(instanceId, fil = pcmfilter):
             status.status_code = 500
         if status.status_code == 200:
             queueId = status.text
-            fname = 'import/' + instanceId + '.dat'
+            fname = 'import/queue.dat'
             queue = []
             if os.path.isfile(fname):
                 with open(fname) as f:
@@ -701,7 +701,7 @@ def createpcmqueue(instanceId, fil = pcmfilter):
 def pollpcmqueue(instanceId):
     servicetype, url, name = get_service_url(instanceId)
     if servicetype == 'PortCDM':
-        fname = 'import/' + instanceId + '.dat'
+        fname = 'import/queue.dat'
         if os.path.isfile(fname):
             with open(fname) as f:
                 queue = json.loads(f.read())
@@ -811,14 +811,13 @@ def pollallqueues():
                     if (res.status_code == 200) and (res.text != 'ConnectionError'):
                         try:
                             msgs = json.loads(res.text)
-                            print('Pollqueue returned ', res.text)
                             for msg in msgs:
                                 messageId = msg['messageId']
                                 parse_portcdm(msg)
                                 with open('import/' + messageId + '.uvid', 'w') as f:
                                     f.write(json.dumps(msg))
                         except:
-                            print('Pollqueue returned ', res.text)
+                            fname = 'import/queue.dat'
 
 def vessel_connects():
     '''
