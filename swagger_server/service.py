@@ -67,8 +67,16 @@ vis_cert=(str(vis_cert[0]), str(vis_key[0]))
 trustchain=str(vis_trust[0])
 
 url="https://localhost:8001"
-callbackurl=conf['host'] + ':' + str(conf['stmport'])
 vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
+
+p = Path('.')
+conffile = list(p.glob('**/target.conf'))
+if len(conffile) > 0:
+    with conffile[0].open() as f:
+        data = json.loads(f.read())
+        vis2_uvid = data['instanceId']
+
+callbackurl=conf['host'] + ':' + str(conf['stmport'])
 
 def reportrow(sheet, row, col, state = True, reason = ''):
     if state:
