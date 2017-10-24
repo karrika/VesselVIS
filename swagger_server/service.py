@@ -640,7 +640,7 @@ def sendpcm(body):
 pcmfilter='''[
   {
     "type": "VESSEL",
-    "element": "urn:x-mrn:stm:vessel:IMO:7917551"
+    "element": "urn:x-mrn:stm:vessel:IMO:''' + conf['imo'] + '''"
   }
 ]'''
 
