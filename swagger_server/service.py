@@ -74,6 +74,7 @@ conffile = list(p.glob('**/target.conf'))
 if len(conffile) > 0:
     with conffile[0].open() as f:
         data = json.loads(f.read())
+        url = data['endpointUri']
         vis2_uvid = data['instanceId']
 
 callbackurl=conf['host'] + ':' + str(conf['stmport'])
