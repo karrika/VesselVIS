@@ -135,6 +135,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
             if int(routeStatus) != 7:
                 filterOK = False
         if filterOK:
+            fname = 'export/' + data['route']
             with open(fname) as f:
                 vp = VoyagePlan()
                 vp.route = f.read()
@@ -152,6 +153,7 @@ def get_voyage_plans(uvid=None, routeStatus=None):
             if int(routeStatus) == 7:
                 filterOK = False
         if filterOK:
+            fname = 'export/' + data['route']
             with open(fname) as f:
                 vp = VoyagePlan()
                 vp.route = f.read()
