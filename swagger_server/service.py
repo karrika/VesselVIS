@@ -23,6 +23,7 @@ from datetime import datetime
 import time
 from subprocess import call
 import xml.etree.ElementTree as ET
+from lxml import etree
 
 simulate_vessel = False
 
@@ -79,6 +80,9 @@ if len(conffile) > 0:
 
 callbackurl=conf['host'] + ':' + str(conf['stmport'])
 
+def st(status):
+    return str(st.status_code) + " " + st.text
+
 def reportrow(sheet, row, col, state = True, reason = ''):
     if state:
         report=sheet + '.write(' + row + ', ' + col + ''', "PASS", boldcenter)
@@ -131,239 +135,88 @@ def check_event(name, callback = None, uvid = None):
     return False
 
 '''
-Unit tests only
+Get uvid from monitored.rtz or alternate.rtz
 '''
-def rm_acl():
-    fname = 'export/all.acl'
+def getuvid(routename):
+    fname = 'export/' + routename
     if os.path.isfile(fname):
-        os.remove(fname)
-    fname = 'export/monitored.subs'
-    if os.path.isfile(fname):
-        os.remove(fname)
-    fname = 'export/alternate.subs'
-    if os.path.isfile(fname):
-        os.remove(fname)
+        tree = etree.parse(fname)
+        root = tree.getroot()
+        tag='{http://www.cirm.org/RTZ/1/1}'
+        routeInfo = root.find(tag + 'routeInfo')
+        return(routeInfo.get('vesselVoyage'))
 
-def set_acl(id, uvid=None):
-    rm_acl()
-    data=[ id ]
-    fname = 'export/all.acl'
-    with open(fname, 'w') as f:
-        f.write(json.dumps(data))
+def get_alternate_uvid():
+    return getuvid('alternate.rtz')
 
+def get_monitored_uvid():
+    return getuvid('monitored.rtz')
+
+'''
+Generic ACL methods for testing only
+The acl will also follow the subscriptions
+'''
+def rm_acl(id = None):
+    if simulated_vessel:
+        fname = 'export/all.acl'
+        if os.path.isfile(fname):
+            if id is None:
+                os.remove(fname)
+            else:
+                with open(fname) as f:
+                    acl = json.loads(f.read())
+                    if id in acl:
+                        acl.remove(id)
+                        with open(fname,'w') as g:
+                            g.write(acl)
+
+def add_acl(id):
+    if simulated_vessel:
+        fname = 'export/all.acl'
+        acl = []
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                acl = json.loads(f.read())
+        if not (id in acl):
+            acl.append(id)
+            with open(fname, 'w') as f:
+                f.write(json.dumps(acl))
+
+'''
+Alternate route methods for testing only
+'''
 def rm_alternate():
-    fname = 'export/alternate.uvid'
-    if os.path.isfile(fname):
-        with open(fname) as f:
-            data = json.loads(f.read())
-            if 'route' in data:
-                route = 'export/' + data['route']
-                if os.path.isfile(route):
-                    os.remove(route)
-        os.remove(fname)
+    if simulated_vessel:
+        fname = 'export/alternate.uvid'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                data = json.loads(f.read())
+                if 'route' in data:
+                    route = 'export/' + data['route']
+                    if os.path.isfile(route):
+                        os.remove(route)
+            os.remove(fname)
 
-def uvid_exists(uvid):
-    p = Path('export')
-    uvids = list(p.glob('**/' + uvid + '.uvid'))
-    return len(uvids) > 0
+'''
+Monitored route methods for testing only
+'''
+def rm_monitored():
+    if simulated_vessel:
+        fname = 'export/monitored.uvid'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                data = json.loads(f.read())
+                if 'route' in data:
+                    route = 'export/' + data['route']
+                    if os.path.isfile(route):
+                        os.remove(route)
+            os.remove(fname)
 
-def rtz_exists(uvid):
-    p = Path('export')
-    uvids = list(p.glob('**/' + uvid + '.rtz'))
-    return len(uvids) > 0
-
-def subs_exists(uvid):
-    p = Path('export')
-    if uvid is None:
-        uvids = list(p.glob('**/all.subs'))
-    else:
-        uvids = list(p.glob('**/' + uvid + '.subs'))
-    return len(uvids) > 0
-
-def acl_exists(uvid):
-    p = Path('export')
-    if uvid is None:
-        uvids = list(p.glob('**/all.acl'))
-    else:
-        uvids = list(p.glob('**/' + uvid + '.acl'))
-    return len(uvids) > 0
-
-def acl_allowed(uvid):
-    p = Path('export')
-    all = list(p.glob('**/all.acl'))
-    if len(all) > 0:
-        with open(str(all[0]), 'r') as f:
-            data = json.loads(f.read())
-        if uvid in data:
-            return True
-    return False
-
-def rm_subs(id, uvid=None):
-    if uvid is None:
-        if subs_exists(None):
-            os.remove('export/all.subs') 
-    else:
-        if subs_exists(uvid):
-            os.remove('export/' + uvid + '.subs') 
-
-def rm_uvid(uvid):
-    if uvid is None:
-        if subs_exists(None):
-            os.remove('export/all.subs') 
-        if acl_exists(uvid):
-            os.remove('export/all.acl') 
-    else:
-        if uvid_exists(uvid):
-            os.remove('export/' + uvid + '.uvid') 
-        if rtz_exists(uvid):
-            os.remove('export/' + uvid + '.rtz') 
-        if subs_exists(uvid):
-            os.remove('export/' + uvid + '.subs') 
-        if acl_exists(uvid):
-            os.remove('export/' + uvid + '.acl') 
-
-def get_voyageplan(url, uvid = None, routeStatus = None, name = None):
-    parameters = {
-    }
-    sub='/voyagePlans'
-    if not (uvid is None):
-        parameters['uvid'] = uvid
-    if not (routeStatus is None):
-        parameters['routeStatus'] = routeStatus
-    try:
-        status = requests.get(url + sub, params = parameters, cert=vis_cert, verify=trustchain, timeout = 15)
-    except Timeout as e:
-        print(e)
-        status = requests.Response
-        status.text = "Timeout"
-        status.status_code = 500
-    except SSLError as e:
-        print(e)
-        status = requests.Response
-        status.text = "SSLError"
-        status.status_code = 500
-    except ConnectionError as e:
-        print(e)
-        status = requests.Response
-        status.text = "ConnectionError"
-        status.status_code = 500
-    log_event('get voyageplan', name=name, status = status.text, url=url)
-    return status
-
-def subscribe_voyageplan(url, callback, uvid = None, name = None):
-    sub='/voyagePlans/subscription'
-    if uvid is None:
-        parameters={
-            'callbackEndpoint': callback
-        }
-        status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-        log_event('subscribe', name=name, status = status.text)
-        return status
-    parameters={
-        'callbackEndpoint': callback,
-        'uvid': uvid
-    }
-    status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-    log_event('subscribe', name=name, status = status.text)
-    return status
-
-def get_subscriptions(url, callback, name=None):
-    sub='/voyagePlans/subscription'
-    parameters={
-        'callbackEndpoint': callback
-    }
-    status = requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-    log_event('get subscriptions', name=name, status = status.text)
-    return status
-
-def unsubscribe_voyageplan(url, callback, uvid = None, name = None):
-    sub='/voyagePlans/subscription'
-    if uvid is None:
-        parameters={
-            'callbackEndpoint': callback
-        }
-        status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-        log_event('delete subscription', name=name, status = status.text)
-        return status
-    parameters={
-        'callbackEndpoint': callback,
-        'uvid': uvid
-    }
-    status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-    log_event('delete subscription', name=name, status = status.text)
-    return status
-
-def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = callbackurl, uvid = None, name = '', routeName = ''):
-    headers = {
-        'Content-Type': 'text/xml'
-    }
-    parameters = {
-    }
-    if not (deliveryAckEndPoint is None):
-        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-    if not (callbackEndpoint is None):
-        parameters['callbackEndpoint'] = callbackEndpoint
-    sub='/voyagePlans'
-    try:
-        status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain, timeout = 15)
-    except requests.exceptions.Timeout:
-        status = requests.Response
-        status.text = "Timeout"
-    log_event('sent ' + routeName, name=name, status = status.text)
-    return status
-
-def post_area(url, area, deliveryAckEndPoint = None):
-    headers = {
-        'Content-Type': 'text/xml'
-    }
-    sub='/area'
-    parameters = {
-    }
-    if not (deliveryAckEndPoint is None):
-        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-    log_event('post_area', None)
-    return requests.post(url + sub, data=area.encode('utf-8'), headers=headers, cert=vis_cert, verify=trustchain)
-
-def post_text(url, text, deliveryAckEndPoint = None):
-    headers = {
-        'Content-Type': 'text/xml'
-    }
-    sub='/textMessage'
-    parameters = {
-    }
-    if not (deliveryAckEndPoint is None):
-        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-    try:
-        status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, verify=trustchain, timeout = 15)
-    except Timeout as e:
-        print(e)
-        status = requests.Response
-        status.text = "Timeout"
-        status.status_code = 500
-    except SSLError as e:
-        print(e)
-        status = requests.Response
-        status.text = "SSLError"
-        status.status_code = 500
-    except ConnectionError as e:
-        print(e)
-        status = requests.Response
-        status.text = "ConnectionError"
-        status.status_code = 500
-    log_event('post_text', url=url, ack=deliveryAckEndPoint, status=status.text)
-    return status
-
-def post_pcm(url, msg, name=None, subj = None):
-    sub='/amss/state-update'
-    headers={
-        'Content-Type' : 'application/xml'
-    }
-    status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert, verify=trustchain)
-    log_event('sent ' + subj, name=name, status = str(status.status_code) + " " + status.text)
-    return status
-
-def get_service_url(xml):
-    instanceId = os.path.splitext(os.path.basename(xml))[0]
+'''
+Extract url and name based on intanceId
+'''
+def get_service_url(instanceId):
+    instanceId = os.path.splitext(os.path.basename(instanceId))[0]
     if os.path.exists('import/ports.dat'):
         with open('import/ports.dat') as f:
             data=json.loads(f.read())
@@ -390,70 +243,140 @@ def get_service_url(xml):
                     return ('VIS', item['endpointUri'], item['name'])
     return ('None', 'None', 'None')
 
-def subscribe_all(instanceId):
+'''
+GET voyagePlans method
+'''
+def get_voyageplan(url, uvid = None, routeStatus = None, name = None):
+    parameters = {
+    }
+    sub='/voyagePlans'
+    if not (uvid is None):
+        parameters['uvid'] = uvid
+    if not (routeStatus is None):
+        parameters['routeStatus'] = routeStatus
+    try:
+        status = requests.get(url + sub, params = parameters, cert=vis_cert, verify=trustchain, timeout = 15)
+    except Timeout as e:
+        print(e)
+        status = requests.Response
+        status.text = "Timeout"
+        status.status_code = 500
+    except SSLError as e:
+        print(e)
+        status = requests.Response
+        status.text = "SSLError"
+        status.status_code = 500
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
+    log_event('voyageplan', name=name, status = st(status), url=url)
+    return status
+
+'''
+POST voyagePlans/subscription method
+'''
+def post_subscription(url, callback, uvid = None, name = None):
+    sub='/voyagePlans/subscription'
+    if uvid is None:
+        parameters={
+            'callbackEndpoint': callback
+        }
+        status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        log_event('subscribe', name=name, status = st(status))
+        return status
+    parameters={
+        'callbackEndpoint': callback,
+        'uvid': uvid
+    }
+    status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    log_event('subscribe', name=name, status = st(status))
+    return status
+
+def subscribe_voyageplan(instanceId):
     servicetype, url, name = get_service_url(instanceId)
     if servicetype == 'VIS':
-        return subscribe_voyageplan(url, callbackurl, name=name)
+        return post_subscription(url, callbackurl, name=name)
 
-def unsubscribe_all(instanceId):
+'''
+GET voyagePlans/subscription method
+'''
+def get_subscriptions(url, callback, name=None):
+    sub='/voyagePlans/subscription'
+    parameters={
+        'callbackEndpoint': callback
+    }
+    status = requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    log_event('subscriptions', name=name, status = st(status))
+    return status
+
+'''
+DELETE voyagePlans/subscription method
+'''
+def delete_subscription(url, callback, uvid = None, name = None):
+    sub='/voyagePlans/subscription'
+    if uvid is None:
+        parameters={
+            'callbackEndpoint': callback
+        }
+        status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        log_event('unsubscribe', name=name, status = st(status))
+        return status
+    parameters={
+        'callbackEndpoint': callback,
+        'uvid': uvid
+    }
+    status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    log_event('unsubscribe', name=name, status = st(status))
+    return status
+
+def unsubscribe_voyageplan(instanceId):
     servicetype, url, name = get_service_url(instanceId)
     if servicetype == 'VIS':
-        return unsubscribe_voyageplan(url, callbackurl, name=name)
+        return delete_subscription(url, callbackurl, name=name)
 
-def upload_xml(xml):
-    servicetype, url, name = get_service_url(xml)
-    if servicetype == 'PortCDM':
-        with open(xml) as f:
-            text = f.read()
-            tree = ET.parse(xml)
-            root = tree.getroot()
-            locationState = root.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationState')
-            if not (locationState is None):
-                timeval = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}time')
-                subj = timeval.text
-                arrivalLocation = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}arrivalLocation')
-                if not (arrivalLocation is None):
-                    to = arrivalLocation.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}to')
-                    if not (to is None):
-                        locationType = to.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationType')
-                        subj = subj + ' ' + locationType.text
-            else:
-                subj = None
-        post_pcm(url, text, name = name, subj = subj)
-        shutil.copyfile(xml, 'import/xmls.sent')
-    if servicetype == 'VIS':
-        with open(xml) as f:
-            text = f.read()
-        post_text(url, text)
-        shutil.copyfile(xml, 'import/xmls.sent')
-
-def upload_text(to, msg):
-    servicetype, url, name = get_service_url(to)
-    if servicetype == 'VIS':
-        post_text(url, msg)
-
-def upload_pcm(to, msg):
-    servicetype, url, name = get_service_url(to)
-    if servicetype == 'PortCDM':
-        fname = 'export/' + msg
+def upload_subscriptions_to_all():
+    prev = []
+    fname = 'import/request.subs'
+    if os.path.isfile(fname):
         with open(fname) as f:
-            text = f.read()
-            tree = ET.parse(fname)
-            root = tree.getroot()
-            locationState = root.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationState')
-            if not (locationState is None):
-                timeval = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}time')
-                subj = timeval.text
-                arrivalLocation = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}arrivalLocation')
-                if not (arrivalLocation is None):
-                    to = arrivalLocation.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}to')
-                    if not (to is None):
-                        locationType = to.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationType')
-                        subj = subj + ' ' + locationType.text
-            else:
-                subj = None
-        post_pcm(url, text, name = name, subj = subj)
-        shutil.copyfile(fname, 'import/portcdm.sent')
+            prev = json.loads(f.read())
+    current = []
+    fname = 'export/request.subs'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            current = json.loads(f.read())
+    for preitem in prev:
+        if not (preitem in current):
+            unsubscribe_voyageplan(preitem)
+            shutil.copyfile('export/request.subs', 'import/request.subs')
+    for curitem in current:
+        if not (curitem in prev):
+            subscribe_voyageplan(curitem)
+            shutil.copyfile('export/request.subs', 'import/request.subs')
+
+'''
+POST voyagePlans method
+'''
+def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = callbackurl, uvid = None, name = '', routeName = ''):
+    headers = {
+        'Content-Type': 'text/xml'
+    }
+    parameters = {
+    }
+    if not (deliveryAckEndPoint is None):
+        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+    if not (callbackEndpoint is None):
+        parameters['callbackEndpoint'] = callbackEndpoint
+    sub='/voyagePlans'
+    try:
+        status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain, timeout = 15)
+    except requests.exceptions.Timeout:
+        status = requests.Response
+        status.text = "Timeout"
+    log_event('sent ' + routeName, name=name, status = st(status))
+    return status
 
 def upload_monitored(subscriber):
     '''
@@ -462,6 +385,29 @@ def upload_monitored(subscriber):
     servicetype, url, name = get_service_url(subscriber)
     if servicetype == 'VIS':
         fname = 'export/monitored.uvid'
+        if os.path.exists(fname):
+            with open(fname, 'r') as f:
+                data = json.loads(f.read())
+                routeFile = 'export/' + data['route']
+                if os.path.exists(routeFile):
+                    with open(routeFile) as f:
+                        route = f.read()
+                        tree = ET.parse(routeFile)
+                        root = tree.getroot()
+                        routeInfo = root.find('{http://www.cirm.org/RTZ/1/1}routeInfo')
+                        if not (routeInfo is None):
+                            routeName = routeInfo.get('routeName')
+                        else:
+                            routeName = data['route']
+                        post_voyageplan(url, route, uvid=data['uvid'], name=name, routeName=routeName)
+
+def upload_alternate(subscriber):
+    '''
+    Upload alternate route to subscriber
+    '''
+    servicetype, url, name = get_service_url(subscriber)
+    if servicetype == 'VIS':
+        fname = 'export/alternate.uvid'
         if os.path.exists(fname):
             with open(fname, 'r') as f:
                 data = json.loads(f.read())
@@ -490,41 +436,6 @@ def upload_monitored_to_all():
         if os.path.isfile('export/monitored.uvid'):
             shutil.copyfile('export/monitored.uvid', 'import/monitored.sent')
 
-def upload_alternate(subscriber):
-    '''
-    Upload alternate route to subscriber
-    '''
-    servicetype, url, name = get_service_url(subscriber)
-    if servicetype == 'VIS':
-        fname = 'export/alternate.uvid'
-        if os.path.exists(fname):
-            with open(fname, 'r') as f:
-                data = json.loads(f.read())
-                routeFile = 'export/' + data['route']
-                if os.path.exists(routeFile):
-                    with open(routeFile) as f:
-                        route = f.read()
-                        tree = ET.parse(routeFile)
-                        root = tree.getroot()
-                        routeInfo = root.find('{http://www.cirm.org/RTZ/1/1}routeInfo')
-                        if not (routeInfo is None):
-                            routeName = routeInfo.get('routeName')
-                        else:
-                            routeName = data['route']
-                        post_voyageplan(url, route, uvid=data['uvid'], name=name, routeName=routeName)
-
-def upload_alternate_to_all():
-    '''
-    Upload alternate to all subscribers
-    '''
-    if os.path.isfile('export/alternate.subs'):
-        with open('export/alternate.subs') as f:
-            subs = json.loads(f.read())
-        for sub in subs:
-            upload_monitored(sub)
-        if os.path.isfile('export/alternate.uvid'):
-            shutil.copyfile('export/alternate.uvid', 'import/alternate.sent')
-
 def upload_alternate_to_all():
     '''
     Upload alternate to all subscribers
@@ -535,29 +446,70 @@ def upload_alternate_to_all():
             with open(fname) as f:
                 subs = json.loads(f.read())
             for sub in subs:
-                upload_alternate(sub['url'])
+                upload_alternate(sub)
         shutil.copyfile('export/alternate.uvid', 'import/alternate.sent')
 
-def upload_subscriptions_to_all():
-    prev = []
-    fname = 'import/request.subs'
-    if os.path.isfile(fname):
-        with open(fname) as f:
-            prev = json.loads(f.read())
-    current = []
-    fname = 'export/request.subs'
-    if os.path.isfile(fname):
-        with open(fname) as f:
-            current = json.loads(f.read())
-    for preitem in prev:
-        if not (preitem in current):
-            unsubscribe_all(preitem)
-            shutil.copyfile('export/request.subs', 'import/request.subs')
-    for curitem in current:
-        if not (curitem in prev):
-            subscribe_all(curitem)
-            shutil.copyfile('export/request.subs', 'import/request.subs')
+'''
+POST area method
+'''
+def post_area(url, area, deliveryAckEndPoint = None, name = None, areaName = 'area'):
+    headers = {
+        'Content-Type': 'text/xml'
+    }
+    sub='/area'
+    parameters = {
+    }
+    if not (deliveryAckEndPoint is None):
+        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+    status = requests.post(url + sub, data=area.encode('utf-8'), headers=headers, cert=vis_cert, verify=trustchain)
+    log_event('sent ' + areaName, name=name, status = st(status))
+    return status
 
+def upload_area(to, msg):
+    servicetype, url, name = get_service_url(to)
+    if servicetype == 'VIS':
+        post_area(url, msg, name = name)
+
+'''
+POST textMessage method
+'''
+def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'text'):
+    headers = {
+        'Content-Type': 'text/xml'
+    }
+    sub='/textMessage'
+    parameters = {
+    }
+    if not (deliveryAckEndPoint is None):
+        parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+    try:
+        status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, verify=trustchain, timeout = 15)
+    except Timeout as e:
+        print(e)
+        status = requests.Response
+        status.text = "Timeout"
+        status.status_code = 500
+    except SSLError as e:
+        print(e)
+        status = requests.Response
+        status.text = "SSLError"
+        status.status_code = 500
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
+    log_event('post_text', url=url, ack=deliveryAckEndPoint, status=st(status))
+    return status
+
+def upload_text(to, msg):
+    servicetype, url, name = get_service_url(to)
+    if servicetype == 'VIS':
+        post_text(url, msg, name = name)
+
+'''
+POST acknowledgement method
+'''
 def post_ack(data):
     servicetype, url, name = get_service_url(data['fromId'])
     if url == 'None':
@@ -602,50 +554,46 @@ def post_ack(data):
     except ValueError:
         status = requests.Response
         response.text = 'Fail'
-    log_event('sent ack', name=name, status = status.text)
+    log_event('sent ack', name=name, status = st(status))
 
-def search(query, params = None):
-    url="https://sr-staging.maritimecloud.net"
-    sub='/api/_search/serviceInstance'
-    headers={
-        'Accept' : 'application/json'
-    }
-    parameters={
-        'query' : query,
-        'size' : 1000
-    }
-    if params is None:
-        return requests.get(url + sub, headers=headers, params=parameters)
-    else:
-        if not (query is None):
-            params['query'] = query;
-        return requests.get(url + sub, headers=headers, params=params)
-
-def searchgeometry(query = None, params = None):
-    url="https://sr-staging.maritimecloud.net"
-    sub='/api/_searchGeometryWKT/serviceInstance'
-    headers={
-        'Accept' : 'application/json'
-    }
-    parameters={
-        'query' : query,
-        'size' : 1000
-    }
-    if params is None:
-        return requests.get(url + sub, headers=headers, params=parameters)
-    else:
-        if not (query is None):
-            params['query'] = query;
-        return requests.get(url + sub, headers=headers, params=params)
-
-def sendpcm(body):
-    url="https://sandbox-2.portcdm.eu:8443"
-    sub='/amss/state-update'
+'''
+POST PortCDM locationState method
+'''
+def post_pcm(url, msg, name=None, subj = None):
+    sub='/amss/state_update'
     headers={
         'Content-Type' : 'application/xml'
     }
-    return requests.post(url + sub, headers=headers, data=body, cert=vis_cert, verify=trustchain)
+    status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert, verify=trustchain)
+    log_event('sent ' + subj, name=name, status = st(status))
+    return status
 
+def upload_pcm(to, msg):
+    servicetype, url, name = get_service_url(to)
+    if servicetype == 'PortCDM':
+        fname = 'export/' + msg
+        with open(fname) as f:
+            text = f.read()
+            tree = ET.parse(fname)
+            root = tree.getroot()
+            locationState = root.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationState')
+            if not (locationState is None):
+                timeval = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}time')
+                subj = timeval.text
+                arrivalLocation = locationState.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}arrivalLocation')
+                if not (arrivalLocation is None):
+                    to = arrivalLocation.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}to')
+                    if not (to is None):
+                        locationType = to.find('{urn:x-mrn:stm:schema:port-call-message:0.0.16}locationType')
+                        subj = subj + ' ' + locationType.text
+            else:
+                subj = None
+        post_pcm(url, text, name = name, subj = subj)
+        shutil.copyfile(fname, 'import/portcdm.sent')
+
+'''
+Define PortCDM message queue filter to only receive material for my vessel
+'''
 pcmfilter='''[
   {
     "type": "VESSEL",
@@ -653,9 +601,15 @@ pcmfilter='''[
   }
 ]'''
 
+'''
+Define PortCDM message queue to capture everythin at the port
+'''
 pcmnofilter='''[
 ]'''
 
+'''
+Create message queue in a specified STM Port
+'''
 def createpcmqueue(instanceId, fil = pcmfilter):
     servicetype, url, name = get_service_url(instanceId)
     if servicetype == 'PortCDM':
@@ -706,31 +660,9 @@ def createpcmqueue(instanceId, fil = pcmfilter):
     status.status_code = 500
     return status
             
-
-def pollpcmqueue(instanceId):
-    servicetype, url, name = get_service_url(instanceId)
-    if servicetype == 'PortCDM':
-        fname = 'import/queue.dat'
-        if os.path.isfile(fname):
-            with open(fname) as f:
-                queue = json.loads(f.read())
-                for srv in queue:
-                    if srv['instanceId'] == instanceId:
-                        queueId = srv['queueId']
-                        if portcdm_version == '0.0.16':
-                            sub='/mqs_legacy/mb/mqs/' + queueId
-                        else:
-                            sub='/mb/mqs/' + queueId
-                        headers={
-                            'Accept' : 'application/json',
-                            'Content-Type' : 'application/json'
-                        }
-                        return requests.get(url + sub, headers=headers, cert=vis_cert, verify=trustchain)
-    res = requests.Response
-    res.status_code = 500
-    res.text = ""
-    return res
-
+'''
+Create message queues for all STM Ports
+'''
 def createallqueues():
     fname = 'import/ports.dat'
     if os.path.isfile(fname):
@@ -739,7 +671,11 @@ def createallqueues():
             for srv in queue:
                 createpcmqueue(srv['instanceId'])
 
+'''
+Parse a PortCDM message
+'''
 def parse_portcdm(msg):
+    body = ''
     if 'reportedAt' in msg:
         reportedAt = msg['reportedAt']
         messageId = msg['messageId']
@@ -808,7 +744,51 @@ def parse_portcdm(msg):
                     body = body + totyp
             with open('import/' + messageId + '.msg', 'w') as f:
                 f.write(body)
+    return body
 
+'''
+Poll for messages on a STM Port
+'''
+def pollpcmqueue(instanceId):
+    servicetype, url, name = get_service_url(instanceId)
+    if servicetype == 'PortCDM':
+        fname = 'import/queue.dat'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                queue = json.loads(f.read())
+                for srv in queue:
+                    if srv['instanceId'] == instanceId:
+                        queueId = srv['queueId']
+                        if portcdm_version == '0.0.16':
+                            sub='/mqs_legacy/mb/mqs/' + queueId
+                        else:
+                            sub='/mb/mqs/' + queueId
+                        headers={
+                            'Accept' : 'application/json',
+                            'Content-Type' : 'application/json'
+                        }
+                        res = requests.get(url + sub, headers=headers, cert=vis_cert, verify=trustchain)
+                        if not (res is None):
+                            if (res.status_code == 200) and (res.text != 'ConnectionError'):
+                                try:
+                                    msgs = json.loads(res.text)
+                                    for msg in msgs:
+                                        messageId = msg['messageId']
+                                        body = parse_portcdm(msg)
+                                        log_event('msg ' + body, name=name, status = st(res))
+                                        with open('import/' + messageId + '.uvid', 'w') as f:
+                                            f.write(json.dumps(msg))
+                                except:
+                                    pass
+                        return res
+    res = requests.Response
+    res.status_code = 500
+    res.text = ""
+    return res
+
+'''
+Poll messages on all STM Port message queues
+'''
 def pollallqueues():
     fname = 'import/queue.dat'
     if os.path.isfile(fname):
@@ -827,6 +807,46 @@ def pollallqueues():
                                     f.write(json.dumps(msg))
                         except:
                             fname = 'import/queue.dat'
+
+'''
+Search Service Registry method
+'''
+def search(query, params = None):
+    url="https://sr-staging.maritimecloud.net"
+    sub='/api/_search/serviceInstance'
+    headers={
+        'Accept' : 'application/json'
+    }
+    parameters={
+        'query' : query,
+        'size' : 1000
+    }
+    if params is None:
+        return requests.get(url + sub, headers=headers, params=parameters)
+    else:
+        if not (query is None):
+            params['query'] = query;
+        return requests.get(url + sub, headers=headers, params=params)
+
+'''
+Search Service Registry by geometry method
+'''
+def searchgeometry(query = None, params = None):
+    url="https://sr-staging.maritimecloud.net"
+    sub='/api/_searchGeometryWKT/serviceInstance'
+    headers={
+        'Accept' : 'application/json'
+    }
+    parameters={
+        'query' : query,
+        'size' : 1000
+    }
+    if params is None:
+        return requests.get(url + sub, headers=headers, params=parameters)
+    else:
+        if not (query is None):
+            params['query'] = query;
+        return requests.get(url + sub, headers=headers, params=params)
 
 def vessel_connects():
     '''
