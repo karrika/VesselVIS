@@ -83,7 +83,7 @@ if len(conffile) > 0:
 callbackurl=conf['host'] + ':' + str(conf['stmport'])
 
 def st(status):
-    return str(st.status_code) + " " + st.text
+    return str(status.status_code) + " " + status.text
 
 def reportrow(sheet, row, col, state = True, reason = ''):
     if state:
