@@ -69,6 +69,7 @@ trustchain=str(vis_trust[0])
 
 url="https://localhost:8001"
 vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
+vis2_name='VIS-2'
 
 p = Path('.')
 conffile = list(p.glob('**/target.conf'))
@@ -77,6 +78,7 @@ if len(conffile) > 0:
         data = json.loads(f.read())
         url = data['endpointUri']
         vis2_uvid = data['instanceId']
+        vis2_name = data['name']
 
 callbackurl=conf['host'] + ':' + str(conf['stmport'])
 
@@ -513,6 +515,8 @@ POST acknowledgement method
 def post_ack(data):
     servicetype, url, name = get_service_url(data['fromId'])
     if url == 'None':
+        status = requests.Response
+        response.text = 'No url'
         return
     payload = collections.OrderedDict()
     
@@ -555,6 +559,7 @@ def post_ack(data):
         status = requests.Response
         response.text = 'Fail'
     log_event('sent ack', name=name, status = st(status))
+    return status
 
 '''
 POST PortCDM locationState method
