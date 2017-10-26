@@ -516,7 +516,8 @@ def post_ack(data):
     servicetype, url, name = get_service_url(data['fromId'])
     if url == 'None':
         status = requests.Response
-        response.text = 'No url'
+        status.text = 'No url'
+        status.status_code = 400
         return
     payload = collections.OrderedDict()
     
