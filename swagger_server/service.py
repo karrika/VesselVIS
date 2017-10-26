@@ -118,6 +118,9 @@ def log_event(eventname, name = None, callback = None, uvid = None, routeStatus 
         data['routeStatus'] = routeStatus
     if not (status is None):
         data['status'] = status.replace('"','').replace('{','').replace('}','')
+        if len(data['status']) > 80:
+            tmp = data['status']
+            data['status'] = tmp[0:79]
     with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
