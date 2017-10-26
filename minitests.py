@@ -14,7 +14,7 @@ import sys
 import json
 import uuid
 from pathlib import Path
-from testVIS import hostsettings
+from swagger_server import service
 
 voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <!--route node-->
@@ -585,16 +585,12 @@ textmessage='''<?xml version="1.0" encoding="utf-8"?>
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd">
   <textMessageId>urn:mrn:stm:txt:furuno:20170510104400-7</textMessageId>
-  <informationObjectReferenceId>urn:mrn:stm:voyage:id:furuno:19700101000000-2-Barcelona-Gothenborg</informationObjectReferenceId>
-  <informationObjectReferenceType>RTZ</informationObjectReferenceType>
-  <validityPeriodStart>2017-05-01T01:00:00Z</validityPeriodStart>
-  <validityPeriodStop>2017-06-10T01:00:00Z</validityPeriodStop>
   <author>urn:mrn:stm:user:sma:mikolo</author>
   <from>urn:mrn:stm:org:sma</from>
   <serviceType>SHIP-VIS</serviceType>
-  <createdAt>2017-05-10T01:00:00Z</createdAt>
-  <subject>Test message</subject>
-  <body>Just testing the ack stuff</body>
+  <createdAt>2017-10-21T01:00:00Z</createdAt>
+  <subject>Medea</subject>
+  <body>Testing msg from Medea</body>
 </textMessage>
 '''
 
@@ -654,6 +650,16 @@ area='''<?xml version="1.0" encoding="UTF-8"?>
 </S124:DataSet>
 '''
 
+ackmsg = {
+  "endpoint": service.url,
+  "id": "urn:mrn:s124:NW.SE.local.100.17.P",
+  "fromName": service.vis2_name,
+  "fromId": service.vis2_uvid,
+  "time": "2017-10-24T06:08:44Z",
+  "toId": service.conf['id'],
+  "toName": service.conf['name']
+}
+
 pcmdata1='''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <portCallMessage xmlns="urn:x-mrn:stm:schema:port-call-message:0.0.16">
    <vesselId>urn:x-mrn:stm:vessel:IMO:8016550</vesselId>
@@ -684,68 +690,67 @@ pcmfilter='''[
 pcmnofilter='''[
 ]'''
 
-url=hostsettings.url
-ackurl='https://stm.furuno.fi:8000'
-vis_cert=hostsettings.vis_cert
-trustchain=hostsettings.trustchain
+url=service.url
+ackurl=service.callbackurl
+vis_cert=service.vis_cert
+trustchain=service.trustchain
 print('Endpoint: ', url)
 print()
 
-#print('POST voyageplan')
-#response=hostsettings.post_voyageplan(url, voyageplan)
-#response=hostsettings.post_voyageplan(url, voyageplan.encode('utf-8'), callbackEndpoint = ackurl, deliveryAckEndPoint = ackurl)
-#print(response.text)
-#print('POST textmessage')
-#response=hostsettings.post_text(url, textmessage, ackurl)
-#print(response.status_code, response.text)
-#print('POST area message')
-#response=hostsettings.post_area(url, area.encode('utf-8'), ackurl)
-#print(response.text)
-#print('GET voyage plans')
-#response=hostsettings.get_voyageplan(url)
-#print(response.status_code, response.text)
-#print()
-#print('SUBSCRIBE voyage plans')
-#response=hostsettings.subscribe_voyageplan(url, ackurl)
-#print(response.status_code, response.text)
-#print()
-#print('UNSUBSCRIBE voyage plans')
-#response=hostsettings.unsubscribe_voyageplan(url, ackurl)
-#print(response.text)
-#print()
-#print('POST acknowledgement')
-#response=hostsettings.send_ack(url)
-#print(response.text)
-#print()
+print('POST voyageplan')
+response=service.post_voyageplan(url, voyageplan, callbackEndpoint = ackurl, deliveryAckEndPoint = ackurl)
+print(response.status_code, response.text)
+print('POST textmessage')
+response=service.post_text(url, textmessage, ackurl)
+print(response.status_code, response.text)
+print('POST area message')
+response=service.post_area(url, area, ackurl)
+print(response.status_code, response.text)
+print('GET voyage plans')
+response=service.get_voyageplan(url)
+print(response.status_code, response.text)
+print()
+print('SUBSCRIBE voyage plans')
+response=service.subscribe_voyageplan(service.vis2_uvid)
+print(response.status_code, response.text)
+print()
+print('UNSUBSCRIBE voyage plans')
+response=service.unsubscribe_voyageplan(service.vis2_uvid)
+print(response.status_code, response.text)
+print()
+print('POST acknowledgement')
+response=service.post_ack(ackmsg)
+print(response.status_code, response.text)
+print()
 #print('POST PCM message')
 #msg=pcmdata1 + str(uuid.uuid4()) + pcmdata2
 #print(msg)
-#response=hostsettings.sendpcm(msg)
-#print(response.text)
+#response=service.sendpcm(msg)
+#print(response.status_code, response.text)
 
 
 #print('PortCDM create queue')
-#response=hostsettings.createpcmqueue(pcmnofilter)
-#print(response.text)
+#response=service.createpcmqueue(pcmnofilter)
+#print(response.status_code, response.text)
 #with open('pcmqueue.dat','w') as f:
 #    f.write(response.text)
 #print()
 
-#print(hostsettings.createpcmmsg(TTAmsg))
+#print(service.createpcmmsg(TTAmsg))
 
 #print('POST PCM message')
-#response=hostsettings.sendpcm(pcmoldmsg)
-#print(response.text)
+#response=service.sendpcm(pcmoldmsg)
+#print(response.status_code, response.text)
 #print()
 
-print('POST PCM message')
-response=hostsettings.sendpcm(pcmnewmsg)
-print(response.text)
-print()
+#print('POST PCM message')
+#response=service.sendpcm(pcmnewmsg)
+#print(response.status_code, response.text)
+#print()
 
 #print('PortCDM poll queue')
 #with open('pcmqueue.dat') as f:
 #    guid=f.read()
-#response=hostsettings.pollpcmqueue(guid)
-#print(response.text)
+#response=service.pollpcmqueue(guid)
+#print(response.status_code, response.text)
 

@@ -2,8 +2,6 @@
 
 SERVICE=$1
 
-cd testVIS
-rm hostsettings.py
-ln -s $1_hostsettings.py hostsettings.py
-cd ..
+rm -f target.conf
+ln -s $1 target.conf
 python3 minitests.py
