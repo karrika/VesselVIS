@@ -43,6 +43,7 @@ if len(conffile) > 0:
         data = json.loads(f.read())
         conf['host'] = data['host']
         conf['port'] = data['port']
+        conf['stmhost'] = data['stmhost']
         conf['stmport'] = data['stmport']
         conf['id'] = data['id']
         length = len(data['id'])
@@ -80,7 +81,7 @@ if len(conffile) > 0:
         vis2_uvid = data['instanceId']
         vis2_name = data['name']
 
-callbackurl=conf['host'] + ':' + str(conf['stmport'])
+callbackurl=conf['stmhost'] + ':' + str(conf['stmport'])
 
 def st(status):
     return str(status.status_code) + " " + status.text
@@ -376,10 +377,11 @@ def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoin
         parameters['callbackEndpoint'] = callbackEndpoint
     sub='/voyagePlans'
     try:
-        status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain, timeout = 15)
-    except requests.exceptions.Timeout:
+        status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain, timeout = 30)
+    except Timeout:
         status = requests.Response
         status.text = "Timeout"
+        status.status_code = 400
     log_event('sent ' + routeName, name=name, status = st(status))
     return status
 
