@@ -98,6 +98,9 @@ def reportrow(sheet, row, col, state = True, reason = ''):
     with open('../create_worksheet.py', 'a') as f:
         f.write(report)
 
+def skip_trustchain(url):
+    return False
+
 def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
@@ -261,7 +264,10 @@ def get_voyageplan(url, uvid = None, routeStatus = None, name = None):
     if not (routeStatus is None):
         parameters['routeStatus'] = routeStatus
     try:
-        status = requests.get(url + sub, params = parameters, cert=vis_cert, verify=trustchain, timeout = 15)
+        if skip_trustchain(url):
+            status = requests.get(url + sub, params = parameters, cert=vis_cert, timeout = 15)
+        else:
+            status = requests.get(url + sub, params = parameters, cert=vis_cert, verify=trustchain, timeout = 15)
     except Timeout as e:
         print(e)
         status = requests.Response
@@ -289,14 +295,20 @@ def post_subscription(url, callback, uvid = None, name = None):
         parameters={
             'callbackEndpoint': callback
         }
-        status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        if skip_trustchain(url):
+            status = requests.post(url + sub, params=parameters, cert=vis_cert)
+        else:
+            status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
         log_event('subscribe', name=name, status = st(status))
         return status
     parameters={
         'callbackEndpoint': callback,
         'uvid': uvid
     }
-    status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    if skip_trustchain(url):
+        status = requests.post(url + sub, params=parameters, cert=vis_cert)
+    else:
+        status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
     log_event('subscribe', name=name, status = st(status))
     return status
 
@@ -313,7 +325,10 @@ def get_subscriptions(url, callback, name=None):
     parameters={
         'callbackEndpoint': callback
     }
-    status = requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    if skip_trustchain(url):
+        status = requests.get(url + sub, params=parameters, cert=vis_cert)
+    else:
+        status = requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
     log_event('subscriptions', name=name, status = st(status))
     return status
 
@@ -326,14 +341,20 @@ def delete_subscription(url, callback, uvid = None, name = None):
         parameters={
             'callbackEndpoint': callback
         }
-        status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        if skip_trustchain(url):
+            status = requests.delete(url + sub, params=parameters, cert=vis_cert)
+        else:
+            status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
         log_event('unsubscribe', name=name, status = st(status))
         return status
     parameters={
         'callbackEndpoint': callback,
         'uvid': uvid
     }
-    status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    if skip_trustchain(url):
+        status = requests.delete(url + sub, params=parameters, cert=vis_cert)
+    else:
+        status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
     log_event('unsubscribe', name=name, status = st(status))
     return status
 
@@ -377,7 +398,10 @@ def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoin
         parameters['callbackEndpoint'] = callbackEndpoint
     sub='/voyagePlans'
     try:
-        status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain, timeout = 30)
+        if skip_trustchain(url):
+            status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, timeout = 30)
+        else:
+            status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain, timeout = 30)
     except Timeout:
         status = requests.Response
         status.text = "Timeout"
@@ -468,7 +492,10 @@ def post_area(url, area, deliveryAckEndPoint = None, name = None, areaName = 'ar
     }
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-    status = requests.post(url + sub, data=area.encode('utf-8'), headers=headers, cert=vis_cert, verify=trustchain)
+    if skip_trustchain(url):
+        status = requests.post(url + sub, data=area.encode('utf-8'), headers=headers, cert=vis_cert)
+    else:
+        status = requests.post(url + sub, data=area.encode('utf-8'), headers=headers, cert=vis_cert, verify=trustchain)
     log_event('sent ' + areaName, name=name, status = st(status))
     return status
 
@@ -490,7 +517,10 @@ def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'te
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
     try:
-        status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, verify=trustchain, timeout = 15)
+        if skip_trustchain(url):
+            status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, timeout = 15)
+        else:
+            status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, verify=trustchain, timeout = 15)
     except Timeout as e:
         print(e)
         status = requests.Response
@@ -560,7 +590,10 @@ def post_ack(data):
         payload['ackResult'] = 'OK'
     sub='/acknowledgement'
     try:
-        status=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
+        if skip_trustchain(url):
+            status=requests.post(url + sub, json=payload, cert=vis_cert)
+        else:
+            status=requests.post(url + sub, json=payload, cert=vis_cert, verify=trustchain)
     except ValueError:
         status = requests.Response
         response.text = 'Fail'
@@ -575,7 +608,10 @@ def post_pcm(url, msg, name=None, subj = None):
     headers={
         'Content-Type' : 'application/xml'
     }
-    status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert, verify=trustchain)
+    if skip_trustchain(url):
+        status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert)
+    else:
+        status = requests.post(url + sub, headers=headers, data=msg, cert=vis_cert, verify=trustchain)
     log_event('sent ' + subj, name=name, status = st(status))
     return status
 
@@ -633,7 +669,10 @@ def createpcmqueue(instanceId, fil = pcmfilter):
             'Content-Type' : 'application/json'
         }
         try:
-            status = requests.post(url + sub, headers=headers, data=fil, cert=vis_cert, verify=trustchain, timeout = 15)
+            if skip_trustchain(url):
+                status = requests.post(url + sub, headers=headers, data=fil, cert=vis_cert, timeout = 15)
+            else:
+                status = requests.post(url + sub, headers=headers, data=fil, cert=vis_cert, verify=trustchain, timeout = 15)
         except Timeout as e:
             print(e)
             status = requests.Response
@@ -778,7 +817,10 @@ def pollpcmqueue(instanceId):
                             'Accept' : 'application/json',
                             'Content-Type' : 'application/json'
                         }
-                        res = requests.get(url + sub, headers=headers, cert=vis_cert, verify=trustchain)
+                        if skip_trustchain(url):
+                            res = requests.get(url + sub, headers=headers, cert=vis_cert)
+                        else:
+                            res = requests.get(url + sub, headers=headers, cert=vis_cert, verify=trustchain)
                         if not (res is None):
                             if (res.status_code == 200) and (res.text != 'ConnectionError'):
                                 try:
@@ -823,7 +865,7 @@ def pollallqueues():
 Search Service Registry method
 '''
 def search(query, params = None):
-    url="https://sr-staging.maritimecloud.net"
+    url="https://sr.maritimecloud.net"
     sub='/api/_search/serviceInstance'
     headers={
         'Accept' : 'application/json'
@@ -843,7 +885,7 @@ def search(query, params = None):
 Search Service Registry by geometry method
 '''
 def searchgeometry(query = None, params = None):
-    url="https://sr-staging.maritimecloud.net"
+    url="https://sr.maritimecloud.net"
     sub='/api/_searchGeometryWKT/serviceInstance'
     headers={
         'Accept' : 'application/json'
