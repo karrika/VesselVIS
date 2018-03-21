@@ -26,6 +26,7 @@ for item in sorted(data, key=methodcaller('get', 'name', None)):
         shore_data['name'] = item['name']
         shore_data['endpointUri'] = item['endpointUri'].rstrip('/')
         shore_data['instanceId'] = item['instanceId']
+        shore_data['status'] = item['status']
         shore_set.append(shore_data)
         all_data.append(shore_data)
         print('VTS', item['name'])
@@ -56,6 +57,7 @@ for item in sorted(data, key=methodcaller('get', 'name', None)):
         shore_data['name'] = item['name']
         shore_data['endpointUri'] = item['endpointUri'].rstrip('/')
         shore_data['instanceId'] = item['instanceId']
+        shore_data['status'] = item['status']
         shore_set.append(shore_data)
         if not ('instanceId' in all_data):
             all_data.append(item)
@@ -76,6 +78,7 @@ for item in sorted(data, key=methodcaller('get', 'name', None)):
         vessels_data['mmsi'] = item['mmsi']
         vessels_data['endpointUri'] = item['endpointUri'].rstrip('/')
         vessels_data['instanceId'] = item['instanceId']
+        vessels_data['status'] = item['status']
         vessels_set.append(vessels_data)
         if not ('instanceId' in all_data):
             all_data.append(item)
@@ -94,6 +97,7 @@ for item in sorted(data, key=methodcaller('get', 'unlocode', None)):
         ports_data['unlocode'] = item['unlocode']
         ports_data['endpointUri'] = item['endpointUri'].rstrip('/')
         ports_data['instanceId'] = item['instanceId']
+        ports_data['status'] = item['status']
         ports_set.append(ports_data)
         item['name'] = item['unlocode']
         all_data.append(item)
