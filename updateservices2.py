@@ -33,11 +33,28 @@ for item in dataold:
         data.remove(item)
 ''' Check the set of new or unvalid services '''
 for srv in data:
-    ret = service.get_voyageplan(srv['endpointUri'])
-    if (ret.status_code == 500) and (ret.text == 'SSLError'):
-        print(srv['name'])
-    else:
+    if srv['name'] == 'DMI Route METOC service':
         dataold.append(srv)
+    else:
+        ret = service.get_voyageplan(srv['endpointUri'])
+        if (ret.status_code == 500) and (ret.text == 'SSLError'):
+            print(srv['name'])
+        else:
+            dataold.append(srv)
+''' Sort the list alphabetically '''
+mapping_set = []
+for item in sorted(dataold, key=methodcaller('get', 'name', None)):
+    if 'status' in item:
+        if item['status'] != 'released':
+            print(item['name'])
+        else:
+            mapping_data=collections.OrderedDict()
+            mapping_data['name'] = item['name']
+            mapping_data['endpointUri'] = item['endpointUri'].rstrip('/')
+            mapping_data['instanceId'] = item['instanceId']
+            mapping_set.append(mapping_data)
+    else:
+        print(item)
 ''' Save the modified set of valid services '''
 with open(fname,'w') as f:
-    f.write(json.dumps(dataold))
+    f.write(json.dumps(mapping_set))
