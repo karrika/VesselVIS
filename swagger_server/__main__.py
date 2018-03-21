@@ -11,7 +11,10 @@ from threading import Thread
 from . import service
 
 p = Path('.')
-print(service.conf)
+if service.staging:
+    print('Staging', service.conf)
+else:
+    print('Production', service.conf)
 vis_cert = list(p.glob('**/Certificate_*.pem'))
 if len(vis_cert) == 0:
     print('Error: no Certificate_*.pem found')

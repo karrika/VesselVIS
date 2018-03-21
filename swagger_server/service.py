@@ -26,6 +26,7 @@ import xml.etree.ElementTree as ET
 from lxml import etree
 
 simulate_vessel = False
+staging = False
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -52,6 +53,8 @@ if len(conffile) > 0:
         conf['open_to_all'] = data['open_to_all']
         conf['simulate_vessel'] = data['simulate_vessel']
         simulate_vessel = data['simulate_vessel']
+        if 'staging' in data:
+            staging = True
 vis_cert = list(p.glob('**/Certificate_*.pem'))
 if len(vis_cert) == 0:
     print('Error: no Certificate_*.pem found')
@@ -61,12 +64,11 @@ else:
 vis_key = list(p.glob('**/PrivateKey_*.pem'))
 if len(vis_key) == 0:
     print('Error: no PrivateKey_*.pem found')
-vis_trust = list(p.glob('**/mc-ca-chain.pem'))
-if len(vis_trust) == 0:
-    print('Error: no mc-ca-chain.pem found')
-
 vis_cert=(str(vis_cert[0]), str(vis_key[0]))
-trustchain=str(vis_trust[0])
+if staging:
+    trustchain = '/usr/share/ca-certificates/MCstaging/mc-ca-chain.pem'
+else:
+    trustchain = '/usr/share/ca-certificates/MCproduction/mc-ca-chain.pem'
 
 url="https://localhost:8001"
 vis2_uvid='urn:mrn:stm:service:instance:furuno:vis2'
@@ -98,7 +100,14 @@ def reportrow(sheet, row, col, state = True, reason = ''):
     with open('../create_worksheet.py', 'a') as f:
         f.write(report)
 
+'''
+Skip trustchain check for Microsoft Azure servers
+Due to Transas that refuse to use certificates properly
+and STM that does not enforce proper security
+'''
 def skip_trustchain(url):
+    if 'azure' in url:
+        return True
     return False
 
 def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None):
@@ -865,7 +874,10 @@ def pollallqueues():
 Search Service Registry method
 '''
 def search(query, params = None):
-    url="https://sr.maritimecloud.net"
+    if staging:
+        url="https://sr-staging.maritimecloud.net"
+    else:
+        url="https://sr.maritimecloud.net"
     sub='/api/_search/serviceInstance'
     headers={
         'Accept' : 'application/json'
@@ -885,7 +897,10 @@ def search(query, params = None):
 Search Service Registry by geometry method
 '''
 def searchgeometry(query = None, params = None):
-    url="https://sr.maritimecloud.net"
+    if staging:
+        url="https://sr-staging.maritimecloud.net"
+    else:
+        url="https://sr.maritimecloud.net"
     sub='/api/_searchGeometryWKT/serviceInstance'
     headers={
         'Accept' : 'application/json'
