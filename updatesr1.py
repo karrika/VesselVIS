@@ -19,26 +19,39 @@ ret=service.search(None, params=parameters)
 data=json.loads(ret.text)
 shore_set = []
 for item in sorted(data, key=methodcaller('get', 'name', None)):
-    if item['status'] == 'noprovisional':
-        print('Provisional: ', item['name'])
+    if item['status'] != 'released':
+        pass
     else:
         shore_data=collections.OrderedDict()
         shore_data['name'] = item['name']
         shore_data['endpointUri'] = item['endpointUri'].rstrip('/')
         shore_data['instanceId'] = item['instanceId']
         shore_set.append(shore_data)
-        all_data.append(item)
+        all_data.append(shore_data)
         print('VTS', item['name'])
 with open('import/vtsnew.dat','w') as f:
     f.write(json.dumps(shore_set))
 
 ret=service.search('designID="urn:mrn:stm:service:design:sma:vis-rest-2.2" -VTS -SHIP')
 data=json.loads(ret.text)
-shore_set = []
+dmi_service_inserted = False
 for item in sorted(data, key=methodcaller('get', 'name', None)):
-    if item['status'] == 'noprovisional':
-        print('Provisional: ', item['name'])
+    if item['status'] != 'released':
+        pass
     else:
+        if not dmi_service_inserted:
+            if item['name'] > 'DMI Route METOC service':
+                dmi_service_inserted = True
+                shore_set = []
+                shore_data=collections.OrderedDict()
+                shore_data['name'] = 'DMI Route METOC service'
+                shore_data['endpointUri'] = 'http://sejlrute.dmi.dk/SejlRute/SR'
+                shore_data['instanceId'] = 'urn:mrn:mcl:service:instance:dmi:METOC_SejlRute-service'
+                shore_data['keywords'] = 'DMI, metocean, forecasts, prognoses, currents, waves, wind, sea-ice'
+                shore_data['status'] = 'released'
+                shore_set.append(shore_data)
+                all_data.append(shore_data)
+                print('Services', shore_data['name'], 'keywords:', shore_data['keywords'])
         shore_data=collections.OrderedDict()
         shore_data['name'] = item['name']
         shore_data['endpointUri'] = item['endpointUri'].rstrip('/')
@@ -54,8 +67,8 @@ ret=service.search('designID="urn:mrn:stm:service:design:sma:vis-rest-2.2" +SHIP
 data=json.loads(ret.text)
 vessels_set = []
 for item in sorted(data, key=methodcaller('get', 'name', None)):
-    if item['status'] == 'noprovisional':
-        print('Provisional: ', item['name'])
+    if item['status'] != 'released':
+        pass
     else:
         vessels_data=collections.OrderedDict()
         vessels_data['name'] = item['name']
@@ -74,8 +87,8 @@ ret=service.search('designID="urn:mrn:stm:service:design:viktoria:amss"')
 data=json.loads(ret.text)
 ports_set = []
 for item in sorted(data, key=methodcaller('get', 'unlocode', None)):
-    if item['status'] == 'noprovisional':
-        print('Provisional: ', item['name'])
+    if item['status'] != 'released':
+        pass
     else:
         ports_data=collections.OrderedDict()
         ports_data['unlocode'] = item['unlocode']
@@ -90,8 +103,8 @@ with open('import/portsnew.dat','w') as f:
 
 mapping_set = []
 for item in sorted(all_data, key=methodcaller('get', 'name', None)):
-    if item['status'] == 'noprovisional':
-        print('Provisional: ', item['name'])
+    if item['status'] != 'released':
+        print(item['name'])
     else:
         mapping_data=collections.OrderedDict()
         mapping_data['name'] = item['name']
