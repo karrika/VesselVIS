@@ -108,6 +108,8 @@ and STM that does not enforce proper security
 def skip_trustchain(url):
     if 'azure' in url:
         return True
+    if 'transas' in url:
+        return True
     return False
 
 def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None):
