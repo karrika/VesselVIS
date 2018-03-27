@@ -24,6 +24,7 @@ import time
 from subprocess import call
 import xml.etree.ElementTree as ET
 from lxml import etree
+from io import BytesIO
 
 simulate_vessel = False
 staging = False
@@ -49,6 +50,7 @@ if len(conffile) > 0:
         conf['id'] = data['id']
         length = len(data['id'])
         conf['imo'] = data['id'][length-7:length]
+        conf['mmsi'] = data['mmsi']
         conf['name'] = data['name']
         conf['open_to_all'] = data['open_to_all']
         conf['simulate_vessel'] = data['simulate_vessel']
@@ -254,7 +256,10 @@ def get_service_url(instanceId):
             data=json.loads(f.read())
             for item in data:
                 if item['instanceId'] == instanceId:
-                    return ('VIS', item['endpointUri'], item['name'])
+                    if instanceId == 'urn:mrn:mcl:service:instance:dmi:METOC_SejlRute-service':
+                        return ('MCL', item['endpointUri'], item['name'])
+                    else:
+                        return ('VIS', item['endpointUri'], item['name'])
     if os.path.exists('import/vessels.dat'):
         with open('import/vessels.dat') as f:
             data=json.loads(f.read())
@@ -442,6 +447,23 @@ def upload_monitored(subscriber):
                         else:
                             routeName = data['route']
                         post_voyageplan(url, route, uvid=data['uvid'], name=name, routeName=routeName)
+    if servicetype == 'MCL':
+        fname = 'export/monitored.uvid'
+        if os.path.exists(fname):
+            with open(fname, 'r') as f:
+                data = json.loads(f.read())
+                routeFile = 'export/' + data['route']
+                if os.path.exists(routeFile):
+                    with open(routeFile) as f:
+                        route = f.read()
+                        tree = ET.parse(routeFile)
+                        root = tree.getroot()
+                        routeInfo = root.find('{http://www.cirm.org/RTZ/1/1}routeInfo')
+                        if not (routeInfo is None):
+                            routeName = routeInfo.get('routeName')
+                        else:
+                            routeName = data['route']
+                        post_dmi(url, route, uvid=data['uvid'], name=name, routeName=routeName)
 
 def upload_alternate(subscriber):
     '''
@@ -465,6 +487,23 @@ def upload_alternate(subscriber):
                         else:
                             routeName = data['route']
                         post_voyageplan(url, route, uvid=data['uvid'], name=name, routeName=routeName)
+    if servicetype == 'MCL':
+        fname = 'export/alternate.uvid'
+        if os.path.exists(fname):
+            with open(fname, 'r') as f:
+                data = json.loads(f.read())
+                routeFile = 'export/' + data['route']
+                if os.path.exists(routeFile):
+                    with open(routeFile) as f:
+                        route = f.read()
+                        tree = ET.parse(routeFile)
+                        root = tree.getroot()
+                        routeInfo = root.find('{http://www.cirm.org/RTZ/1/1}routeInfo')
+                        if not (routeInfo is None):
+                            routeName = routeInfo.get('routeName')
+                        else:
+                            routeName = data['route']
+                        post_dmi(url, route, uvid=data['uvid'], name=name, routeName=routeName)
 
 def upload_monitored_to_all():
     '''
@@ -609,6 +648,197 @@ def post_ack(data):
         status = requests.Response
         response.text = 'Fail'
     log_event('sent ack', name=name, status = st(status))
+    return status
+
+'''
+Extract waypoints and schedules
+'''
+def extract_waypoints(route):
+    wps = []
+    calculated = []
+    tree = ET.parse(BytesIO(route.encode('utf-8')))
+    root = tree.getroot()
+    tag = root.tag[0:len(root.tag)-5]
+    routeInfo = root.find(tag + 'routeInfo')
+    if routeInfo:
+        routeuvid = routeInfo.get('vesselVoyage')
+    schedules = root.find(tag + 'schedules')
+    if schedules:
+        schedule = schedules.find(tag + 'schedule')
+        if schedule:
+            calculated = schedule.find(tag + 'calculated')
+    waypoints = root.find(tag + 'waypoints')
+    if waypoints:
+        for wp in waypoints:
+            a = wp.attrib
+            if 'id' in a:
+                wpnr = a['id']
+                eta = ''
+                pos = wp[0]
+                for el in calculated:
+                    if el.attrib['waypointId'] == wpnr:
+                        if 'eta' in el.attrib:
+                            eta = el.attrib['eta']
+                        if 'etd' in el.attrib:
+                            eta = el.attrib['etd']
+                etalen = len(eta)
+                eta = eta[0:etalen-1] + '.000+0000'
+                wps.append({'eta': eta, 'lat': float(pos.attrib['lat']), 'lon': float(pos.attrib['lon']), 'heading': 'RL'})
+    return wps
+
+'''
+POST forecast text messages
+'''
+def post_meteo_textmessage(forecast, i):
+    routeReferenceId='urn:mrn:stm:voyage:id:furuno:19700101000000-2-Barcelona-Gothenborg'
+    validStart='2018-03-21T01:00:00Z'
+    validStop='2018-04-01T01:00:00Z'
+    createTime='2018-03-21T11:00:00Z'
+    if 'time' in forecast:
+        createTime = forecast['time']
+    if not ('wind-dir' in forecast):
+        return
+    if not ('wind-speed' in forecast):
+        return
+    textMessageId='urn:mrn:stm:txt:dmi:' + createTime + ':' + str(i)
+    userId='urn:mrn:mcl:service:instance:dmi:METOC_SejlRute-service'
+    fromId='urn:mrn:mcl:service:instance:dmi:METOC_SejlRute-service'
+    subject='Metoc forecast'
+    if 'lat' in forecast:
+        lat = str(round(forecast['lat'],5))
+    if 'lon' in forecast:
+        lon = str(round(forecast['lon'],5))
+    textmessage='''<?xml version="1.0" encoding="utf-8"?>
+<textMessage
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd">
+  <textMessageId>''' + textMessageId + '''</textMessageId>
+  <informationObjectReferenceId>''' + routeReferenceId + '''</informationObjectReferenceId>
+  <informationObjectReferenceType>RTZ</informationObjectReferenceType>
+  <validityPeriodStart>''' + validStart + '''</validityPeriodStart>
+  <validityPeriodStop>''' + validStop + '''</validityPeriodStop>
+  <from>''' + fromId + '''</from>
+  <serviceType>SHIP-VIS</serviceType>
+  <createdAt>''' + createTime + '''</createdAt>
+  <subject>''' + subject + '''</subject>
+  <metoc/>
+  <wind_direction>''' + str(round(forecast['wind-dir']['forecast'],1)) + '''</wind_direction>
+  <wind_speed>''' + str(round(forecast['wind-speed']['forecast'],1)) + '''</wind_speed>
+  <body>
+'''
+    if 'time' in forecast:
+        line = '    time ' + str(forecast['time'])
+        textmessage = textmessage + line + '\n'
+    if 'wind-dir' in forecast or 'wind-speed' in forecast:
+        line = '    wind '
+        if 'wind-dir' in forecast:
+            line = line + str(round(forecast['wind-dir']['forecast'],1)) + ' degrees '
+        if 'wind-speed' in forecast:
+            line = line + str(round(forecast['wind-speed']['forecast'],1)) + ' m/s'
+        textmessage = textmessage + line + '\n'
+    if 'temperature' in forecast:
+        line = '    temperature' + str(round(forecast['temperature']['forecast'],1)) + ' degC'
+        textmessage = textmessage + line + '\n'
+    if 'current-dir' in forecast or 'current-speed' in forecast:
+        line = '    current '
+        if 'current-dir' in forecast:
+            line = line + str(round(forecast['current-dir']['forecast'],1)) + ' degrees '
+        if 'current-speed' in forecast:
+            line = line + str(round(forecast['current-speed']['forecast'] * 3600 / 1852,1)) + ' kts'
+        textmessage = textmessage + line + '\n'
+    if 'wave-dir' in forecast or 'wave-height' in forecast or 'wave-period' in forecast:
+        line = '    wave '
+        if 'wave-dir' in forecast:
+            line = line + str(round(forecast['wave-dir']['forecast'],1)) + ' degrees '
+        if 'wave-height' in forecast:
+            line = line + str(round(forecast['wave-height']['forecast'],1)) + ' m '
+        if 'wave-period' in forecast:
+            line = line + str(round(forecast['wave-period']['forecast'],1)) + ' s'
+        textmessage = textmessage + line + '\n'
+    if 'sealevel' in forecast:
+        line = '    sealevel ' + str(round(forecast['sealevel']['forecast'],1)) + ' m'
+        textmessage = textmessage + line + '\n'
+    if 'sea-temperature' in forecast:
+        line = '    sea-temperature ' + str(round(forecast['sealevel']['forecast'],1)) + ' degC'
+        textmessage = textmessage + line + '\n'
+    if 'salinity' in forecast:
+        line = '    salinity ' + str(round(forecast['salinity']['forecast'],1)) + ' g/kg'
+        textmessage = textmessage + line + '\n'
+    if 'sea-ice-thickness' in forecast:
+        line = '    sea-ice-thickness ' + str(round(forecast['sea-ice-thickness']['forecast'],1)) + ' m'
+        textmessage = textmessage + line + '\n'
+    if 'sea-ice-cover' in forecast:
+        line = '    sea-ice-cover ' + str(round(forecast['sea-ice-cover']['forecast'],1)) + ' fraction: 0-1'
+        textmessage = textmessage + line + '\n'
+    if 'sea-ice-drift-dir' in forecast or 'sea-ice-drift-speed' in forecast:
+        line = '    sea-ice-drift '
+        if 'sea-ice-drift-dir' in forecast:
+            line = line + str(round(forecast['sea-ice-drift-dir']['forecast'],1)) + ' degrees '
+        if 'sea-ice-drift-speed' in forecast:
+            line = line + str(round(forecast['sea-ice-drift-speed']['forecast'],1)) + ' m/s'
+        textmessage = textmessage + line + '\n'
+    textmessage = textmessage + '''  </body>
+  <position lat="''' + lat + '" lon="' + lon + '''"/>
+</textMessage>
+''' 
+    fname = 'import/' + textMessageId + '.xml'
+    with open(fname, 'w') as f:
+        f.write(textmessage)
+    data = {
+        "msg": textMessageId + '.xml',
+        "from": fromId,
+        "uvid": textMessageId,
+        "subject": "Metoc forecast",
+        "body": "Metoc forecast",
+        "graphics": True
+    }
+    fname = 'import/' + textMessageId + '.uvid'
+    with open(fname, 'w') as f:
+        f.write(json.dumps(data))
+
+
+'''
+POST meteorological query
+'''
+def post_dmi(url='http://sejlrute.dmi.dk/SejlRute/SR', route=None, uvid='', name='', routeName=''):
+    headers={
+        'Accept' : 'application/json',
+        'Content-Type' : 'application/json'
+    }
+    wps = [
+    {
+      "heading":"GC",
+      "lat":60.163433,
+      "eta":"2018-03-27T12:00:00.000+0000",
+      "lon":24.708550},
+    {
+      "eta":"2018-03-27T13:41:00.000+0000",
+      "heading":"GC",
+      "lat":59.794683,
+      "lon":24.523083},
+    {
+      "eta":"2018-03-27T21:48:00.000+0000",
+      "heading":"RL",
+      "lat":59.498433,
+      "lon":20.900950}
+        ]
+    wps = extract_waypoints(route)
+    payload = collections.OrderedDict()
+    payload['mssi'] = conf['mmsi']
+    payload['datatypes'] = ["sealevel","current","wave","wind","sea-ice","sea-ice-drift","sea-temperature","salinity","temperature"]
+    payload['dt'] = 180
+    payload['waypoints'] = wps
+    parameters={
+        'req' : json.dumps(payload)
+    }
+    print(parameters)
+    status = requests.post(url, params=parameters)
+    #if status.textdata = json.loads(msg)
+    #if 'metocForecast' in data:
+    #    metocForecast = data['metocForecast']
+    #    if 'forecasts' in metocForecast:
+    #        forecasts = metocForecast['forecasts']
+    #        for forecast in forecasts:
     return status
 
 '''
