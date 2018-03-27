@@ -697,6 +697,7 @@ def post_meteo_textmessage(forecast, i, validStart, validStop):
     createTime=validStart
     if 'time' in forecast:
         createTime = forecast['time']
+    createTime = createTime[:16]
     if not ('wind-dir' in forecast):
         return
     if not ('wind-speed' in forecast):
@@ -704,7 +705,7 @@ def post_meteo_textmessage(forecast, i, validStart, validStop):
     textMessageId='urn:mrn:stm:txt:dmi:' + createTime + ':' + str(i)
     userId='urn:mrn:mcl:service:instance:dmi:METOC_SejlRute-service'
     fromId='urn:mrn:mcl:service:instance:dmi:METOC_SejlRute-service'
-    subject=createTime[:16]
+    subject=createTime
     if 'lat' in forecast:
         lat = str(round(forecast['lat'],5))
     if 'lon' in forecast:
@@ -728,8 +729,9 @@ def post_meteo_textmessage(forecast, i, validStart, validStop):
   <wind_speed>''' + str(round(forecast['wind-speed']['forecast'],1)) + '''</wind_speed>
   <body>
 '''
+    minibody = ''
     if 'time' in forecast:
-        line = '    time ' + str(forecast['time'])
+        line = '    time ' + createTime
         textmessage = textmessage + line + '\n'
     if 'wind-dir' in forecast or 'wind-speed' in forecast:
         line = '    wind '
@@ -737,6 +739,7 @@ def post_meteo_textmessage(forecast, i, validStart, validStop):
             line = line + str(round(forecast['wind-dir']['forecast'],1)) + ' degrees '
         if 'wind-speed' in forecast:
             line = line + str(round(forecast['wind-speed']['forecast'],1)) + ' m/s'
+        minibody = textmessage + line
         textmessage = textmessage + line + '\n'
     if 'temperature' in forecast:
         line = '    temperature' + str(round(forecast['temperature']['forecast'],1)) + ' degC'
@@ -790,8 +793,8 @@ def post_meteo_textmessage(forecast, i, validStart, validStop):
         "msg": textMessageId + '.xml',
         "from": fromId,
         "uvid": textMessageId,
-        "subject": "Metoc forecast",
-        "body": "Metoc forecast",
+        "subject": subject,
+        "body": minibody,
         "graphics": True
     }
     fname = 'import/' + textMessageId + '.uvid'
@@ -828,7 +831,7 @@ def post_dmi(url='http://sejlrute.dmi.dk/SejlRute/SR', route=None, uvid='', name
     payload = collections.OrderedDict()
     payload['mssi'] = conf['mmsi']
     payload['datatypes'] = ["sealevel","current","wave","wind","sea-ice","sea-ice-drift","sea-temperature","salinity","temperature"]
-    payload['dt'] = 180
+    payload['dt'] = 360
     payload['waypoints'] = wps
     parameters={
         'req' : json.dumps(payload)
