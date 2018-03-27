@@ -687,13 +687,13 @@ def extract_waypoints(route):
                 etalen = len(eta)
                 eta = eta[0:etalen-1] + '.000+0000'
                 wps.append({'eta': eta, 'lat': float(pos.attrib['lat']), 'lon': float(pos.attrib['lon']), 'heading': 'RL'})
-    return wps
+    return routeuvid, wps
 
 '''
 POST forecast text messages
 '''
-def post_meteo_textmessage(forecast, i, validStart, validStop):
-    routeReferenceId='urn:mrn:stm:voyage:id:furuno:19700101000000-2-Barcelona-Gothenborg'
+def post_meteo_textmessage(forecast, i, validStart, validStop, routeuvid):
+    routeReferenceId=routeuvid
     createTime=validStart
     if 'time' in forecast:
         createTime = forecast['time']
@@ -721,14 +721,13 @@ def post_meteo_textmessage(forecast, i, validStart, validStop):
   <validityPeriodStop>''' + validStop + '''</validityPeriodStop>
   <author>DMI</author>
   <from>''' + fromId + '''</from>
-  <serviceType>SHIP-VIS</serviceType>
+  <serviceType>SHORE-MCL</serviceType>
   <createdAt>''' + createTime + '''</createdAt>
   <subject>''' + subject + '''</subject>
   <metoc/>
   <wind_direction>''' + str(round(forecast['wind-dir']['forecast'],1)) + '''</wind_direction>
   <wind_speed>''' + str(round(forecast['wind-speed']['forecast'],1)) + '''</wind_speed>
-  <body>
-'''
+  <body>'''
     minibody = ''
     if 'time' in forecast:
         line = '    time ' + createTime
@@ -742,7 +741,7 @@ def post_meteo_textmessage(forecast, i, validStart, validStop):
         minibody = textmessage + line
         textmessage = textmessage + line + '\n'
     if 'temperature' in forecast:
-        line = '    temperature' + str(round(forecast['temperature']['forecast'],1)) + ' degC'
+        line = '    temperature ' + str(round(forecast['temperature']['forecast'],1)) + ' degC'
         textmessage = textmessage + line + '\n'
     if 'current-dir' in forecast or 'current-speed' in forecast:
         line = '    current '
@@ -827,7 +826,7 @@ def post_dmi(url='http://sejlrute.dmi.dk/SejlRute/SR', route=None, uvid='', name
       "lat":59.498433,
       "lon":20.900950}
         ]
-    wps = extract_waypoints(route)
+    routeuvid, wps = extract_waypoints(route)
     payload = collections.OrderedDict()
     payload['mssi'] = conf['mmsi']
     payload['datatypes'] = ["sealevel","current","wave","wind","sea-ice","sea-ice-drift","sea-temperature","salinity","temperature"]
@@ -852,7 +851,7 @@ def post_dmi(url='http://sejlrute.dmi.dk/SejlRute/SR', route=None, uvid='', name
                     timelast = str(forecast['time'])
                 i = 1
                 for forecast in forecasts:
-                    post_meteo_textmessage(forecast, i, timefirst[:16], timelast[:16])
+                    post_meteo_textmessage(forecast, i, timefirst[:16], timelast[:16], routeuvid)
                     i = i+1
     return status
 
