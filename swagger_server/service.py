@@ -656,7 +656,10 @@ Extract waypoints and schedules
 def extract_waypoints(route):
     wps = []
     calculated = []
-    tree = ET.parse(BytesIO(route.encode('utf-8')))
+    bytestream = BytesIO(route.encode('utf-8'))
+    bytestream.readline()
+    bytestream.readline()
+    tree = ET.parse(bytestream)
     root = tree.getroot()
     tag = root.tag[0:len(root.tag)-5]
     routeInfo = root.find(tag + 'routeInfo')
