@@ -692,11 +692,9 @@ def extract_waypoints(route):
 '''
 POST forecast text messages
 '''
-def post_meteo_textmessage(forecast, i):
+def post_meteo_textmessage(forecast, i, validStart, validStop):
     routeReferenceId='urn:mrn:stm:voyage:id:furuno:19700101000000-2-Barcelona-Gothenborg'
-    validStart='2018-03-21T01:00:00Z'
-    validStop='2018-04-01T01:00:00Z'
-    createTime='2018-03-21T11:00:00Z'
+    createTime=validStart
     if 'time' in forecast:
         createTime = forecast['time']
     if not ('wind-dir' in forecast):
@@ -706,7 +704,7 @@ def post_meteo_textmessage(forecast, i):
     textMessageId='urn:mrn:stm:txt:dmi:' + createTime + ':' + str(i)
     userId='urn:mrn:mcl:service:instance:dmi:METOC_SejlRute-service'
     fromId='urn:mrn:mcl:service:instance:dmi:METOC_SejlRute-service'
-    subject='Metoc forecast'
+    subject=createTime[:16]
     if 'lat' in forecast:
         lat = str(round(forecast['lat'],5))
     if 'lon' in forecast:
@@ -720,6 +718,7 @@ def post_meteo_textmessage(forecast, i):
   <informationObjectReferenceType>RTZ</informationObjectReferenceType>
   <validityPeriodStart>''' + validStart + '''</validityPeriodStart>
   <validityPeriodStop>''' + validStop + '''</validityPeriodStop>
+  <author>DMI</author>
   <from>''' + fromId + '''</from>
   <serviceType>SHIP-VIS</serviceType>
   <createdAt>''' + createTime + '''</createdAt>
@@ -834,14 +833,24 @@ def post_dmi(url='http://sejlrute.dmi.dk/SejlRute/SR', route=None, uvid='', name
     parameters={
         'req' : json.dumps(payload)
     }
-    print(parameters)
     status = requests.post(url, params=parameters)
-    #if status.textdata = json.loads(msg)
-    #if 'metocForecast' in data:
-    #    metocForecast = data['metocForecast']
-    #    if 'forecasts' in metocForecast:
-    #        forecasts = metocForecast['forecasts']
-    #        for forecast in forecasts:
+    if status.status_code == 200:
+        data = json.loads(status.text)
+        if 'metocForecast' in data:
+            metocForecast = data['metocForecast']
+            if 'forecasts' in metocForecast:
+                forecasts = metocForecast['forecasts']
+                timefirst = ''
+                timelast = ''
+                i = 0
+                for forecast in forecasts:
+                    if i == 0:
+                        timefirst = str(forecast['time'])
+                    timelast = str(forecast['time'])
+                i = 1
+                for forecast in forecasts:
+                    post_meteo_textmessage(forecast, i, timefirst[:16], timelast[:16])
+                    i = i+1
     return status
 
 '''
