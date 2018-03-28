@@ -853,19 +853,20 @@ def post_dmi(url='http://sejlrute.dmi.dk/SejlRute/SR', route=None, uvid='', name
         data = json.loads(status.text)
         if 'metocForecast' in data:
             metocForecast = data['metocForecast']
-            if 'forecasts' in metocForecast:
-                forecasts = metocForecast['forecasts']
-                timefirst = ''
-                timelast = ''
-                i = 0
-                for forecast in forecasts:
-                    if i == 0:
-                        timefirst = str(forecast['time'])
-                    timelast = str(forecast['time'])
-                i = 1
-                for forecast in forecasts:
-                    post_meteo_textmessage(forecast, i, timefirst[:16], timelast[:16], routeuvid)
-                    i = i+1
+            if metocForecast:
+                if 'forecasts' in metocForecast:
+                    forecasts = metocForecast['forecasts']
+                    timefirst = ''
+                    timelast = ''
+                    i = 0
+                    for forecast in forecasts:
+                        if i == 0:
+                            timefirst = str(forecast['time'])
+                        timelast = str(forecast['time'])
+                    i = 1
+                    for forecast in forecasts:
+                        post_meteo_textmessage(forecast, i, timefirst[:16], timelast[:16], routeuvid)
+                        i = i+1
     return status
 
 '''
@@ -1175,6 +1176,8 @@ def searchgeometry(query = None, params = None):
             params['query'] = query;
         return requests.get(url + sub, headers=headers, params=params)
 
+usepcm = False
+
 def vessel_connects():
     '''
     Check the possible new subsciptions and handle it if is allowed in acl.
@@ -1345,26 +1348,29 @@ def vessel_connects():
     '''
     Check for PortCDM messages to be sent.
     '''
-    p = Path('export')
-    uvids = list(p.glob('**/urn:x-mrn:stm:portcdm:message:*.uvid'))
-    if len(uvids) > 0:
-        for item in uvids:
-            if os.path.isfile('import/portcdm.sent'):
-                if os.path.getmtime(str(item)) > os.path.getmtime('import/portcdm.sent'):
+    if usepcm:
+        p = Path('export')
+        uvids = list(p.glob('**/urn:x-mrn:stm:portcdm:message:*.uvid'))
+        if len(uvids) > 0:
+            for item in uvids:
+                if os.path.isfile('import/portcdm.sent'):
+                    if os.path.getmtime(str(item)) > os.path.getmtime('import/portcdm.sent'):
+                        with item.open() as f:
+                            data = json.loads(f.read())
+                            upload_pcm(data['to'], data['msg'])
+                else:
                     with item.open() as f:
                         data = json.loads(f.read())
-                        upload_pcm(data['to'], data['msg'])
-            else:
-                with item.open() as f:
-                    data = json.loads(f.read())
-                    upload_pcm(data['to'], data['msg'])
+                    u    pload_pcm(data['to'], data['msg'])
     '''
     Check for PortCDM messages to be received.
     '''
-    pollallqueues()
+    if usepcm:
+        pollallqueues()
 
 def service():
-    createallqueues()
+    if usepcm:
+        createallqueues()
     while True:
         time.sleep(20)
         vessel_connects()
