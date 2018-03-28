@@ -1361,7 +1361,7 @@ def vessel_connects():
                 else:
                     with item.open() as f:
                         data = json.loads(f.read())
-                    u    pload_pcm(data['to'], data['msg'])
+                        upload_pcm(data['to'], data['msg'])
     '''
     Check for PortCDM messages to be received.
     '''
