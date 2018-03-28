@@ -114,6 +114,19 @@ def skip_trustchain(url):
         return True
     return False
 
+'''
+Check that the partner to talk with is in the service registry
+For staging we allow anything, for production it needs to be in all.dat
+'''
+def released(id):
+    fname = 'import/all.dat'
+    with open(fname) as f:
+        data = json.loads(f.read())
+    for item in data:
+        if item['instanceId'] == id:
+            return True
+    return False
+
 def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
@@ -179,7 +192,7 @@ Generic ACL methods for testing only
 The acl will also follow the subscriptions
 '''
 def rm_acl(id = None):
-    if simulated_vessel:
+    if simulate_vessel:
         fname = 'export/all.acl'
         if os.path.isfile(fname):
             if id is None:
@@ -193,7 +206,7 @@ def rm_acl(id = None):
                             g.write(acl)
 
 def add_acl(id):
-    if simulated_vessel:
+    if simulate_vessel:
         fname = 'export/all.acl'
         acl = []
         if os.path.isfile(fname):
@@ -208,7 +221,7 @@ def add_acl(id):
 Alternate route methods for testing only
 '''
 def rm_alternate():
-    if simulated_vessel:
+    if simulate_vessel:
         fname = 'export/alternate.uvid'
         if os.path.isfile(fname):
             with open(fname) as f:
@@ -223,7 +236,7 @@ def rm_alternate():
 Monitored route methods for testing only
 '''
 def rm_monitored():
-    if simulated_vessel:
+    if simulate_vessel:
         fname = 'export/monitored.uvid'
         if os.path.isfile(fname):
             with open(fname) as f:

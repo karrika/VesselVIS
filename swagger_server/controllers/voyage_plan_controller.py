@@ -89,6 +89,9 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
     if not check_acl():
         return 'Forbidden', 403
 
+    if not service.released(client_mrn()):
+        return 'We only talk with released services', 403
+
     subsl = []
     fname = 'export/monitored.subs'
     if os.path.isfile(fname):
@@ -120,6 +123,9 @@ def get_voyage_plans(uvid=None, routeStatus=None):
     """
     if not check_acl():
         return 'Forbidden', 403
+
+    if not service.released(client_mrn()):
+        return 'We only talk with released services', 403
 
     vps = []
     fname = 'export/monitored.uvid'
@@ -181,6 +187,9 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     """
     if not check_acl():
         return 'Forbidden', 403
+
+    if not service.released(client_mrn()):
+        return 'We only talk with released services', 403
 
     fname = 'export/monitored.subs'
     if os.path.isfile(fname):
@@ -264,6 +273,9 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     if not check_acl():
         return 'Forbidden', 403
 
+    if not service.released(client_mrn()):
+        return 'We only talk with released services', 403
+
     subs1 = []
     fname = 'export/monitored.subs'
     if os.path.isfile(fname):
@@ -313,6 +325,9 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
     :rtype: None
     """
+    if not service.released(client_mrn()):
+        return 'We only talk with released services', 403
+
     uvid='parse:from:rtz'
     f = open('import/' + uvid + '.rtz', 'wb')
     f.write(voyagePlan)

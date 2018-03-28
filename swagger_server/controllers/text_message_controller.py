@@ -42,6 +42,9 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
     :rtype: None
     """
+    if not service.released(client_mrn()):
+        return 'We only talk with released services', 403
+
     with open('import/parse.txt', 'wb') as f:
         f.write(textMessageObject)
     try:

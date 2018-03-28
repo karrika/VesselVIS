@@ -41,6 +41,9 @@ def acknowledgement(deliveryAck):
     if connexion.request.is_json:
         deliveryAck = DeliveryAck.from_dict(connexion.request.get_json())
     """
+    if not service.released(client_mrn()):
+        return 'We only talk with released services', 403
+
     with open('stm/ackmsg.txt', 'w') as f:
         f.write(json.dumps(deliveryAck))
     """
