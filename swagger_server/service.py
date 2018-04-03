@@ -435,6 +435,10 @@ def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoin
         status = requests.Response
         status.text = "Timeout"
         status.status_code = 400
+    except ConnectionError:
+        status = requests.Response
+        status.text = "No route to host"
+        status.status_code = 400
     log_event('sent ' + routeName, name=name, status = st(status))
     return status
 
