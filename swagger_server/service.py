@@ -681,6 +681,7 @@ def post_ack(data):
     else:
         payload['ackResult'] = 'OK'
     sub='/acknowledgement'
+    evtype = 1
     try:
         if skip_trustchain(url):
             status=requests.post(url + sub, json=payload, cert=vis_cert)
@@ -689,7 +690,8 @@ def post_ack(data):
     except ValueError:
         status = requests.Response
         response.text = 'Fail'
-    log_event('sent ack', name=name, status = st(status))
+        evtype = 4
+    log_event('sent ack', name=name, status = st(status), client = data['fromId'], eventNumber = 14, eventType = evtype, eventDataType = 8)
     return status
 
 '''
