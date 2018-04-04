@@ -36,6 +36,7 @@ with open('import/vtsnew.dat','w') as f:
 ret=service.search('designID="urn:mrn:stm:service:design:sma:vis-rest-2.2" -VTS -SHIP')
 data=json.loads(ret.text)
 dmi_service_inserted = False
+shore_set = []
 for item in sorted(data, key=methodcaller('get', 'name', None)):
     if item['status'] != 'released':
         pass
@@ -43,7 +44,6 @@ for item in sorted(data, key=methodcaller('get', 'name', None)):
         if not dmi_service_inserted:
             if item['name'] > 'DMI Route METOC service':
                 dmi_service_inserted = True
-                shore_set = []
                 shore_data=collections.OrderedDict()
                 shore_data['name'] = 'DMI Route METOC service'
                 shore_data['endpointUri'] = 'http://sejlrute.dmi.dk/SejlRute/SR'
