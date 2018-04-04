@@ -43,6 +43,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     :rtype: None
     """
     if not service.released(client_mrn()):
+        service.log_event('TXT from not released service', client = client_mrn(), eventNumber = 5, eventType = 6, eventDataType = 2)
         return 'We only talk with released services', 403
 
     with open('import/parse.txt', 'wb') as f:
@@ -69,11 +70,13 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         if not result:
             txt.close()
             ret = str(txt13.xmlschema.error_log)
+            service.log_event('Error in TXT schema', client = client_mrn(), eventNumber = 5, eventType = 2, eventDataType = 2)
             return ret, 400
     except:
         result = False
     if not result:
         txt.close()
+        service.log_event('Error in TXT schema', client = client_mrn(), eventNumber = 5, eventType = 2, eventDataType = 2)
         return ret, 400
     tag='{http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd}'
     messageId = root.find(tag + 'textMessageId')
@@ -101,6 +104,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     with open('import/' + uvid + '.uvid', 'w') as f:
         f.write(json.dumps(data))
     servicetype, url, name = service.get_service_url(client_mrn())
+    evpar = ''
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
@@ -116,7 +120,8 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
         with open('import/' + messageId.text + '.ack', 'w') as f:
             f.write(json.dumps(data))
+        evpar = 'deliveryAckEndPoint:' + deliveryAckEndPoint
     
-    service.log_event('received ' + subject.text, name=body.text, status = name)
+    service.log_event('received ' + subject.text, name=body.text, status = name, client = client_mrn(), eventNumber = 5, eventType = 1, eventDataType = 2, eventParameters = evpar)
     return 'OK'
 

@@ -134,18 +134,18 @@ def log_stm_event(eventNumber, eventType, externalOrgId, externalEntityId, event
     data['UID'] = str(uuid.uuid4())
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     data['serviceInstanceId'] = conf['id']
-    data['eventNumber'] = 0
-    data['eventType'] = 0
-    data['externalOrgId'] = ''
-    data['externalEntityId'] = ''
-    data['eventParameters'] = ''
-    data['eventDataType'] = ''
-    data['eventData'] = ''
-    with open('stm.log', 'a') as f:
+    data['eventNumber'] = eventNumber
+    data['eventType'] = eventType
+    data['externalOrgId'] = externalOrgId
+    data['externalEntityId'] = externalEntityId
+    data['eventParameters'] = eventParameters
+    data['eventDataType'] = eventDataType
+    data['eventData'] = eventData
+    with open(str(data['time'])[0:10] + '.log', 'a') as f:
         spamwriter = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow([ data['UID'], data['time'], data['serviceInstanceId'], data['eventNumber'], data['eventType'], data['externalOrgId'], data['externalEntityId'], data['eventParameters'], data['eventDataType'], data['eventData'] ])
 
-def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None, eventNumber = '', eventType = '', externalOrgId = '', externalEntityId = '', eventParameters = '', eventDataType = '', eventData = '' ):
+def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None, eventNumber = '', eventType = '', externalOrgId = '', eventParameters = '', eventDataType = '', eventData = '' ):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     if not (eventname is None):
@@ -172,7 +172,7 @@ def log_event(eventname, name = None, callback = None, uvid = None, routeStatus 
     with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
-    log_stm_event(eventNumber, eventType, externalOrgId, externalEntityId, eventParameters, eventDataType, eventData)
+    log_stm_event(eventNumber, eventType, externalOrgId, client, eventParameters, eventDataType, eventData)
 
 def check_event(name, callback = None, uvid = None):
     with open('import/event.log', 'r') as f:
@@ -593,15 +593,18 @@ def upload_area(to, msg):
 '''
 POST textMessage method
 '''
-def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'text'):
+def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'text', client = conf['id']):
     headers = {
         'Content-Type': 'text/xml'
     }
     sub='/textMessage'
     parameters = {
     }
+    evtype = 1
+    evpar = ''
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+        evpar = 'deliveryAckEndPoint:' + deliveryAckEndPoint
     try:
         if skip_trustchain(url):
             status = requests.post(url + sub, data=text.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, timeout = 15)
@@ -612,23 +615,26 @@ def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'te
         status = requests.Response
         status.text = "Timeout"
         status.status_code = 500
+        evtype = 4
     except SSLError as e:
         print(e)
         status = requests.Response
         status.text = "SSLError"
         status.status_code = 500
+        evtype = 6
     except ConnectionError as e:
         print(e)
         status = requests.Response
         status.text = "ConnectionError"
         status.status_code = 500
-    log_event('post_text', url=url, ack=deliveryAckEndPoint, status=st(status))
+        evtype = 4
+    log_event('post_text', url=url, ack=deliveryAckEndPoint, status=st(status), client = client, eventNumber = 6, eventType = evtype, eventDataType = 2, eventParameters = evpar)
     return status
 
 def upload_text(to, msg):
     servicetype, url, name = get_service_url(to)
     if servicetype == 'VIS':
-        post_text(url, msg, name = name)
+        post_text(url, msg, name = name, client = to)
 
 '''
 POST acknowledgement method
