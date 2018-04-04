@@ -25,6 +25,8 @@ from subprocess import call
 import xml.etree.ElementTree as ET
 from lxml import etree
 from io import BytesIO
+import uuid
+import csv
 
 simulate_vessel = False
 staging = False
@@ -127,7 +129,23 @@ def released(id):
             return True
     return False
 
-def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None):
+def log_stm_event(eventNumber, eventType, externalOrgId, externalEntityId, eventParameters, eventDataType, eventData):
+    data = collections.OrderedDict()
+    data['UID'] = str(uuid.uuid4())
+    data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    data['serviceInstanceId'] = conf['id']
+    data['eventNumber'] = 0
+    data['eventType'] = 0
+    data['externalOrgId'] = ''
+    data['externalEntityId'] = ''
+    data['eventParameters'] = ''
+    data['eventDataType'] = ''
+    data['eventData'] = ''
+    with open('stm.log', 'a') as f:
+        spamwriter = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        spamwriter.writerow([ data['UID'], data['time'], data['serviceInstanceId'], data['eventNumber'], data['eventType'], data['externalOrgId'], data['externalEntityId'], data['eventParameters'], data['eventDataType'], data['eventData'] ])
+
+def log_event(eventname, name = None, callback = None, uvid = None, routeStatus = None, ack = None, url = None, status = None, client = None, eventNumber = '', eventType = '', externalOrgId = '', externalEntityId = '', eventParameters = '', eventDataType = '', eventData = '' ):
     data = collections.OrderedDict()
     data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
     if not (eventname is None):
@@ -154,6 +172,7 @@ def log_event(eventname, name = None, callback = None, uvid = None, routeStatus 
     with open('import/event.log', 'a') as f:
         json.dump(data, f, ensure_ascii=True)
         f.write('\n')
+    log_stm_event(eventNumber, eventType, externalOrgId, externalEntityId, eventParameters, eventDataType, eventData)
 
 def check_event(name, callback = None, uvid = None):
     with open('import/event.log', 'r') as f:
