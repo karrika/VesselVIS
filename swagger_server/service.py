@@ -127,6 +127,8 @@ def released(id):
     for item in data:
         if item['instanceId'] == id:
             return True
+    if conf['open_to_all']:
+        return True
     return False
 
 def log_stm_event(eventNumber, eventType, externalOrgId, externalEntityId, eventParameters, eventDataType, eventData):
