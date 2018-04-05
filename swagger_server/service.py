@@ -311,8 +311,10 @@ def get_voyageplan(url, uvid = None, routeStatus = None, name = None, client = c
     evpar = ''
     if not (uvid is None):
         parameters['uvid'] = uvid
+        evpar = 'uvid:' + str(uvid)
     if not (routeStatus is None):
         parameters['routeStatus'] = routeStatus
+        evpar = evpar + ' routeStatus:' + str(routeStatus)
     try:
         if skip_trustchain(url):
             status = requests.get(url + sub, params = parameters, cert=vis_cert, timeout = 15)
@@ -323,17 +325,20 @@ def get_voyageplan(url, uvid = None, routeStatus = None, name = None, client = c
         status = requests.Response
         status.text = "Timeout"
         status.status_code = 500
+        evtype = 4
     except SSLError as e:
         print(e)
         status = requests.Response
         status.text = "SSLError"
         status.status_code = 500
+        evtype = 6
     except ConnectionError as e:
         print(e)
         status = requests.Response
         status.text = "ConnectionError"
         status.status_code = 500
-    log_event('voyageplan', name=name, status = st(status), url=url)
+        evtype = 4
+    log_event('voyageplan', url=url, name=name, uvid=uvid, routeStatus=routeStatus, status=st(status), client = client, eventNumber = 2, eventType = evtype, eventDataType = 1, eventParameters = evpar)
     return status
 
 '''
@@ -342,26 +347,65 @@ POST voyagePlans/subscription method
 def post_subscription(url, callback, uvid = None, name = None, client = conf['id']):
     sub='/voyagePlans/subscription'
     evtype = 1
-    evpar = ''
+    evpar = 'callbackEndpoint:' + str(callback)
     if uvid is None:
         parameters={
             'callbackEndpoint': callback
         }
-        if skip_trustchain(url):
-            status = requests.post(url + sub, params=parameters, cert=vis_cert)
-        else:
-            status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-        log_event('subscribe', name=name, status = st(status))
+        try:
+            if skip_trustchain(url):
+                status = requests.post(url + sub, params=parameters, cert=vis_cert)
+            else:
+                status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        except Timeout as e:
+            print(e)
+            status = requests.Response
+            status.text = "Timeout"
+            status.status_code = 500
+            evtype = 4
+        except SSLError as e:
+            print(e)
+            status = requests.Response
+            status.text = "SSLError"
+            status.status_code = 500
+            evtype = 6
+        except ConnectionError as e:
+            print(e)
+            status = requests.Response
+            status.text = "ConnectionError"
+            status.status_code = 500
+            evtype = 4
+        log_event('subscribe', url=url, name=name, status=st(status), client = client, eventNumber = 10, eventType = evtype, eventDataType = 1, eventParameters = evpar)
         return status
+    evpar = evpar + 'uvid:' + str(uvid)
     parameters={
         'callbackEndpoint': callback,
         'uvid': uvid
     }
-    if skip_trustchain(url):
-        status = requests.post(url + sub, params=parameters, cert=vis_cert)
-    else:
-        status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-    log_event('subscribe', name=name, status = st(status))
+    try:
+        if skip_trustchain(url):
+            status = requests.post(url + sub, params=parameters, cert=vis_cert)
+        else:
+            status = requests.post(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    except Timeout as e:
+        print(e)
+        status = requests.Response
+        status.text = "Timeout"
+        status.status_code = 500
+        evtype = 4
+    except SSLError as e:
+        print(e)
+        status = requests.Response
+        status.text = "SSLError"
+        status.status_code = 500
+        evtype = 6
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
+        evtype = 4
+    log_event('subscribe', url=url, name=name, uvid=uvid, status=st(status), client = client, eventNumber = 10, eventType = evtype, eventDataType = 1, eventParameters = evpar)
     return status
 
 def subscribe_voyageplan(instanceId):
@@ -375,15 +419,34 @@ GET voyagePlans/subscription method
 def get_subscriptions(url, callback, name=None, client = conf['id']):
     sub='/voyagePlans/subscription'
     evtype = 1
-    evpar = ''
+    evpar = 'callbackEndpoint:' + str(callback)
     parameters={
         'callbackEndpoint': callback
     }
-    if skip_trustchain(url):
-        status = requests.get(url + sub, params=parameters, cert=vis_cert)
-    else:
-        status = requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-    log_event('subscriptions', name=name, status = st(status))
+    try:
+        if skip_trustchain(url):
+            status = requests.get(url + sub, params=parameters, cert=vis_cert)
+        else:
+            status = requests.get(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    except Timeout as e:
+        print(e)
+        status = requests.Response
+        status.text = "Timeout"
+        status.status_code = 500
+        evtype = 4
+    except SSLError as e:
+        print(e)
+        status = requests.Response
+        status.text = "SSLError"
+        status.status_code = 500
+        evtype = 6
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
+        evtype = 4
+    log_event('subscriptions', url=url, name=name, status=st(status), client = client, eventNumber = 30, eventType = evtype, eventDataType = 1, eventParameters = evpar)
     return status
 
 '''

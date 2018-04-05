@@ -324,9 +324,9 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
 
     evpar = 'uvid:' + str(uvid) + ' callbackEndpoint:' + str(callbackEndpoint)
     if (len(subs1) == 0) and (len(subs2) == 0):
-        service.log_event('subscribe', client=mrn, callback=callbackEndpoint, uvid=uvid, eventNumber = 11, eventType = 1, eventDataType = 1, eventParameters = evpar)
+        service.log_event('subscribe', client=mrn, callback=callbackEndpoint, uvid=uvid, eventNumber = 9, eventType = 1, eventDataType = 1, eventParameters = evpar)
         return 'No voyage plans found', 404
-    service.log_event('subscribe', client=mrn, callback=callbackEndpoint, uvid=uvid, eventNumber = 11, eventType = 1, eventDataType = 1, eventParameters = evpar)
+    service.log_event('subscribe', client=mrn, callback=callbackEndpoint, uvid=uvid, eventNumber = 9, eventType = 1, eventDataType = 1, eventParameters = evpar)
     return 'OK'
 
 

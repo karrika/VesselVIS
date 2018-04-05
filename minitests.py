@@ -20,15 +20,11 @@ voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
 <!--route node-->
 <route version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stm="http://stmvalidation.eu/STM/1/0/0" xsi:schemaLocation="http://stmvalidation.eu/STM/1/0/0 stm_extensions.xsd" xmlns="http://www.cirm.org/RTZ/1/1">
   <!--routeInfo node-->
-  <routeInfo routeName="FROMFFOY" vesselName="FURUNO KOEAJO" vesselMMSI="230031001" vesselIMO="0000000" vesselVoyage="urn:mrn:stm:voyage:id:furuno:19700101000000-11-FROMFFOY" optimizationMethod="MAX speed">
+  <routeInfo vesselDisplacement="30089" routeName="BRH-GOT_SSPAoptimized" validityPeriodStart="2018-03-27T14:00:04Z" validityPeriodStop="2018-03-27T20:56:00Z" vesselName="Madame Butterfly" vesselMMSI="230031001" vesselIMO="7917551" vesselVoyage="urn:mrn:stm:voyage:id:Furuno:20180322102715-27-BRHGOT" optimizationMethod="MAX speed">
     <extensions>
-      <extension xsi:type="stm:RouteInfoExtension" manufacturer="STM" name="routeInfoEx" version="1.0.0" routeStatusEnum="7" depPort="SEGOT" arrPort="SEUME">
-        <stm:routeChanges>
-          <stm:historyItem dateTime="2017-08-23T06:46:20Z" author="Karri" reason="Space characters break uvid"/>
-        </stm:routeChanges>
-      </extension>
+      <extension xsi:type="stm:RouteInfoExtension" manufacturer="STM" name="routeInfoEx" version="1.0.0" routeStatusEnum="8" depPort="DEBRH" arrPort="SEGOT"/>
       <extension manufacturer="Furuno" name="AdditionalRouteInfo" version="1.0">
-        <property income="0" channelLimitMode="0" safetyContour="30" ukcLimit="30.000000"/>
+        <property income="0" channelLimitMode="0" safetyContour="10" ukcLimit="30.000000"/>
       </extension>
     </extensions>
   </routeInfo>
@@ -36,81 +32,168 @@ voyageplan='''<?xml version="1.0" encoding="UTF-8"?>
   <waypoints>
     <!--No.1 waypoint-->
     <waypoint id="1" name="" radius="0.800000">
-      <position lat="60.166333" lon="24.706517"/>
+      <position lat="56.845470" lon="7.977030"/>
     </waypoint>
     <!--No.2 waypoint-->
     <waypoint id="2" name="" radius="0.800000">
-      <position lat="60.163017" lon="24.695300"/>
-      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <position lat="57.085940" lon="8.105470"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
       <extensions>
         <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
-          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
         </extension>
       </extensions>
     </waypoint>
     <!--No.3 waypoint-->
-    <waypoint id="3" name="" radius="0.380000">
-      <position lat="60.161833" lon="24.681733"/>
-      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    <waypoint id="3" name="" radius="0.800000">
+      <position lat="57.398440" lon="8.417970"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
       <extensions>
         <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
-          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
         </extension>
       </extensions>
     </waypoint>
     <!--No.4 waypoint-->
-    <waypoint id="4" name="" radius="0.330000">
-      <position lat="60.157633" lon="24.670733"/>
-      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    <waypoint id="4" name="" radius="0.800000">
+      <position lat="57.523440" lon="8.714840"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
       <extensions>
         <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
-          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
         </extension>
       </extensions>
     </waypoint>
     <!--No.5 waypoint-->
-    <waypoint id="5" name="" radius="0.390000">
-      <position lat="60.155667" lon="24.657350"/>
-      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    <waypoint id="5" name="" radius="0.800000">
+      <position lat="57.636720" lon="9.136720"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
       <extensions>
         <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
-          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
         </extension>
       </extensions>
     </waypoint>
     <!--No.6 waypoint-->
-    <waypoint id="6" name="" radius="0.470000">
-      <position lat="60.152633" lon="24.648317"/>
-      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+    <waypoint id="6" name="" radius="0.800000">
+      <position lat="57.667970" lon="9.425780"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
       <extensions>
         <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
-          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
         </extension>
       </extensions>
     </waypoint>
     <!--No.7 waypoint-->
     <waypoint id="7" name="" radius="0.800000">
-      <position lat="60.149017" lon="24.626483"/>
-      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <position lat="57.792970" lon="10.714840"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
       <extensions>
         <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
-          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
         </extension>
       </extensions>
     </waypoint>
     <!--No.8 waypoint-->
     <waypoint id="8" name="" radius="0.800000">
-      <position lat="60.148183" lon="24.612033"/>
-      <leg portsideXTD="0.099892" starboardXTD="0.099892" safetyContour="30" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <position lat="57.609380" lon="11.621090"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
       <extensions>
         <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
-          <property margin="40.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.9 waypoint-->
+    <waypoint id="9" name="" radius="0.800000">
+      <position lat="57.628910" lon="11.691410"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.10 waypoint-->
+    <waypoint id="10" name="" radius="0.800000">
+      <position lat="57.648440" lon="11.714840"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.11 waypoint-->
+    <waypoint id="11" name="" radius="0.800000">
+      <position lat="57.654080" lon="11.735930"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.12 waypoint-->
+    <waypoint id="12" name="" radius="0.800000">
+      <position lat="57.657170" lon="11.755270"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.13 waypoint-->
+    <waypoint id="13" name="" radius="0.800000">
+      <position lat="57.661320" lon="11.773370"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
+        </extension>
+      </extensions>
+    </waypoint>
+    <!--No.14 waypoint-->
+    <waypoint id="14" name="" radius="0.500000">
+      <position lat="57.667700" lon="11.787020"/>
+      <leg portsideXTD="0.100000" starboardXTD="0.100000" safetyContour="10" geometryType="Loxodrome" speedMax="22.100000" draughtForward="10.000000" draughtAft="10.000000" staticUKC="30.000000"/>
+      <extensions>
+        <extension manufacturer="Furuno" name="AdditionalLegInfo" version="1.0">
+          <property margin="0.000000" parallelLine1="0.000000" parallelLine2="0.000000"/>
         </extension>
       </extensions>
     </waypoint>
   </waypoints>
   <!--schedules node-->
-  <schedules/>
+  <schedules>
+    <schedule id="1">
+      <manual>
+        <scheduleElement etd="2018-03-27T14:00:04Z" waypointId="1"/>
+        <scheduleElement eta="2018-03-22T17:40:40Z" waypointId="10"/>
+        <scheduleElement eta="2018-03-22T17:42:43Z" waypointId="11"/>
+        <scheduleElement eta="2018-03-22T17:44:28Z" waypointId="12"/>
+        <scheduleElement eta="2018-03-22T17:46:10Z" waypointId="13"/>
+        <scheduleElement eta="2018-03-22T17:47:44Z" waypointId="14"/>
+      </manual>
+      <calculated>
+        <scheduleElement etd="2018-03-27T14:00:04Z" waypointId="1"/>
+        <scheduleElement eta="2018-03-27T14:41:00Z" waypointId="2" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T15:39:00Z" waypointId="3" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T16:12:00Z" waypointId="4" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T16:53:00Z" waypointId="5" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T17:19:00Z" waypointId="6" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T19:14:00Z" waypointId="7" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T20:39:00Z" waypointId="8" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T20:45:00Z" waypointId="9" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T20:49:00Z" waypointId="10" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T20:51:00Z" waypointId="11" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T20:52:00Z" waypointId="12" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T20:54:00Z" waypointId="13" speed="22.100000"/>
+        <scheduleElement eta="2018-03-27T20:56:00Z" waypointId="14" speed="22.100000"/>
+      </calculated>
+    </schedule>
+  </schedules>
 </route>
 '''
 
@@ -697,31 +780,34 @@ trustchain=service.trustchain
 print('Endpoint: ', url)
 print()
 
-print('POST voyageplan')
-response=service.post_voyageplan(url, voyageplan, callbackEndpoint = ackurl, deliveryAckEndPoint = ackurl)
-print(response.status_code, response.text)
-print('POST textmessage')
-response=service.post_text(url, textmessage, ackurl)
-print(response.status_code, response.text)
-print('POST area message')
-response=service.post_area(url, area, ackurl)
-print(response.status_code, response.text)
-print('GET voyage plans')
-response=service.get_voyageplan(url)
-print(response.status_code, response.text)
-print()
-print('SUBSCRIBE voyage plans')
-response=service.subscribe_voyageplan(service.vis2_uvid)
-print(response.status_code, response.text)
-print()
-print('UNSUBSCRIBE voyage plans')
-response=service.unsubscribe_voyageplan(service.vis2_uvid)
-print(response.status_code, response.text)
-print()
+#print('POST voyageplan')
+#response=service.post_voyageplan(url, voyageplan, callbackEndpoint = ackurl, deliveryAckEndPoint = ackurl)
+#print(response.status_code, response.text)
+#print('POST textmessage')
+#response=service.post_text(url, textmessage, ackurl)
+#print(response.status_code, response.text)
+#print('POST area message')
+#response=service.post_area(url, area, ackurl)
+#print(response.status_code, response.text)
+#print('GET voyage plans')
+#response=service.get_voyageplan(url)
+#print(response.status_code, response.text)
+#print()
+#print('SUBSCRIBE voyage plans')
+#response=service.subscribe_voyageplan(service.vis2_uvid)
+#print(response.status_code, response.text)
+#print()
+#print('UNSUBSCRIBE voyage plans')
+#response=service.unsubscribe_voyageplan(service.vis2_uvid)
+#print(response.status_code, response.text)
+#print('SUBSCRIPTIONS for voyage plans')
+#response=service.get_subscriptions(url, ackurl)
+#print(response.status_code, response.text)
+#print()
 print('POST acknowledgement')
 response=service.post_ack(ackmsg)
 print(response.status_code, response.text)
-print()
+#print()
 #print('POST PCM message')
 #msg=pcmdata1 + str(uuid.uuid4()) + pcmdata2
 #print(msg)
