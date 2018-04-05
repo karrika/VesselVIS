@@ -303,10 +303,12 @@ def get_service_url(instanceId):
 '''
 GET voyagePlans method
 '''
-def get_voyageplan(url, uvid = None, routeStatus = None, name = None):
+def get_voyageplan(url, uvid = None, routeStatus = None, name = None, client = conf['id']):
     parameters = {
     }
     sub='/voyagePlans'
+    evtype = 1
+    evpar = ''
     if not (uvid is None):
         parameters['uvid'] = uvid
     if not (routeStatus is None):
@@ -337,8 +339,10 @@ def get_voyageplan(url, uvid = None, routeStatus = None, name = None):
 '''
 POST voyagePlans/subscription method
 '''
-def post_subscription(url, callback, uvid = None, name = None):
+def post_subscription(url, callback, uvid = None, name = None, client = conf['id']):
     sub='/voyagePlans/subscription'
+    evtype = 1
+    evpar = ''
     if uvid is None:
         parameters={
             'callbackEndpoint': callback
@@ -368,8 +372,10 @@ def subscribe_voyageplan(instanceId):
 '''
 GET voyagePlans/subscription method
 '''
-def get_subscriptions(url, callback, name=None):
+def get_subscriptions(url, callback, name=None, client = conf['id']):
     sub='/voyagePlans/subscription'
+    evtype = 1
+    evpar = ''
     parameters={
         'callbackEndpoint': callback
     }
@@ -383,27 +389,68 @@ def get_subscriptions(url, callback, name=None):
 '''
 DELETE voyagePlans/subscription method
 '''
-def delete_subscription(url, callback, uvid = None, name = None):
+def delete_subscription(url, callback, uvid = None, name = None, client = conf['id']):
     sub='/voyagePlans/subscription'
+    evtype = 1
+    evpar = 'callbackEndpoint:' + callback
     if uvid is None:
         parameters={
             'callbackEndpoint': callback
         }
-        if skip_trustchain(url):
-            status = requests.delete(url + sub, params=parameters, cert=vis_cert)
-        else:
-            status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-        log_event('unsubscribe', name=name, status = st(status))
+        try:
+            if skip_trustchain(url):
+                status = requests.delete(url + sub, params=parameters, cert=vis_cert)
+            else:
+                status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+        except Timeout as e:
+            print(e)
+            status = requests.Response
+            status.text = "Timeout"
+            status.status_code = 500
+            evtype = 4
+        except SSLError as e:
+            print(e)
+            status = requests.Response
+            status.text = "SSLError"
+            status.status_code = 500
+            evtype = 6
+        except ConnectionError as e:
+            print(e)
+            status = requests.Response
+            status.text = "ConnectionError"
+            status.status_code = 500
+            evtype = 4
+        log_event('unsubscribe', url=url, name=name, status=st(status), client = client, eventNumber = 12, eventType = evtype, eventDataType = 1, eventParameters = evpar)
         return status
     parameters={
         'callbackEndpoint': callback,
         'uvid': uvid
     }
-    if skip_trustchain(url):
-        status = requests.delete(url + sub, params=parameters, cert=vis_cert)
-    else:
-        status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
-    log_event('unsubscribe', name=name, status = st(status))
+    evpar = evpar + 'uvid:' + str(uvid)
+    try:
+        if skip_trustchain(url):
+            status = requests.delete(url + sub, params=parameters, cert=vis_cert)
+        else:
+            status = requests.delete(url + sub, params=parameters, cert=vis_cert, verify=trustchain)
+    except Timeout as e:
+        print(e)
+        status = requests.Response
+        status.text = "Timeout"
+        status.status_code = 500
+        evtype = 4
+    except SSLError as e:
+        print(e)
+        status = requests.Response
+        status.text = "SSLError"
+        status.status_code = 500
+        evtype = 6
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
+        evtype = 4
+    log_event('unsubscribe', url=url, name=name, status=st(status), uvid=uvid, client = client, eventNumber = 12, eventType = evtype, eventDataType = 1, eventParameters = evpar)
     return status
 
 def unsubscribe_voyageplan(instanceId):
@@ -434,31 +481,45 @@ def upload_subscriptions_to_all():
 '''
 POST voyagePlans method
 '''
-def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = callbackurl, uvid = None, name = '', routeName = ''):
+def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = callbackurl, uvid = None, name = '', routeName = '', client = conf['id']):
     headers = {
         'Content-Type': 'text/xml'
     }
     parameters = {
     }
+    evtype = 1
+    evpar = ''
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
+        evpar = 'deliveryAckEndPoint:' + str(deliveryAckEndPoint)
     if not (callbackEndpoint is None):
         parameters['callbackEndpoint'] = callbackEndpoint
+        evpar = evpar + ' callbackEndpoint:' + str(callbackEndpoint)
     sub='/voyagePlans'
     try:
         if skip_trustchain(url):
             status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, timeout = 30)
         else:
             status = requests.post(url + sub, data=voyageplan.encode('utf-8'), params = parameters, headers = headers, cert=vis_cert, verify=trustchain, timeout = 30)
-    except Timeout:
+    except Timeout as e:
+        print(e)
         status = requests.Response
         status.text = "Timeout"
-        status.status_code = 400
-    except ConnectionError:
+        status.status_code = 500
+        evtype = 4
+    except SSLError as e:
+        print(e)
         status = requests.Response
-        status.text = "No route to host"
-        status.status_code = 400
-    log_event('sent ' + routeName, name=name, status = st(status))
+        status.text = "SSLError"
+        status.status_code = 500
+        evtype = 6
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
+        evtype = 4
+    log_event('sent ' + routeName, url=url, name=name, ack=deliveryAckEndPoint, status=st(status), client = client, eventNumber = 4, eventType = evtype, eventDataType = 1, eventParameters = evpar)
     return status
 
 def upload_monitored(subscriber):
@@ -569,20 +630,42 @@ def upload_alternate_to_all():
 '''
 POST area method
 '''
-def post_area(url, area, deliveryAckEndPoint = None, name = None, areaName = 'area'):
+def post_area(url, area, deliveryAckEndPoint = None, name = None, areaName = 'area', client = conf['id']):
     headers = {
         'Content-Type': 'text/xml'
     }
     sub='/area'
     parameters = {
     }
+    evtype = 1
+    evpar = ''
     if not (deliveryAckEndPoint is None):
         parameters['deliveryAckEndPoint'] = deliveryAckEndPoint
-    if skip_trustchain(url):
-        status = requests.post(url + sub, data=area.encode('utf-8'), headers=headers, cert=vis_cert)
-    else:
-        status = requests.post(url + sub, data=area.encode('utf-8'), headers=headers, cert=vis_cert, verify=trustchain)
-    log_event('sent ' + areaName, name=name, status = st(status))
+        evpar = 'deliveryAckEndPoint:' + deliveryAckEndPoint
+    try:
+        if skip_trustchain(url):
+            status = requests.post(url + sub, data=area.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert)
+        else:
+            status = requests.post(url + sub, data=area.encode('utf-8'), params=parameters, headers=headers, cert=vis_cert, verify=trustchain)
+    except Timeout as e:
+        print(e)
+        status = requests.Response
+        status.text = "Timeout"
+        status.status_code = 500
+        evtype = 4
+    except SSLError as e:
+        print(e)
+        status = requests.Response
+        status.text = "SSLError"
+        status.status_code = 500
+        evtype = 6
+    except ConnectionError as e:
+        print(e)
+        status = requests.Response
+        status.text = "ConnectionError"
+        status.status_code = 500
+        evtype = 4
+    log_event('post_area', url=url, name=name, ack=deliveryAckEndPoint, status=st(status), client = client, eventNumber = 8, eventType = evtype, eventDataType = 4, eventParameters = evpar)
     return status
 
 def upload_area(to, msg):

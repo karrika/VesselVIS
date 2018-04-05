@@ -34,11 +34,11 @@ def client_mrn():
             for field in hdr[1].split('/'):
                 if len(field) > 5:
                     if field[0:4] == 'UID=':
-                        print(field[4:])
+                        print(field[4:], 'RTZ')
                         return field[4:]
     return 'urn:mrn:stm:service:instance:furuno:vis2'
 
-def check_acl():
+def check_acl(mrn):
     """
     Check if client is authorized in the access list of the voyage
     """
@@ -46,21 +46,21 @@ def check_acl():
     if os.path.isfile(fname):
         with open(fname) as f:
             data = json.loads(f.read())
-            if client_mrn() in data:
+            if mrn in data:
                 return True
 
     fname = 'export/monitored.subs'
     if os.path.isfile(fname):
         with open(fname) as f:
             data = json.loads(f.read())
-            if client_mrn() in data:
+            if mrn in data:
                 return True
 
     fname = 'export/alternate.subs'
     if os.path.isfile(fname):
         with open(fname) as f:
             data = json.loads(f.read())
-            if client_mrn() in data:
+            if mrn in data:
                 return True
 
     if not service.conf is None:
@@ -86,28 +86,32 @@ def get_subscription_to_voyage_plans(callbackEndpoint):
 
     :rtype: List[GetSubscriptionResponse]
     """
-    if not check_acl():
-        return 'Forbidden', 403
-
-    if not service.released(client_mrn()):
+    mrn = client_mrn()
+    if not service.released(mrn):
+        service.log_event('RTZ from not released service', client = mrn, eventNumber = 29, eventType = 6, eventDataType = 1)
         return 'We only talk with released services', 403
+
+    if not check_acl(mrn):
+        service.log_event('RTZ not allowed', client = mrn, eventNumber = 29, eventType = 6, eventDataType = 1)
+        return 'Forbidden', 403
 
     subsl = []
     fname = 'export/monitored.subs'
     if os.path.isfile(fname):
         with open(fname) as f:
             data = json.loads(f.read())
-            if client_mrn() in data:
+            if mrn in data:
                 subsl.append(getuvid('monitored.rtz'))
 
     fname = 'export/alternate.subs'
     if os.path.isfile(fname):
         with open(fname) as f:
             data = json.loads(f.read())
-            if client_mrn() in data:
+            if mrn in data:
                 subsl.append(getuvid('alternate.rtz'))
 
-    service.log_event('get_subscriptions', client=client_mrn(), callback=callbackEndpoint)
+    evpar = 'callbackEndpoint:' + callbackEndpoint
+    service.log_event('get_subscriptions', client=mrn, callback=callbackEndpoint, eventNumber = 29, eventType = 1, eventDataType = 1, eventParameters = evpar)
     return subsl
 
 def get_voyage_plans(uvid=None, routeStatus=None):
@@ -121,11 +125,14 @@ def get_voyage_plans(uvid=None, routeStatus=None):
 
     :rtype: GetVoyagePlanResponse
     """
-    if not check_acl():
-        return 'Forbidden', 403
-
-    if not service.released(client_mrn()):
+    mrn = client_mrn()
+    if not service.released(mrn):
+        service.log_event('RTZ from not released service', client = mrn, eventNumber = 1, eventType = 6, eventDataType = 1)
         return 'We only talk with released services', 403
+
+    if not check_acl(mrn):
+        service.log_event('RTZ not allowed', client = mrn, eventNumber = 1, eventType = 6, eventDataType = 1)
+        return 'Forbidden', 403
 
     vps = []
     fname = 'export/monitored.uvid'
@@ -164,14 +171,16 @@ def get_voyage_plans(uvid=None, routeStatus=None):
                 vp = VoyagePlan()
                 vp.route = f.read()
                 vps.append(vp)
+    evpar = 'uvid:' + str(uvid) + ' routeStatus:' + str(routeStatus)
     if len(vps) == 0:
+        service.log_event('get_subscriptions', client=mrn, eventNumber = 1, eventType = 1, eventDataType = 1, eventParameters = evpar)
         return 'No voyage plans found', 404
     if os.path.exists('export/last_interaction_time'):
         with open('export/last_interaction_time', 'r') as f:
             timestamp = f.read()
     else:
         timestamp = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
-    service.log_event('get_voyage', client=client_mrn())
+    service.log_event('get_subscriptions', client=mrn, eventNumber = 1, eventType = 1, eventDataType = 1, eventParameters = evpar)
     return GetVoyagePlanResponse(last_interaction_time=timestamp, voyage_plans=vps)
 
 def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
@@ -185,17 +194,20 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
 
     :rtype: None
     """
-    if not check_acl():
-        return 'Forbidden', 403
-
-    if not service.released(client_mrn()):
+    mrn = client_mrn()
+    if not service.released(mrn):
+        service.log_event('RTZ from not released service', client = mrn, eventNumber = 11, eventType = 6, eventDataType = 1)
         return 'We only talk with released services', 403
+
+    if not check_acl(mrn):
+        service.log_event('RTZ not allowed', client = mrn, eventNumber = 11, eventType = 6, eventDataType = 1)
+        return 'Forbidden', 403
 
     fname = 'export/monitored.subs'
     if os.path.isfile(fname):
         with open(fname) as f:
             subs = json.loads(f.read())
-            if client_mrn() in subs:
+            if mrn in subs:
                 filterOK = True
                 if not (uvid is None):
                     if uvid == getuvid('monitored.rtz'):
@@ -206,7 +218,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
                     if os.path.isfile(rmsubsname):
                         with open(rmsubsname) as g:
                             data = json.loads(g.read())
-                    data.append(client_mrn())
+                    data.append(mrn)
                     with open(rmsubsname, 'w') as g:
                         g.write(json.dumps(data))
 
@@ -214,7 +226,7 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
     if os.path.isfile(fname):
         with open(fname) as f:
             subs = json.loads(f.read())
-            if client_mrn() in subs:
+            if mrn in subs:
                 filterOK = True
                 if not (uvid is None):
                     if uvid == getuvid('alternate.rtz'):
@@ -225,11 +237,12 @@ def remove_voyage_plan_subscription(callbackEndpoint, uvid=None):
                     if os.path.isfile(rmsubsname):
                         with open(rmsubsname) as g:
                             data = json.loads(g.read())
-                    data.append(client_mrn())
+                    data.append(mrn)
                     with open(rmsubsname, 'w') as g:
                         g.write(json.dumps(data))
 
-    service.log_event('remove_subscription', client=client_mrn(), callback=callbackEndpoint, uvid=uvid)
+    evpar = 'uvid:' + str(uvid) + ' callbackEndpoint:' + str(callbackEndpoint)
+    service.log_event('remove_subscription', client=mrn, callback=callbackEndpoint, uvid=uvid, eventNumber = 11, eventType = 1, eventDataType = 1, eventParameters = evpar)
     return 'OK'
 
 
@@ -245,6 +258,7 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
     :rtype: None
     """
 
+    mrn = client_mrn()
     '''
     This section is for stand-alone unit testing only
     '''
@@ -254,14 +268,14 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         with open(fname) as f:
             acl = json.loads(f.read())
     if callbackEndpoint == 'allow':
-        if not (client_mrn() in acl):
-            acl.append(client_mrn())
+        if not (mrn in acl):
+            acl.append(mrn)
             with open(fname, 'w') as g:
                 g.write(acl)
         return 'OK'
     elif callbackEndpoint == 'deny':
-        if client_mrn() in acl:
-            acl.remove(client_mrn())
+        if mrn in acl:
+            acl.remove(mrn)
             with open(fname, 'w') as g:
                 g.write(acl)
         return 'OK'
@@ -270,11 +284,13 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
             os.remove(fname)
         return 'OK'
 
-    if not check_acl():
-        return 'Forbidden', 403
-
-    if not service.released(client_mrn()):
+    if not service.released(mrn):
+        service.log_event('RTZ from not released service', client = mrn, eventNumber = 9, eventType = 6, eventDataType = 1)
         return 'We only talk with released services', 403
+
+    if not check_acl(mrn):
+        service.log_event('RTZ not allowed', client = mrn, eventNumber = 9, eventType = 6, eventDataType = 1)
+        return 'Forbidden', 403
 
     subs1 = []
     fname = 'export/monitored.subs'
@@ -286,8 +302,8 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         if os.path.isfile('export/monitored.rtz'):
             if uvid == getuvid('monitored.rtz'):
                 filterOK = False
-    if not client_mrn() in subs1:
-        subs1.append(client_mrn())
+    if not mrn in subs1:
+        subs1.append(mrn)
     with open(fname, 'w') as f:
         f.write(json.dumps(subs1))
 
@@ -301,14 +317,16 @@ def subscribe_to_voyage_plan(callbackEndpoint, uvid=None):
         if os.path.isfile('export/alternate.rtz'):
             if uvid == getuvid('alternate.rtz'):
                 filterOK = False
-    if not client_mrn() in subs2:
-        subs2.append(client_mrn())
+    if not mrn in subs2:
+        subs2.append(mrn)
     with open(fname, 'w') as f:
         f.write(json.dumps(subs2))
 
+    evpar = 'uvid:' + str(uvid) + ' callbackEndpoint:' + str(callbackEndpoint)
     if (len(subs1) == 0) and (len(subs2) == 0):
+        service.log_event('subscribe', client=mrn, callback=callbackEndpoint, uvid=uvid, eventNumber = 11, eventType = 1, eventDataType = 1, eventParameters = evpar)
         return 'No voyage plans found', 404
-    service.log_event('subscribe', client=client_mrn(), callback=callbackEndpoint, uvid=uvid)
+    service.log_event('subscribe', client=mrn, callback=callbackEndpoint, uvid=uvid, eventNumber = 11, eventType = 1, eventDataType = 1, eventParameters = evpar)
     return 'OK'
 
 
@@ -325,9 +343,12 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
     :rtype: None
     """
-    if not service.released(client_mrn()):
+    mrn = client_mrn()
+    if not service.released(mrn):
+        service.log_event('RTZ from not released service', client = mrn, eventNumber = 3, eventType = 6, eventDataType = 1)
         return 'We only talk with released services', 403
 
+    evpar = 'deliveryAckEndPoint:' + str(deliveryAckEndPoint) + ' callbackEndpoint:' + str(callbackEndpoint)
     uvid='parse:from:rtz'
     f = open('import/' + uvid + '.rtz', 'wb')
     f.write(voyagePlan)
@@ -361,6 +382,7 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
                 if result == False:
                     rtz.close()
                     ret = str(rtzstm11.xmlschema.error_log)
+                    service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
                     return ret, 400
             except:
                 ret = 'Schema validation exception'
@@ -369,48 +391,57 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
         else:
             rtz.close()
             ret = 'Unsupported route format'
+            service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
             return ret, 400
     if result == False:
         rtz.close()
+        service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
         return ret, 400
     routeInfo = doc.find(tag + 'routeInfo')
     uvid = routeInfo.get('vesselVoyage')
     if uvid is None:
+        service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
         return 'Missing vesselVoyage', 404
     routeName = routeInfo.get('routeName')
     if routeName is None:
+        service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
         return 'Missing routeName', 404
     if not ('urn:mrn:stm:voyage:id' in uvid):
+        service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
         return 'Wrong vesselVoyage format', 400
     if tag == '{http://www.cirm.org/RTZ/1/1}':
         routeInfo = doc.find(tag + 'routeInfo')
         extensions = routeInfo.find(tag + 'extensions')
         if extensions is None:
+            service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
             return 'Missing routeInfo/extensions', 404
         extension = extensions.find(tag + 'extension')
         if extension is None:
+            service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
             return 'Missing routeInfo/extensions/extension', 404
         routeStatus = extension.get('routeStatusEnum')
         if routeStatus is None:
+            service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
             return 'Missing routeInfo/extensions/extension/routeStatusEnum', 404
     else:
         routeStatus = routeInfo.get('routeStatus')
     if not (routeStatus in '12345678'):
+        service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
         return 'Wrong routeStatus format', 400
     f = open('import/' + routeName + '.rtz', 'wb')
     f.write(voyagePlan)
     f.close()
-    data = { 'uvid': uvid, 'route': routeName + '.rtz', 'routeStatus': routeStatus, 'from': client_mrn() }
+    data = { 'uvid': uvid, 'route': routeName + '.rtz', 'routeStatus': routeStatus, 'from': mrn }
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))
     f.close()
-    servicetype, url, name = service.get_service_url(client_mrn())
+    servicetype, url, name = service.get_service_url(mrn)
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
         data['id'] = uvid
         data['fromName'] = name
-        data['fromId'] = client_mrn()
+        data['fromId'] = mrn
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         if not service.conf is None:
             data['toId'] = service.conf['id']
@@ -418,6 +449,6 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
-    service.log_event('received voyageplan', client=client_mrn(), name=routeName, status = name)
+    service.log_event('received voyageplan', client=mrn, name=routeName, status = name, callback=callbackEndpoint, eventNumber = 3, eventType = 1, eventDataType = 1, eventParameters = evpar)
     return 'OK'
 

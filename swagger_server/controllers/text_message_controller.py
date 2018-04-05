@@ -27,7 +27,7 @@ def client_mrn():
             for field in hdr[1].split('/'):
                 if len(field) > 5:
                     if field[0:4] == 'UID=':
-                        print(field[4:])
+                        print(field[4:], 'TXT')
                         return field[4:]
     return 'urn:mrn:stm:service:instance:furuno:vis2'
 
@@ -42,8 +42,9 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
 
     :rtype: None
     """
-    if not service.released(client_mrn()):
-        service.log_event('TXT from not released service', client = client_mrn(), eventNumber = 5, eventType = 6, eventDataType = 2)
+    mrn = client_mrn()
+    if not service.released(mrn):
+        service.log_event('TXT from not released service', client = mrn, eventNumber = 5, eventType = 6, eventDataType = 2)
         return 'We only talk with released services', 403
 
     with open('import/parse.txt', 'wb') as f:
@@ -70,13 +71,13 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
         if not result:
             txt.close()
             ret = str(txt13.xmlschema.error_log)
-            service.log_event('Error in TXT schema', client = client_mrn(), eventNumber = 5, eventType = 2, eventDataType = 2)
+            service.log_event('Error in TXT schema', client = mrn, eventNumber = 5, eventType = 2, eventDataType = 2)
             return ret, 400
     except:
         result = False
     if not result:
         txt.close()
-        service.log_event('Error in TXT schema', client = client_mrn(), eventNumber = 5, eventType = 2, eventDataType = 2)
+        service.log_event('Error in TXT schema', client = mrn, eventNumber = 5, eventType = 2, eventDataType = 2)
         return ret, 400
     tag='{http://stmvalidation.eu/schemas/textMessageSchema_1_3.xsd}'
     messageId = root.find(tag + 'textMessageId')
@@ -100,17 +101,17 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     uvid = messageId.text
     with open('import/' + uvid + '.xml', 'w', encoding='utf-8') as f:
         f.write(txtmsg)
-    data = { 'uvid': uvid, 'msg': uvid + '.xml', 'from': client_mrn(), 'subject': subj, 'body': bod, 'graphics': graphics }
+    data = { 'uvid': uvid, 'msg': uvid + '.xml', 'from': mrn, 'subject': subj, 'body': bod, 'graphics': graphics }
     with open('import/' + uvid + '.uvid', 'w') as f:
         f.write(json.dumps(data))
-    servicetype, url, name = service.get_service_url(client_mrn())
+    servicetype, url, name = service.get_service_url(mrn)
     evpar = ''
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
         data['id'] = uvid
         data['fromName'] = name
-        data['fromId'] = client_mrn()
+        data['fromId'] = mrn
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         if not (referenceId is None):
             data['referenceId'] = referenceId.text
@@ -122,6 +123,6 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
             f.write(json.dumps(data))
         evpar = 'deliveryAckEndPoint:' + deliveryAckEndPoint
     
-    service.log_event('received ' + subject.text, name=body.text, status = name, client = client_mrn(), eventNumber = 5, eventType = 1, eventDataType = 2, eventParameters = evpar)
+    service.log_event('received ' + subject.text, name=body.text, status = name, client = mrn, eventNumber = 5, eventType = 1, eventDataType = 2, eventParameters = evpar)
     return 'OK'
 

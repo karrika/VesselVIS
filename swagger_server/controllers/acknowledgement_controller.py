@@ -41,8 +41,9 @@ def acknowledgement(deliveryAck):
     if connexion.request.is_json:
         deliveryAck = DeliveryAck.from_dict(connexion.request.get_json())
     """
-    if not service.released(client_mrn()):
-        service.log_event('ACK from not released service', client = client_mrn(), eventNumber = 13, eventType = 6, eventDataType = 5)
+    mrn = client_mrn()
+    if not service.released(mrn):
+        service.log_event('ACK from not released service', client = mrn, eventNumber = 13, eventType = 6, eventDataType = 5)
         return 'We only talk with released services', 403
 
     with open('stm/ackmsg.txt', 'w') as f:
@@ -60,13 +61,13 @@ def acknowledgement(deliveryAck):
             'ack_result': str
         }
     """
-    servicetype, url, name = service.get_service_url(client_mrn())
+    servicetype, url, name = service.get_service_url(mrn)
     id = ''
     if 'id' in deliveryAck:
         id = deliveryAck['id']
     ackResult = ''
     if 'ackResult' in deliveryAck:
         ackResult = deliveryAck['ackResult']
-    service.log_event('received ack ' + id, name=ackResult, status = name, client = client_mrn(), eventNumber = 13, eventType = 1, eventDataType = 8)
+    service.log_event('received ack ' + id, name=ackResult, status = name, client = mrn, eventNumber = 13, eventType = 1, eventDataType = 8)
     return 'Thank you for sending the acknowlegement'
 

@@ -28,7 +28,7 @@ def client_mrn():
             for field in hdr[1].split('/'):
                 if len(field) > 5:
                     if field[0:4] == 'UID=':
-                        print(field[4:])
+                        print(field[4:], 'AREA')
                         return field[4:]
     return 'urn:mrn:stm:service:instance:furuno:vis2'
 
@@ -43,7 +43,9 @@ def upload_area(area, deliveryAckEndPoint=None):
 
     :rtype: None
     """
-    if not service.released(client_mrn()):
+    mrn = client_mrn()
+    if not service.released(mrn):
+        service.log_event('AREA from not released service', client = mrn, eventNumber = 7, eventType = 6, eventDataType = 4)
         return 'We only talk with released services', 403
 
     with open('import/parse_area.txt', 'wb') as f:
@@ -71,11 +73,13 @@ def upload_area(area, deliveryAckEndPoint=None):
         if not result:
             areastr.close()
             ret = str(S124.xmlschema.error_log)
+            service.log_event('Error in AREA schema', client = mrn, eventNumber = 7, eventType = 2, eventDataType = 4)
             return ret, 400
     except:
         result = False
     if not result:
         areastr.close()
+        service.log_event('Error in AREA schema', client = mrn, eventNumber = 7, eventType = 2, eventDataType = 4)
         return ret, 400
     areaname = ''
     uvid = 'urn:mrn:s124:missing'
@@ -93,18 +97,19 @@ def upload_area(area, deliveryAckEndPoint=None):
         while os.path.exists(uvid + '-' + str(subnr)):
             subnr = subnr + 1
         uvid = uvid + '-' + str(subnr)
-    data = { 'uvid': uvid, 'area': areaname, 'from': client_mrn() }
+    data = { 'uvid': uvid, 'area': areaname, 'from': mrn }
     with open('import/' + uvid + '.uvid', 'w') as f:
         f.write(json.dumps(data))
     with open('import/' + uvid + '.xml', 'w') as f:
         f.write(areamsg)
-    servicetype, url, name = service.get_service_url(client_mrn())
+    servicetype, url, name = service.get_service_url(mrn)
+    evpar = ''
     if deliveryAckEndPoint is not None:
         data = collections.OrderedDict()
         data['endpoint'] = deliveryAckEndPoint
         data['id'] = uvid
         data['fromName'] = name
-        data['fromId'] = client_mrn()
+        data['fromId'] = mrn
         data['time'] = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
         if not service.conf is None:
             data['toId'] = service.conf['id']
@@ -112,6 +117,7 @@ def upload_area(area, deliveryAckEndPoint=None):
 
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
+        evpar = 'deliveryAckEndPoint:' + deliveryAckEndPoint
     
-    service.log_event('received area', name=areaname, status = name)
+    service.log_event('received area', name=areaname, status = name, client = mrn, eventNumber = 7, eventType = 1, eventDataType = 4, eventParameters = evpar)
     return 'OK'
