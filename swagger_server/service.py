@@ -269,7 +269,7 @@ def rm_monitored():
             os.remove(fname)
 
 '''
-Extract url and name based on intanceId
+Extract url and name based on instanceId
 '''
 def get_service_url(instanceId):
     instanceId = os.path.splitext(os.path.basename(instanceId))[0]
@@ -303,9 +303,22 @@ def get_service_url(instanceId):
     return ('None', 'None', 'None')
 
 '''
+Extract instanceId
+'''
+def get_id_from_url(url):
+    if os.path.exists('import/all.dat'):
+        with open('import/all.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if item['endpointUri'] == url:
+                    return item['instanceId']
+    return 'None'
+
+'''
 GET voyagePlans method
 '''
-def get_voyageplan(url, uvid = None, routeStatus = None, name = None, client = conf['id']):
+def get_voyageplan(url, uvid = None, routeStatus = None, name = None):
+    client = get_id_from_url(url)
     parameters = {
     }
     sub='/voyagePlans'
@@ -340,13 +353,14 @@ def get_voyageplan(url, uvid = None, routeStatus = None, name = None, client = c
         status.text = "ConnectionError"
         status.status_code = 500
         evtype = 4
-    log_event('voyageplan', url=url, name=name, uvid=uvid, routeStatus=routeStatus, status=st(status), client = client, eventNumber = 2, eventType = evtype, eventDataType = 1, eventParameters = evpar)
+    log_event('voyageplan', url=url, name=name, uvid=uvid, routeStatus=routeStatus, status=st(status), client=client, eventNumber = 2, eventType = evtype, eventDataType = 1, eventParameters = evpar)
     return status
 
 '''
 POST voyagePlans/subscription method
 '''
-def post_subscription(url, callback, uvid = None, name = None, client = conf['id']):
+def post_subscription(url, callback, uvid = None, name = None):
+    client = get_id_from_url(url)
     sub='/voyagePlans/subscription'
     evtype = 1
     evpar = 'callbackEndpoint:' + str(callback)
@@ -418,7 +432,8 @@ def subscribe_voyageplan(instanceId):
 '''
 GET voyagePlans/subscription method
 '''
-def get_subscriptions(url, callback, name=None, client = conf['id']):
+def get_subscriptions(url, callback, name=None):
+    client = get_id_from_url(url)
     sub='/voyagePlans/subscription'
     evtype = 1
     evpar = 'callbackEndpoint:' + str(callback)
@@ -454,7 +469,8 @@ def get_subscriptions(url, callback, name=None, client = conf['id']):
 '''
 DELETE voyagePlans/subscription method
 '''
-def delete_subscription(url, callback, uvid = None, name = None, client = conf['id']):
+def delete_subscription(url, callback, uvid = None, name = None):
+    client = get_id_from_url(url)
     sub='/voyagePlans/subscription'
     evtype = 1
     evpar = 'callbackEndpoint:' + callback
@@ -546,7 +562,8 @@ def upload_subscriptions_to_all():
 '''
 POST voyagePlans method
 '''
-def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = callbackurl, uvid = None, name = '', routeName = '', client = conf['id']):
+def post_voyageplan(url, voyageplan, deliveryAckEndPoint = None, callbackEndpoint = callbackurl, uvid = None, name = '', routeName = ''):
+    client = get_id_from_url(url)
     headers = {
         'Content-Type': 'text/xml'
     }
@@ -695,7 +712,8 @@ def upload_alternate_to_all():
 '''
 POST area method
 '''
-def post_area(url, area, deliveryAckEndPoint = None, name = None, areaName = 'area', client = conf['id']):
+def post_area(url, area, deliveryAckEndPoint = None, name = None, areaName = 'area'):
+    client = get_id_from_url(url)
     headers = {
         'Content-Type': 'text/xml'
     }
@@ -741,7 +759,8 @@ def upload_area(to, msg):
 '''
 POST textMessage method
 '''
-def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'text', client = conf['id']):
+def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'text'):
+    client = get_id_from_url(url)
     headers = {
         'Content-Type': 'text/xml'
     }
@@ -997,6 +1016,7 @@ def post_meteo_textmessage(forecast, i, validStart, validStop, routeuvid):
 POST meteorological query
 '''
 def post_dmi(url='http://sejlrute.dmi.dk/SejlRute/SR', route=None, uvid='', name='', routeName=''):
+    client = get_id_from_url(url)
     headers={
         'Accept' : 'application/json',
         'Content-Type' : 'application/json'
