@@ -28,15 +28,19 @@ sudo ln -s /usr/share/ca-certificates/MCproduction/mc-ca-chain.pem /usr/lib/ssl/
 #sudo cp MCstaging/mc-ca-chain.pem /usr/share/ca-certificates/MCstaging
 
 
-HASHTEST=70b4092a.0
+HASHTEST=26388d96.0
 sudo rm -f /usr/lib/ssl/certs/$HASHTEST
 sudo ln -s /usr/share/ca-certificates/MCstaging/mc-ca-chain.pem /usr/lib/ssl/certs/$HASHTEST
-HASHTEST=83dd6dbc.0
+HASHTEST=e2ba868c.0
 sudo rm -f /usr/lib/ssl/certs/$HASHTEST
 sudo ln -s /usr/share/ca-certificates/MCstaging/mc-ca-chain.pem /usr/lib/ssl/certs/$HASHTEST
-HASHTEST=a6566d95.0
+HASHTEST=92e1ca2a.0
 sudo rm -f /usr/lib/ssl/certs/$HASHTEST
 sudo ln -s /usr/share/ca-certificates/MCstaging/mc-ca-chain.pem /usr/lib/ssl/certs/$HASHTEST
-HASHTEST=dfa402ab.0
+HASHTEST=d3f47e1b.0
 sudo rm -f /usr/lib/ssl/certs/$HASHTEST
 sudo ln -s /usr/share/ca-certificates/MCstaging/mc-ca-chain.pem /usr/lib/ssl/certs/$HASHTEST
+HASHTEST=cbb0c224.0
+sudo rm -f /usr/lib/ssl/certs/$HASHTEST
+sudo ln -s /usr/share/ca-certificates/MCstaging/mc-ca-chain.pem /usr/lib/ssl/certs/$HASHTEST
+
