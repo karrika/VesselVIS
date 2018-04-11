@@ -110,10 +110,10 @@ Due to Transas that refuse to use certificates properly
 and STM that does not enforce proper security
 '''
 def skip_trustchain(url):
-    if 'azure' in url:
+    '''if 'azure' in url:
         return True
     if 'transas' in url:
-        return True
+        return True'''
     return False
 
 '''
