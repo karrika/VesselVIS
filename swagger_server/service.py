@@ -688,13 +688,14 @@ def upload_monitored_to_all():
     '''
     Upload monitored to all subscribers
     '''
-    if os.path.isfile('export/monitored.subs'):
-        with open('export/monitored.subs') as f:
-            subs = json.loads(f.read())
-        for sub in subs:
-            upload_monitored(sub)
-        if os.path.isfile('export/monitored.uvid'):
-            shutil.copyfile('export/monitored.uvid', 'import/monitored.sent')
+    if os.path.isfile('export/monitored.uvid'):
+        fname = 'export/monitored.subs'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                subs = json.loads(f.read())
+            for sub in subs:
+                upload_monitored(sub)
+        shutil.copyfile('export/monitored.uvid', 'import/monitored.sent')
 
 def upload_alternate_to_all():
     '''
