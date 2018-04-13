@@ -801,7 +801,7 @@ def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'te
 def upload_text(to, msg):
     servicetype, url, name = get_service_url(to)
     if servicetype == 'VIS':
-        post_text(url, msg, name = name, client = to)
+        post_text(url, msg, name = name)
 
 '''
 POST acknowledgement method
