@@ -428,10 +428,10 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
     if not (routeStatus in '12345678'):
         service.log_event('Error in RTZ schema', client = mrn, eventNumber = 3, eventType = 2, eventDataType = 1)
         return 'Wrong routeStatus format', 400
-    f = open('import/' + routeName + '.rtz', 'wb')
+    f = open('import/' + routeName.encode('utf-8') + '.rtz', 'wb')
     f.write(voyagePlan)
     f.close()
-    data = { 'uvid': uvid, 'route': routeName + '.rtz', 'routeStatus': routeStatus, 'from': mrn }
+    data = { 'uvid': uvid, 'route': routeName.encode('utf-8') + '.rtz', 'routeStatus': routeStatus, 'from': mrn }
     f = open('import/' + uvid + '.uvid', 'w')
     f.write(json.dumps(data))
     f.close()
@@ -449,6 +449,6 @@ def upload_voyage_plan(voyagePlan, deliveryAckEndPoint=None, callbackEndpoint=No
 
         with open('import/' + uvid + '.ack', 'w') as f:
             f.write(json.dumps(data))
-    service.log_event('received voyageplan', client=mrn, name=routeName, status = name, callback=callbackEndpoint, eventNumber = 3, eventType = 1, eventDataType = 1, eventParameters = evpar)
+    service.log_event('received voyageplan', client=mrn, name=routeName.encode('utf-8'), status = name, callback=callbackEndpoint, eventNumber = 3, eventType = 1, eventDataType = 1, eventParameters = evpar)
     return 'OK'
 
