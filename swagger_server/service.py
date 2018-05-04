@@ -19,7 +19,7 @@ import json
 from pathlib import Path
 from swagger_server.models.delivery_ack import DeliveryAck
 import collections
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import time
 from subprocess import call
 import xml.etree.ElementTree as ET
@@ -27,6 +27,7 @@ from lxml import etree
 from io import BytesIO
 import uuid
 import csv
+from glob import glob
 
 simulate_vessel = False
 staging = False
@@ -1568,7 +1569,64 @@ def vessel_connects():
     if usepcm:
         pollallqueues()
 
+def cleanup():
+    #Delete old log events
+    fname='import/event.log'
+    now = datetime.utcnow() + timedelta(days=-8)
+    now = now.replace(microsecond=0).isoformat() + 'Z'
+    epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+    newlog = []
+    with open(fname) as f:
+        raw = f.readlines()
+        for item in raw:
+            try:
+                data = json.loads(item)
+                if data['time'] > now:
+                    newlog.append(data)
+            except:
+                pass
+    while len(newlog) > 30:
+        newlog.pop(0)
+    with open(fname, 'w') as f:
+        for item in newlog:
+            f.write(json.dumps(item))
+            f.write('\n')
+    
+    #Delete old text messages
+    msgs = glob('import/urn:mrn:stm:txt:*')
+    for msg in msgs:
+        statinfo = os.stat(msg)
+        mtime = epoch + timedelta(seconds=statinfo.st_mtime)
+        mtime = mtime.replace(microsecond=0).isoformat() + 'Z'
+        if mtime < now:
+            os.remove(msg)
+    
+    #Delete old S124 messages
+    msgs = glob('import/urn:mrn:s124:*')
+    for msg in msgs:
+        statinfo = os.stat(msg)
+        mtime = epoch + timedelta(seconds=statinfo.st_mtime)
+        mtime = mtime.replace(microsecond=0).isoformat() + 'Z'
+        if mtime < now:
+            os.remove(msg)
+    
+    #Delete routes
+    msgs = glob('import/urn:mrn:stm:voyage:id:*')
+    for msg in msgs:
+        statinfo = os.stat(msg)
+        mtime = epoch + timedelta(seconds=statinfo.st_mtime)
+        mtime = mtime.replace(microsecond=0).isoformat() + 'Z'
+        if mtime < now:
+            with open(msg) as f:
+                data = json.loads(f.read())
+                if 'route' in data:
+                    route = data['route']
+                    if os.path.exists(route):
+                        os.remove(route)
+            os.remove(msg)
+
 def service():
+    cleanup()
     if usepcm:
         createallqueues()
     while True:
