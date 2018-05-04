@@ -808,7 +808,6 @@ def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'te
 
 def upload_text(to, msg):
     servicetype, url, name = get_service_url(to)
-    print(servicetype, url, name, to)
     if servicetype == 'VIS':
         post_text(url, msg, name = name)
 
