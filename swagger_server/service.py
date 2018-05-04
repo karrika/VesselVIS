@@ -301,6 +301,12 @@ def get_service_url(instanceId):
             for item in data:
                 if item['instanceId'] == instanceId:
                     return ('VIS', item['endpointUri'], item['name'])
+    if os.path.exists('import/all.dat'):
+        with open('import/all.dat') as f:
+            data=json.loads(f.read())
+            for item in data:
+                if item['instanceId'] == instanceId:
+                    return ('VIS', item['endpointUri'], item['name'])
     return ('None', 'None', 'None')
 
 '''
@@ -802,6 +808,7 @@ def post_text(url, text, deliveryAckEndPoint = None, name = None, textName = 'te
 
 def upload_text(to, msg):
     servicetype, url, name = get_service_url(to)
+    print(servicetype, url, name, to)
     if servicetype == 'VIS':
         post_text(url, msg, name = name)
 
