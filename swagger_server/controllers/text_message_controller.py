@@ -43,7 +43,7 @@ def upload_text_message(textMessageObject, deliveryAckEndPoint=None):
     :rtype: None
     """
     mrn = client_mrn()
-    if not service.released(mrn):
+    if not service.textreleased(mrn):
         service.log_event('TXT from not released service', client = mrn, eventNumber = 5, eventType = 6, eventDataType = 2)
         return 'We only talk with released services', 403
 

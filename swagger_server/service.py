@@ -132,6 +132,21 @@ def released(id):
         return True
     return False
 
+'''
+Check that the partner to talk with is in the service registry
+For staging we allow anything, for production it needs to be in all.dat
+'''
+def textreleased(id):
+    fname = 'import/text.dat'
+    with open(fname) as f:
+        data = json.loads(f.read())
+    for item in data:
+        if item['instanceId'] == id:
+            return True
+    if conf['open_to_all']:
+        return True
+    return False
+
 def log_stm_event(eventNumber, eventType, externalOrgId, externalEntityId, eventParameters, eventDataType, eventData):
     data = collections.OrderedDict()
     data['UID'] = str(uuid.uuid4())
