@@ -710,32 +710,58 @@ def upload_monitored_to_all():
     '''
     Upload monitored to all subscribers
     '''
-    if os.path.isfile('export/monitored.uvid'):
+    if os.path.isfile('export/monitored.uvid') and os.path.isfile('export/monitored.subs'):
+        oldsubs = []
+        if os.path.getmtime('export/monitored.uvid') > os.path.getmtime('export/monitored.subs'):
+            '''
+            We have exported a new route. Need to be sent to all.
+            '''
+        else:
+            '''
+            The subscriptions are changed. Send only to new subscribers
+            Find out who already got this route
+            '''
+            if os.path.isfile('export/monitored.sent'):
+                with open(fname) as f:
+                    oldsubs = json.loads(f.read())
         fname = 'export/monitored.subs'
-        if os.path.isfile(fname):
-            with open(fname) as f:
-                subs = json.loads(f.read())
+        with open(fname) as f:
+            subs = json.loads(f.read())
             for sub in subs:
-                upload_monitored(sub)
+                if not sub in oldsubs:
+                    upload_monitored(sub)
         shutil.copyfile('export/monitored.uvid', 'import/monitored.sent')
 
 def upload_alternate_to_all():
     '''
     Upload alternate to all subscribers
     '''
-    if os.path.isfile('export/alternate.uvid'):
+    if os.path.isfile('export/alternate.uvid') and os.path.isfile('export/alternate.subs'):
+        oldsubs = []
+        if os.path.getmtime('export/alternate.uvid') > os.path.getmtime('export/alternate.subs'):
+            '''
+            We have exported a new route. Need to be sent to all.
+            '''
+        else:
+            '''
+            The subscriptions are changed. Send only to new subscribers
+            Find out who already got this route
+            '''
+            if os.path.isfile('export/alternate.sent'):
+                with open(fname) as f:
+                    oldsubs = json.loads(f.read())
         fname = 'export/alternate.subs'
-        if os.path.isfile(fname):
-            with open(fname) as f:
-                subs = json.loads(f.read())
+        with open(fname) as f:
+            subs = json.loads(f.read())
             for sub in subs:
-                upload_alternate(sub)
+                if not sub in oldsubs:
+                    upload_alternate(sub)
         shutil.copyfile('export/alternate.uvid', 'import/alternate.sent')
 
 '''
 POST area method
 '''
-def post_area(url, area, deliveryAckEndPoint = None, name = None, areaName = 'area'):
+def post_area(url, area, deliveryAckEndPoint = None, name = None):
     client = get_id_from_url(url)
     headers = {
         'Content-Type': 'text/xml'
@@ -771,7 +797,7 @@ def post_area(url, area, deliveryAckEndPoint = None, name = None, areaName = 'ar
         status.text = "ConnectionError"
         status.status_code = 500
         evtype = 4
-    log_event('post_area', url=url, name=name, ack=deliveryAckEndPoint, status=st(status), client = client, eventNumber = 8, eventType = evtype, eventDataType = 4, eventParameters = evpar)
+    log_event('Area sent', url=url, name=name, ack=deliveryAckEndPoint, status=st(status), client = client, eventNumber = 8, eventType = evtype, eventDataType = 4, eventParameters = evpar)
     return status
 
 def upload_area(to, msg):
