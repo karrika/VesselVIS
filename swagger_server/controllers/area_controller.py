@@ -119,5 +119,5 @@ def upload_area(area, deliveryAckEndPoint=None):
             f.write(json.dumps(data))
         evpar = 'deliveryAckEndPoint:' + deliveryAckEndPoint
     
-    service.log_event('received area', name=areaname, status = name, client = mrn, eventNumber = 7, eventType = 1, eventDataType = 4, eventParameters = evpar)
+    service.log_event('Area: ' + areaname, name=name, status = '200 OK', client = mrn, eventNumber = 7, eventType = 1, eventDataType = 4, eventParameters = evpar)
     return 'OK'
