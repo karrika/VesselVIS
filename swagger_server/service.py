@@ -52,7 +52,10 @@ if len(conffile) > 0:
         conf['stmport'] = data['stmport']
         conf['id'] = data['id']
         length = len(data['id'])
-        conf['imo'] = data['id'][length-7:length]
+        if 'imo' in data['id']:
+            conf['imo'] = data['id'][length-7:length]
+        else:
+            conf['imo'] = ''
         conf['mmsi'] = data['mmsi']
         conf['name'] = data['name']
         conf['open_to_all'] = data['open_to_all']
