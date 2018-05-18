@@ -1625,22 +1625,23 @@ def cleanup():
     now = datetime.utcnow() + timedelta(days=-8)
     now = now.replace(microsecond=0).isoformat() + 'Z'
     epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
-    newlog = []
-    with open(fname) as f:
-        raw = f.readlines()
-        for item in raw:
-            try:
-                data = json.loads(item)
-                if data['time'] > now:
-                    newlog.append(data)
-            except:
-                pass
-    while len(newlog) > 30:
-        newlog.pop(0)
-    with open(fname, 'w') as f:
-        for item in newlog:
-            f.write(json.dumps(item))
-            f.write('\n')
+    if os.path.exists(fname):
+        newlog = []
+        with open(fname) as f:
+            raw = f.readlines()
+            for item in raw:
+                try:
+                    data = json.loads(item)
+                    if data['time'] > now:
+                        newlog.append(data)
+                except:
+                    pass
+        while len(newlog) > 30:
+            newlog.pop(0)
+        with open(fname, 'w') as f:
+            for item in newlog:
+                f.write(json.dumps(item))
+                f.write('\n')
     
     #Delete old text messages
     msgs = glob('import/urn:mrn:stm:txt:*')
