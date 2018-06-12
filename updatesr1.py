@@ -7,6 +7,25 @@ from datetime import datetime
 import time
 import uuid
 
+fname='import/all.dat'
+if os.path.exists(fname):
+    os.remove(fname)
+fname='import/vts.dat'
+if os.path.exists(fname):
+    os.remove(fname)
+fname='import/services.dat'
+if os.path.exists(fname):
+    os.remove(fname)
+fname='import/ports.dat'
+if os.path.exists(fname):
+    os.remove(fname)
+fname='import/vessels.dat'
+if os.path.exists(fname):
+    os.remove(fname)
+fname='import/text.dat'
+if os.path.exists(fname):
+    os.remove(fname)
+
 all_data = []
 
 parameters={
@@ -30,7 +49,7 @@ for item in sorted(data, key=methodcaller('get', 'name', None)):
         shore_set.append(shore_data)
         all_data.append(shore_data)
         print('VTS', item['name'])
-with open('import/vtsnew.dat','w') as f:
+with open('import/vts.dat','w') as f:
     f.write(json.dumps(shore_set))
 
 ret=service.search('designID="urn:mrn:stm:service:design:sma:vis-rest-2.2" -VTS -SHIP')
@@ -62,14 +81,14 @@ for item in sorted(data, key=methodcaller('get', 'name', None)):
         if not ('instanceId' in all_data):
             all_data.append(item)
         print('Services', item['name'], 'keywords:', item['keywords'])
-with open('import/servicesnew.dat','w') as f:
+with open('import/services.dat','w') as f:
     f.write(json.dumps(shore_set))
 
 ret=service.search('designID="urn:mrn:stm:service:design:sma:vis-rest-2.2" +SHIP')
 data=json.loads(ret.text)
 vessels_set = []
 for item in sorted(data, key=methodcaller('get', 'name', None)):
-    if item['status'] != 'released':
+    if (item['status'] != 'released') and not ('furuno' in item['instanceId']):
         pass
     else:
         vessels_data=collections.OrderedDict()
@@ -83,7 +102,7 @@ for item in sorted(data, key=methodcaller('get', 'name', None)):
         if not ('instanceId' in all_data):
             all_data.append(item)
         print('Ship', item['imo' ], item['mmsi'], item['name'], 'keywords:', item['keywords'])
-with open('import/vesselsnew.dat','w') as f:
+with open('import/vessels.dat','w') as f:
     f.write(json.dumps(vessels_set))
 
 ret=service.search('designID="urn:mrn:stm:service:design:viktoria:amss"')
@@ -102,22 +121,18 @@ for item in sorted(data, key=methodcaller('get', 'unlocode', None)):
         item['name'] = item['unlocode']
         all_data.append(item)
         print('Port', item['unlocode'], item['instanceId'], 'keywords:', item['keywords'])
-with open('import/portsnew.dat','w') as f:
+with open('import/ports.dat','w') as f:
     f.write(json.dumps(ports_set))
 
 mapping_set = []
 for item in sorted(all_data, key=methodcaller('get', 'name', None)):
-    if item['status'] != 'released':
-        print(item['name'])
-    else:
-        mapping_data=collections.OrderedDict()
-        mapping_data['name'] = item['name']
-        mapping_data['endpointUri'] = item['endpointUri'].rstrip('/')
-        mapping_data['instanceId'] = item['instanceId']
-        mapping_set.append(mapping_data)
-        print('All', item['name'], item['instanceId'])
+    mapping_data=collections.OrderedDict()
+    mapping_data['name'] = item['name']
+    mapping_data['endpointUri'] = item['endpointUri'].rstrip('/')
+    mapping_data['instanceId'] = item['instanceId']
+    mapping_set.append(mapping_data)
 with open('import/all.dat','w') as f:
     f.write(json.dumps(mapping_set))
-with open('import/textnew.dat','w') as f:
+with open('import/text.dat','w') as f:
     f.write(json.dumps(mapping_set))
 
