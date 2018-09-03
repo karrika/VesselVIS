@@ -1676,6 +1676,22 @@ def cleanup():
                         os.remove(route)
             os.remove(msg)
 
+    #Delete orphan rtz files
+    rtzs = glob('import/*.rtz')
+    if 'import/parse:from:rtz.rtz' in rtzs:
+        rtzs.remove('import/parse:from:rtz.rtz')
+    msgs = glob('import/urn:mrn:stm:voyage:id:*')
+    for msg in msgs:
+        with open(msg) as f:
+            data = json.loads(f.read())
+            if 'route' in data:
+                route = 'import/' + data['route']
+                if route in rtzs:
+                    rtzs.remove(route)
+    if len(rtzs) > 0:
+        for rtz in rtzs:
+            os.remove(rtz)
+
 def service():
     cleanup()
     if usepcm:
