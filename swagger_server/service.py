@@ -1671,7 +1671,7 @@ def cleanup():
             with open(msg) as f:
                 data = json.loads(f.read())
                 if 'route' in data:
-                    route = data['route']
+                    route = 'import/' + data['route']
                     if os.path.exists(route):
                         os.remove(route)
             os.remove(msg)
