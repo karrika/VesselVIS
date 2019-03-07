@@ -1661,6 +1661,15 @@ def cleanup():
         if mtime < now:
             os.remove(msg)
     
+    #Delete old S124 messages
+    msgs = glob('import/urn:mrn:stm:s124:*')
+    for msg in msgs:
+        statinfo = os.stat(msg)
+        mtime = epoch + timedelta(seconds=statinfo.st_mtime)
+        mtime = mtime.replace(microsecond=0).isoformat() + 'Z'
+        if mtime < now:
+            os.remove(msg)
+    
     #Delete routes
     msgs = glob('import/urn:mrn:stm:voyage:id:*')
     for msg in msgs:
